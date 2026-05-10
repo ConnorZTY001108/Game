@@ -1,0 +1,131 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_dropkick_dash"
+display_name = "飞身踢"
+description = "冲刺路径穿过低生命敌人时将其踢飞；撞到墙体或另一名敌人时爆炸并治疗你。"
+source_augment_name = "飞身踢"
+source_augment_rarity = "飞身踢:棱彩"
+route_id = "snowstep_vanguard"
+route_label = "雪步先锋"
+rarity = "gold"
+max_rank = 1
+unique = true
+upgrade_type = "终结器"
+source_trigger = "on_dash_through_low_hp"
+effect = "冲刺路径穿过低生命敌人时将其踢飞；撞到墙体或另一名敌人时爆炸并治疗你。"
+source_condition = "与血债飞踢共享处决标签，但触发条件为位移。"
+value = {
+"source_text": "处决阈值 6%；治疗 3% 最大生命"
+}
+synergy_tags = Array[String](["dash", "execute", "knockback", "heal"])
+required_tags = Array[String](["dash"])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "让每次位移都可能变成收割镜头。"
+fit = "神圣雪印、全凭身法。"
+risk = "需要路径接触，不适合远程龟缩。"
+why_close = "直接转译“飞身踢”。"
+implementation_hint = "DashHitbox 检查 low_hp。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/snowstep_vanguard/aug_dropkick_dash.tres"
+test_owner = "augment_snowstep_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "让每次位移都可能变成收割镜头。",
+"condition": "与血债飞踢共享处决标签，但触发条件为位移。",
+"display_name": "飞身踢",
+"effect": "冲刺路径穿过低生命敌人时将其踢飞；撞到墙体或另一名敌人时爆炸并治疗你。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "dash_path_execute",
+"effect_type": "dash_path_execute",
+"max_proc_depth": 2,
+"params": {
+"effect": "kick",
+"target_filter": "low_hp"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "collision_explosion",
+"effect_type": "collision_explosion",
+"max_proc_depth": 2,
+"params": {
+"on_kicked_target_collision": true
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "heal_player",
+"effect_type": "heal_player",
+"max_proc_depth": 2,
+"params": {
+"source": "dropkick"
+}
+}],
+"excludes_tags": [],
+"fit": "神圣雪印、全凭身法。",
+"id": "aug_dropkick_dash",
+"implementation_hint": "DashHitbox 检查 low_hp。",
+"is_finisher": true,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": ["dash"],
+"resource_path": "data/content/augments/snowstep_vanguard/aug_dropkick_dash.tres",
+"risk": "需要路径接触，不适合远程龟缩。",
+"route_id": "snowstep_vanguard",
+"route_label": "雪步先锋",
+"source_augment_name": "飞身踢",
+"source_augment_rarity": "飞身踢:棱彩",
+"synergy_tags": ["dash", "execute", "knockback", "heal"],
+"test_owner": "augment_snowstep_loop.gd",
+"trigger": "on_dash_through_low_hp",
+"trigger_spec": "trigger_id=on_dash_through_low_hp; signals=dash_finished; required_packet_keys=owner, dash_path, low_hp_targets; synthetic_test=dash through low-hp target fixture",
+"unique": true,
+"upgrade_type": "终结器",
+"value": "处决阈值 6%；治疗 3% 最大生命",
+"why_close": "直接转译“飞身踢”。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "dash_path", "low_hp_targets"],
+"required_packet_values": {
+
+},
+"signal_names": ["dash_finished"],
+"synthetic_test": "dash through low-hp target fixture",
+"trigger_id": "on_dash_through_low_hp"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "dash_path_execute",
+"effect_type": "dash_path_execute",
+"max_proc_depth": 2,
+"params": {
+"effect": "kick",
+"target_filter": "low_hp"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "collision_explosion",
+"effect_type": "collision_explosion",
+"max_proc_depth": 2,
+"params": {
+"on_kicked_target_collision": true
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "heal_player",
+"effect_type": "heal_player",
+"max_proc_depth": 2,
+"params": {
+"source": "dropkick"
+}
+}])

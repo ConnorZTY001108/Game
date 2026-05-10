@@ -49,12 +49,25 @@ func _on_weapon_hit(target: Node, payload: Dictionary) -> void:
 		var stacks := ElementStatusSystem.add_stack(target, element_tag, 1)
 		if stacks >= _get_int(rune, "stack_threshold", 1):
 			ElementStatusSystem.clear_stack(target, element_tag)
-			if target.has_method("apply_damage"):
-				var damage_tags: Array[String] = [element_tag, "rune_bonus"]
-				var effect_tag := _get_string(rune, "effect", "")
-				if effect_tag != "" and effect_tag != "add_element_stack":
-					damage_tags.append(effect_tag)
-				target.apply_damage(_get_float(rune, "bonus_damage", 0.0), damage_tags)
+			var damage_tags: Array[String] = [element_tag, "rune_bonus"]
+			var effect_tag := _get_string(rune, "effect", "")
+			if effect_tag != "" and effect_tag != "add_element_stack":
+				damage_tags.append(effect_tag)
+			var parent_packet: Dictionary = payload.get("damage_packet", {})
+			if parent_packet.is_empty():
+				parent_packet = DamageSystem.make_packet(0.0, _get_string_array_from_variant(payload.get("weapon_tags", [])), payload)
+				parent_packet["target"] = target
+			var bonus_packet := DamageSystem.child_proc_packet(parent_packet, "rune_bonus", rune_id, {
+				"amount": _get_float(rune, "bonus_damage", 0.0),
+				"base_amount": _get_float(rune, "bonus_damage", 0.0),
+				"tags": damage_tags,
+				"source_kind": "rune",
+				"source_id": rune_id,
+				"weapon_id": str(payload.get("weapon_id", "")),
+				"target": target,
+				"on_hit_efficiency": 1.0
+			})
+			DamageSystem.apply_damage(target, bonus_packet)
 			GameEvents.rune_triggered.emit(rune_id, target, {
 				"element": element_tag,
 				"stacks": stacks,
@@ -62,7 +75,8 @@ func _on_weapon_hit(target: Node, payload: Dictionary) -> void:
 				"route_label": _get_string(rune, "route_label", ""),
 				"effect": _get_string(rune, "effect", ""),
 				"short_effect": _get_string(rune, "short_effect", ""),
-				"source_weapon_id": str(payload.get("weapon_id", ""))
+				"source_weapon_id": str(payload.get("weapon_id", "")),
+				"damage_packet": bonus_packet
 			})
 
 func _rune_applies(rune: Resource, payload: Dictionary) -> bool:
@@ -94,6 +108,13 @@ func _get_int(resource: Resource, key: String, fallback: int) -> int:
 func _get_string_array(resource: Resource, key: String) -> Array[String]:
 	var result: Array[String] = []
 	var value = resource.get(key)
+	if value is Array:
+		for item in value:
+			result.append(str(item))
+	return result
+
+func _get_string_array_from_variant(value: Variant) -> Array[String]:
+	var result: Array[String] = []
 	if value is Array:
 		for item in value:
 			result.append(str(item))

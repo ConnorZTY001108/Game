@@ -1,0 +1,133 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_mobile_zhonya"
+display_name = "移动中娅"
+description = "低血或即将被致命伤害时进入短暂凝滞，期间仍可缓慢移动；结束时清除减速/定身并治疗少量生命。"
+source_augment_name = "升级：中娅、升级：米凯尔的祝福"
+source_augment_rarity = "升级：中娅:银色；升级：米凯尔的祝福:棱彩"
+route_id = "quest_forge"
+route_label = "海牛锻炉"
+rarity = "gold"
+max_rank = 1
+unique = true
+upgrade_type = "生存型/规则改写型"
+source_trigger = "on_low_hp_or_controlled"
+effect = "低血或即将被致命伤害时进入短暂凝滞，期间仍可缓慢移动；结束时清除减速/定身并治疗少量生命。"
+source_condition = "每 45 秒冷却。"
+value = {
+"source_text": "凝滞 1 秒；移动速度 45%；治疗 6% 最大生命"
+}
+synergy_tags = Array[String](["stasis", "cleanse", "heal", "survival"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "给高难波次一个规则改写式保命。"
+fit = "血契、玻璃大炮、巨像。"
+risk = "冷却长，不能当常驻坦度。"
+why_close = "转译“升级：中娅”的移动凝滞和“米凯尔”的解控治疗。"
+implementation_hint = "DeathIntercept 或 ControlEvent 触发 stasis。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/quest_forge/aug_mobile_zhonya.tres"
+test_owner = "augment_forge_loop.gd"
+checkpoint_priority = 20
+manifest_fields = {
+"checkpoint_priority": 20,
+"combo_value": "给高难波次一个规则改写式保命。",
+"condition": "每 45 秒冷却。",
+"display_name": "移动中娅",
+"effect": "低血或即将被致命伤害时进入短暂凝滞，期间仍可缓慢移动；结束时清除减速/定身并治疗少量生命。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "enter_stasis",
+"effect_type": "enter_stasis",
+"max_proc_depth": 2,
+"params": {
+"can_move_slowly": true,
+"triggers": ["low_hp", "fatal_damage", "controlled"]
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "cleanse_control",
+"effect_type": "cleanse_control",
+"max_proc_depth": 2,
+"params": {
+"on_end": true
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "heal_player",
+"effect_type": "heal_player",
+"max_proc_depth": 2,
+"params": {
+"amount": "small",
+"on_end": true
+}
+}],
+"excludes_tags": [],
+"fit": "血契、玻璃大炮、巨像。",
+"id": "aug_mobile_zhonya",
+"implementation_hint": "DeathIntercept 或 ControlEvent 触发 stasis。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": [],
+"resource_path": "data/content/augments/quest_forge/aug_mobile_zhonya.tres",
+"risk": "冷却长，不能当常驻坦度。",
+"route_id": "quest_forge",
+"route_label": "海牛锻炉",
+"source_augment_name": "升级：中娅、升级：米凯尔的祝福",
+"source_augment_rarity": "升级：中娅:银色；升级：米凯尔的祝福:棱彩",
+"synergy_tags": ["stasis", "cleanse", "heal", "survival"],
+"test_owner": "augment_forge_loop.gd",
+"trigger": "on_low_hp_or_controlled",
+"trigger_spec": "trigger_id=on_low_hp_or_controlled; signals=low_hp_entered, control_applied, fatal_damage_received; required_packet_keys=owner, ratio, control_tag, stasis_cooldown; synthetic_test=low hp and control fixture",
+"unique": true,
+"upgrade_type": "生存型/规则改写型",
+"value": "凝滞 1 秒；移动速度 45%；治疗 6% 最大生命",
+"why_close": "转译“升级：中娅”的移动凝滞和“米凯尔”的解控治疗。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "ratio", "control_tag", "stasis_cooldown"],
+"required_packet_values": {
+
+},
+"signal_names": ["low_hp_entered", "control_applied", "fatal_damage_received"],
+"synthetic_test": "low hp and control fixture",
+"trigger_id": "on_low_hp_or_controlled"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "enter_stasis",
+"effect_type": "enter_stasis",
+"max_proc_depth": 2,
+"params": {
+"can_move_slowly": true,
+"triggers": ["low_hp", "fatal_damage", "controlled"]
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "cleanse_control",
+"effect_type": "cleanse_control",
+"max_proc_depth": 2,
+"params": {
+"on_end": true
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "heal_player",
+"effect_type": "heal_player",
+"max_proc_depth": 2,
+"params": {
+"amount": "small",
+"on_end": true
+}
+}])

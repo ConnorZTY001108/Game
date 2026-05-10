@@ -1,0 +1,135 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_collector_mark"
+display_name = "收集者刻印"
+description = "对低于 8% 生命的非 Boss 敌人直接处决；处决精英时掉落额外符文金币并刷新一个基础武器冷却。"
+source_augment_name = "升级：收集者、裁决使"
+source_augment_rarity = "升级：收集者:银色；裁决使:金色"
+route_id = "rune_volley"
+route_label = "符文弹幕链"
+rarity = "gold"
+max_rank = 1
+unique = true
+upgrade_type = "终结器/经济型"
+source_trigger = "on_damage_to_low_hp"
+effect = "对低于 8% 生命的非 Boss 敌人直接处决；处决精英时掉落额外符文金币并刷新一个基础武器冷却。"
+source_condition = "Boss 改为造成一次 8% 当前生命伤害，10 秒冷却。"
+value = {
+"source_text": "处决阈值 8%；精英金币 +1"
+}
+synergy_tags = Array[String](["execute", "economy", "cooldown", "kill"])
+required_tags = Array[String](["damage_build"])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "把高频伤害变成收割和经济滚雪球。"
+fit = "强攻三环、暴击飞晶、夺金。"
+risk = "阈值过高会破坏 Boss 战。"
+why_close = "来自“升级：收集者”和“裁决使”的处决/刷新/金币。"
+implementation_hint = "Boss 使用 execute_as_bonus_damage 分支。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/rune_volley/aug_collector_mark.tres"
+test_owner = "augment_rune_volley_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "把高频伤害变成收割和经济滚雪球。",
+"condition": "Boss 改为造成一次 8% 当前生命伤害，10 秒冷却。",
+"display_name": "收集者刻印",
+"effect": "对低于 8% 生命的非 Boss 敌人直接处决；处决精英时掉落额外符文金币并刷新一个基础武器冷却。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "execute_low_hp",
+"effect_type": "execute_low_hp",
+"max_proc_depth": 2,
+"params": {
+"allow_boss": false,
+"threshold_normal": 0.08
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "grant_currency",
+"effect_type": "grant_currency",
+"max_proc_depth": 2,
+"params": {
+"currency": "rune_gold",
+"target_class": "elite"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "refund_cooldown",
+"effect_type": "refund_cooldown",
+"max_proc_depth": 2,
+"params": {
+"cooldown_scope": "basic_weapon",
+"target_class": "elite"
+}
+}],
+"excludes_tags": [],
+"fit": "强攻三环、暴击飞晶、夺金。",
+"id": "aug_collector_mark",
+"implementation_hint": "Boss 使用 execute_as_bonus_damage 分支。",
+"is_finisher": true,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": ["damage_build"],
+"resource_path": "data/content/augments/rune_volley/aug_collector_mark.tres",
+"risk": "阈值过高会破坏 Boss 战。",
+"route_id": "rune_volley",
+"route_label": "符文弹幕链",
+"source_augment_name": "升级：收集者、裁决使",
+"source_augment_rarity": "升级：收集者:银色；裁决使:金色",
+"synergy_tags": ["execute", "economy", "cooldown", "kill"],
+"test_owner": "augment_rune_volley_loop.gd",
+"trigger": "on_damage_to_low_hp",
+"trigger_spec": "trigger_id=on_damage_to_low_hp; signals=damage_applied_packet; required_packet_keys=target, target_health_ratio, enemy_class, boss_scalar; synthetic_test=damage mock low-hp normal and boss targets",
+"unique": true,
+"upgrade_type": "终结器/经济型",
+"value": "处决阈值 8%；精英金币 +1",
+"why_close": "来自“升级：收集者”和“裁决使”的处决/刷新/金币。"
+}
+trigger_spec = {
+"required_packet_keys": ["target", "target_health_ratio", "enemy_class", "boss_scalar"],
+"required_packet_values": {
+
+},
+"signal_names": ["damage_applied_packet"],
+"synthetic_test": "damage mock low-hp normal and boss targets",
+"trigger_id": "on_damage_to_low_hp"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "execute_low_hp",
+"effect_type": "execute_low_hp",
+"max_proc_depth": 2,
+"params": {
+"allow_boss": false,
+"threshold_normal": 0.08
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "grant_currency",
+"effect_type": "grant_currency",
+"max_proc_depth": 2,
+"params": {
+"currency": "rune_gold",
+"target_class": "elite"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "refund_cooldown",
+"effect_type": "refund_cooldown",
+"max_proc_depth": 2,
+"params": {
+"cooldown_scope": "basic_weapon",
+"target_class": "elite"
+}
+}])

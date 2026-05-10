@@ -1,0 +1,121 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_chili_oil"
+display_name = "辣椒油污"
+description = "每施加 20 层符火，在目标脚下生成油污区：敌人受灼烧，玩家站入时持续治疗。"
+source_augment_name = "祖母的辣椒油"
+source_augment_rarity = "祖母的辣椒油:金色"
+route_id = "inferno_conduit"
+route_label = "炼狱导管"
+rarity = "gold"
+max_rank = 2
+unique = false
+upgrade_type = "生存型/放大器"
+source_trigger = "on_apply_burn"
+effect = "每施加 20 层符火，在目标脚下生成油污区：敌人受灼烧，玩家站入时持续治疗。"
+source_condition = "同屏最多 6 个油污区。"
+value = {
+"source_text": "油污 4 秒；治疗 2% 最大生命/秒"
+}
+synergy_tags = Array[String](["burn", "heal", "ground_zone", "sustain"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "灼烧路线获得续航，并制造站位目标。"
+fit = "慢炖法阵、血契、圣盾。"
+risk = "区域太多会污染读屏。"
+why_close = "来自“祖母的辣椒油”的灼烧生成治疗/灼烧区域。"
+implementation_hint = "Tile/Area 节点池，超限删除最旧。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/inferno_conduit/aug_chili_oil.tres"
+test_owner = "augment_inferno_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "灼烧路线获得续航，并制造站位目标。",
+"condition": "同屏最多 6 个油污区。",
+"display_name": "辣椒油污",
+"effect": "每施加 20 层符火，在目标脚下生成油污区：敌人受灼烧，玩家站入时持续治疗。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "counter_on_event",
+"effect_type": "counter_on_event",
+"max_proc_depth": 2,
+"params": {
+"event": "burn_stack_applied",
+"threshold": 20
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "spawn_zone",
+"effect_type": "spawn_zone",
+"max_proc_depth": 2,
+"params": {
+"enemy_effects": ["burn_dot"],
+"max_active": 8,
+"player_effects": ["heal_over_time"],
+"zone_role": "oil"
+}
+}],
+"excludes_tags": [],
+"fit": "慢炖法阵、血契、圣盾。",
+"id": "aug_chili_oil",
+"implementation_hint": "Tile/Area 节点池，超限删除最旧。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 2,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": [],
+"resource_path": "data/content/augments/inferno_conduit/aug_chili_oil.tres",
+"risk": "区域太多会污染读屏。",
+"route_id": "inferno_conduit",
+"route_label": "炼狱导管",
+"source_augment_name": "祖母的辣椒油",
+"source_augment_rarity": "祖母的辣椒油:金色",
+"synergy_tags": ["burn", "heal", "ground_zone", "sustain"],
+"test_owner": "augment_inferno_loop.gd",
+"trigger": "on_apply_burn",
+"trigger_spec": "trigger_id=on_apply_burn; signals=burn_stack_applied; required_packet_keys=target, stacks_added, total_stacks, hit_position; synthetic_test=apply burn stacks to mock target",
+"unique": false,
+"upgrade_type": "生存型/放大器",
+"value": "油污 4 秒；治疗 2% 最大生命/秒",
+"why_close": "来自“祖母的辣椒油”的灼烧生成治疗/灼烧区域。"
+}
+trigger_spec = {
+"required_packet_keys": ["target", "stacks_added", "total_stacks", "hit_position"],
+"required_packet_values": {
+
+},
+"signal_names": ["burn_stack_applied"],
+"synthetic_test": "apply burn stacks to mock target",
+"trigger_id": "on_apply_burn"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "counter_on_event",
+"effect_type": "counter_on_event",
+"max_proc_depth": 2,
+"params": {
+"event": "burn_stack_applied",
+"threshold": 20
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "spawn_zone",
+"effect_type": "spawn_zone",
+"max_proc_depth": 2,
+"params": {
+"enemy_effects": ["burn_dot"],
+"max_active": 8,
+"player_effects": ["heal_over_time"],
+"zone_role": "oil"
+}
+}])

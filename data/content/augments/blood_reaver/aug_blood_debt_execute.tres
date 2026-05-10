@@ -1,0 +1,131 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_blood_debt_execute"
+display_name = "血债飞踢"
+description = "低生命敌人被你的伤害命中时被飞踢处决；被踢目标撞到其它敌人会爆炸并治疗你。"
+source_augment_name = "飞身踢、裁决使"
+source_augment_rarity = "飞身踢:棱彩；裁决使:金色"
+route_id = "blood_reaver"
+route_label = "血契收割"
+rarity = "gold"
+max_rank = 1
+unique = true
+upgrade_type = "终结器"
+source_trigger = "on_damage_to_low_hp"
+effect = "低生命敌人被你的伤害命中时被飞踢处决；被踢目标撞到其它敌人会爆炸并治疗你。"
+source_condition = "精英改为击退和爆炸，不直接处决。"
+value = {
+"source_text": "处决 7%；爆炸 180% 符文强度"
+}
+synergy_tags = Array[String](["execute", "knockback", "heal", "finisher"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "把残血怪群变成回血和二次爆炸资源。"
+fit = "速度恶魔、符文弹幕、血契。"
+risk = "怪少时收益下降。"
+why_close = "来自“飞身踢”的处决、击退、撞击爆炸与治疗。"
+implementation_hint = "计算 knockback_path 碰撞目标。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/blood_reaver/aug_blood_debt_execute.tres"
+test_owner = "augment_blood_loop.gd"
+checkpoint_priority = 16
+manifest_fields = {
+"checkpoint_priority": 16,
+"combo_value": "把残血怪群变成回血和二次爆炸资源。",
+"condition": "精英改为击退和爆炸，不直接处决。",
+"display_name": "血债飞踢",
+"effect": "低生命敌人被你的伤害命中时被飞踢处决；被踢目标撞到其它敌人会爆炸并治疗你。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "execute_low_hp",
+"effect_type": "execute_low_hp",
+"max_proc_depth": 2,
+"params": {
+"allow_boss": false,
+"mode": "kick"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "collision_explosion",
+"effect_type": "collision_explosion",
+"max_proc_depth": 2,
+"params": {
+"on_kicked_target_collision": true
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "heal_player",
+"effect_type": "heal_player",
+"max_proc_depth": 2,
+"params": {
+"source": "kick_explosion"
+}
+}],
+"excludes_tags": [],
+"fit": "速度恶魔、符文弹幕、血契。",
+"id": "aug_blood_debt_execute",
+"implementation_hint": "计算 knockback_path 碰撞目标。",
+"is_finisher": true,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": [],
+"resource_path": "data/content/augments/blood_reaver/aug_blood_debt_execute.tres",
+"risk": "怪少时收益下降。",
+"route_id": "blood_reaver",
+"route_label": "血契收割",
+"source_augment_name": "飞身踢、裁决使",
+"source_augment_rarity": "飞身踢:棱彩；裁决使:金色",
+"synergy_tags": ["execute", "knockback", "heal", "finisher"],
+"test_owner": "augment_blood_loop.gd",
+"trigger": "on_damage_to_low_hp",
+"trigger_spec": "trigger_id=on_damage_to_low_hp; signals=damage_applied_packet; required_packet_keys=target, target_health_ratio, enemy_class, boss_scalar; synthetic_test=damage mock low-hp normal and boss targets",
+"unique": true,
+"upgrade_type": "终结器",
+"value": "处决 7%；爆炸 180% 符文强度",
+"why_close": "来自“飞身踢”的处决、击退、撞击爆炸与治疗。"
+}
+trigger_spec = {
+"required_packet_keys": ["target", "target_health_ratio", "enemy_class", "boss_scalar"],
+"required_packet_values": {
+
+},
+"signal_names": ["damage_applied_packet"],
+"synthetic_test": "damage mock low-hp normal and boss targets",
+"trigger_id": "on_damage_to_low_hp"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "execute_low_hp",
+"effect_type": "execute_low_hp",
+"max_proc_depth": 2,
+"params": {
+"allow_boss": false,
+"mode": "kick"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "collision_explosion",
+"effect_type": "collision_explosion",
+"max_proc_depth": 2,
+"params": {
+"on_kicked_target_collision": true
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "heal_player",
+"effect_type": "heal_player",
+"max_proc_depth": 2,
+"params": {
+"source": "kick_explosion"
+}
+}])

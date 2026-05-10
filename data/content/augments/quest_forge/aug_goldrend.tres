@@ -1,0 +1,99 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_goldrend"
+display_name = "夺金刻痕"
+description = "首次命中精英/Boss 后进入 4 秒夺金窗口：你的伤害附带魔法伤害，命中掉落符文金币并给移速。"
+source_augment_name = "夺金"
+source_augment_rarity = "夺金:棱彩"
+route_id = "quest_forge"
+route_label = "海牛锻炉"
+rarity = "prismatic"
+max_rank = 1
+unique = true
+upgrade_type = "经济型/启动器"
+source_trigger = "on_damage_to_elite_or_boss"
+effect = "首次命中精英/Boss 后进入 4 秒夺金窗口：你的伤害附带魔法伤害，命中掉落符文金币并给移速。"
+source_condition = "每名精英/Boss 12 秒冷却。"
+value = {
+"source_text": "附加 35%；金币最多 5；移速 +20%"
+}
+synergy_tags = Array[String](["gold", "elite", "speed", "damage", "economy"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "鼓励主动打精英，用战斗滚经济。"
+fit = "收集者刻印、速度恶魔。"
+risk = "普通清怪收益不高。"
+why_close = "来自“夺金”的伤害、金币和移速。"
+implementation_hint = "PerEnemyCooldown + capped drops。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/quest_forge/aug_goldrend.tres"
+test_owner = "augment_forge_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "鼓励主动打精英，用战斗滚经济。",
+"condition": "每名精英/Boss 12 秒冷却。",
+"display_name": "夺金刻痕",
+"effect": "首次命中精英/Boss 后进入 4 秒夺金窗口：你的伤害附带魔法伤害，命中掉落符文金币并给移速。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "open_gold_window_on_elite_boss_hit",
+"effect_type": "open_gold_window_on_elite_boss_hit",
+"max_proc_depth": 2,
+"params": {
+"duration": 4.0,
+"effects": ["bonus_magic_damage", "currency_on_hit", "move_speed"]
+}
+}],
+"excludes_tags": [],
+"fit": "收集者刻印、速度恶魔。",
+"id": "aug_goldrend",
+"implementation_hint": "PerEnemyCooldown + capped drops。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": true,
+"max_rank": 1,
+"normalized_rarity": "prismatic",
+"rarity": "棱彩",
+"required_tags": [],
+"resource_path": "data/content/augments/quest_forge/aug_goldrend.tres",
+"risk": "普通清怪收益不高。",
+"route_id": "quest_forge",
+"route_label": "海牛锻炉",
+"source_augment_name": "夺金",
+"source_augment_rarity": "夺金:棱彩",
+"synergy_tags": ["gold", "elite", "speed", "damage", "economy"],
+"test_owner": "augment_forge_loop.gd",
+"trigger": "on_damage_to_elite_or_boss",
+"trigger_spec": "trigger_id=on_damage_to_elite_or_boss; signals=damage_applied_packet, boss_damaged; required_packet_keys=target_class=elite|boss, owner, window_state; synthetic_test=damage elite and boss",
+"unique": true,
+"upgrade_type": "经济型/启动器",
+"value": "附加 35%；金币最多 5；移速 +20%",
+"why_close": "来自“夺金”的伤害、金币和移速。"
+}
+trigger_spec = {
+"required_packet_keys": ["target_class", "owner", "window_state"],
+"required_packet_values": {
+"target_class": "elite|boss"
+},
+"signal_names": ["damage_applied_packet", "boss_damaged"],
+"synthetic_test": "damage elite and boss",
+"trigger_id": "on_damage_to_elite_or_boss"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "open_gold_window_on_elite_boss_hit",
+"effect_type": "open_gold_window_on_elite_boss_hit",
+"max_proc_depth": 2,
+"params": {
+"duration": 4.0,
+"effects": ["bonus_magic_damage", "currency_on_hit", "move_speed"]
+}
+}])

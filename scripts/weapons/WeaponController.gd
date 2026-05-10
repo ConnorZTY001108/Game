@@ -68,18 +68,30 @@ func _fire_at(target: Node2D) -> void:
 	var payload := {
 		"weapon_id": _get_string("id", ""),
 		"weapon_tags": weapon_tags.duplicate(),
-		"element_tags": element_tags.duplicate()
+		"element_tags": element_tags.duplicate(),
+		"owner": owner_player,
+		"source_kind": "weapon",
+		"source_id": _get_string("id", ""),
+		"cooldown_source_id": _get_string("id", "")
 	}
+	var packet := DamageSystem.make_packet(
+		_get_float("damage", 10.0) * _get_owner_float("damage_multiplier", 1.0),
+		combined_tags,
+		payload
+	)
+	payload["damage_packet"] = packet.duplicate(true)
+	GameEvents.weapon_fired.emit(owner_player, weapon_data, packet.duplicate(true))
 	if projectile.has_method("configure"):
 		projectile.configure(
 			direction,
 			_get_float("projectile_speed", 520.0),
-			_get_float("damage", 10.0) * _get_owner_float("damage_multiplier", 1.0),
+			float(packet.get("amount", 0.0)),
 			_get_float("projectile_lifetime", 1.0),
 			_get_int("pierce", 0),
 			combined_tags,
 			payload
 		)
+	GameEvents.projectile_spawned.emit(projectile, packet.duplicate(true))
 
 func _pulse_nearby_enemies() -> int:
 	var enemies := get_node_or_null(enemies_path)
@@ -94,8 +106,15 @@ func _pulse_nearby_enemies() -> int:
 	var payload := {
 		"weapon_id": _get_string("id", ""),
 		"weapon_tags": weapon_tags.duplicate(),
-		"element_tags": element_tags.duplicate()
+		"element_tags": element_tags.duplicate(),
+		"owner": owner_player,
+		"source_kind": "weapon",
+		"source_id": _get_string("id", ""),
+		"cooldown_source_id": _get_string("id", "")
 	}
+	var fire_packet := DamageSystem.make_packet(damage, combined_tags, payload)
+	payload["damage_packet"] = fire_packet.duplicate(true)
+	GameEvents.weapon_fired.emit(owner_player, weapon_data, fire_packet.duplicate(true))
 	var hit_count := 0
 	for child in enemies.get_children():
 		var enemy := child as Node2D

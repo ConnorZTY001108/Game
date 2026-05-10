@@ -1,0 +1,103 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_pinball_rift"
+display_name = "弹球回响"
+description = "符文弹、裂隙连线或回旋弹命中后可向墙体或另一名敌人反弹 1 次；反弹命中伤害 +25%。"
+source_augment_name = "弹球、回力OK镖"
+source_augment_rarity = "弹球:金色；回力OK镖:金色"
+route_id = "void_cascade"
+route_label = "虚空裂隙连锁"
+rarity = "gold"
+max_rank = 1
+unique = true
+upgrade_type = "放大器"
+source_trigger = "on_projectile_or_rift_hit"
+effect = "符文弹、裂隙连线或回旋弹命中后可向墙体或另一名敌人反弹 1 次；反弹命中伤害 +25%。"
+source_condition = "每个弹体只反弹一次。"
+value = {
+"source_text": "+1 反弹；+25% 反弹伤害"
+}
+synergy_tags = Array[String](["bounce", "projectile", "void", "boomerang"])
+required_tags = Array[String](["projectile_or_rift"])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "让空间连线更不可预测，形成弹球式清屏。"
+fit = "虚空裂隙、精准奇才。"
+risk = "复杂地形要处理寻路。"
+why_close = "来自“弹球”和“回力OK镖”的反弹/往返体验。"
+implementation_hint = "Physics raycast 计算反弹方向。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/void_cascade/aug_pinball_rift.tres"
+test_owner = "augment_void_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "让空间连线更不可预测，形成弹球式清屏。",
+"condition": "每个弹体只反弹一次。",
+"display_name": "弹球回响",
+"effect": "符文弹、裂隙连线或回旋弹命中后可向墙体或另一名敌人反弹 1 次；反弹命中伤害 +25%。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "pinball_bounce",
+"effect_type": "bounce_projectile_or_rift",
+"max_proc_depth": 2,
+"params": {
+"damage_bonus": 0.25,
+"max_bounces": 1,
+"proc_flag": "pinball_bounce",
+"sources": ["projectile", "rift_line", "boomerang"]
+}
+}],
+"excludes_tags": [],
+"fit": "虚空裂隙、精准奇才。",
+"id": "aug_pinball_rift",
+"implementation_hint": "Physics raycast 计算反弹方向。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": ["projectile_or_rift"],
+"resource_path": "data/content/augments/void_cascade/aug_pinball_rift.tres",
+"risk": "复杂地形要处理寻路。",
+"route_id": "void_cascade",
+"route_label": "虚空裂隙连锁",
+"source_augment_name": "弹球、回力OK镖",
+"source_augment_rarity": "弹球:金色；回力OK镖:金色",
+"synergy_tags": ["bounce", "projectile", "void", "boomerang"],
+"test_owner": "augment_void_loop.gd",
+"trigger": "on_projectile_or_rift_hit",
+"trigger_spec": "trigger_id=on_projectile_or_rift_hit; signals=projectile_hit, rift_line_hit; required_packet_keys=target, hit_position, source_kind, bounce_count; synthetic_test=emit projectile and rift line hit",
+"unique": true,
+"upgrade_type": "放大器",
+"value": "+1 反弹；+25% 反弹伤害",
+"why_close": "来自“弹球”和“回力OK镖”的反弹/往返体验。"
+}
+trigger_spec = {
+"required_packet_keys": ["target", "hit_position", "source_kind", "bounce_count"],
+"required_packet_values": {
+
+},
+"signal_names": ["projectile_hit", "rift_line_hit"],
+"synthetic_test": "emit projectile and rift line hit",
+"trigger_id": "on_projectile_or_rift_hit"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "pinball_bounce",
+"effect_type": "bounce_projectile_or_rift",
+"max_proc_depth": 2,
+"params": {
+"damage_bonus": 0.25,
+"max_bounces": 1,
+"proc_flag": "pinball_bounce",
+"sources": ["projectile", "rift_line", "boomerang"]
+}
+}])

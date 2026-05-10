@@ -1,0 +1,119 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_duality_charge"
+display_name = "物法双核"
+description = "on_hit 获得 1 层秘术核，技能命中获得 1 层武力核；两种核各 5 层时，下次元素爆发消耗层数并造成混合伤害。"
+source_augment_name = "物法皆修"
+source_augment_rarity = "物法皆修:棱彩"
+route_id = "void_cascade"
+route_label = "虚空裂隙连锁"
+rarity = "gold"
+max_rank = 1
+unique = true
+upgrade_type = "转换器"
+source_trigger = "on_hit_and_skill_hit"
+effect = "on_hit 获得 1 层秘术核，技能命中获得 1 层武力核；两种核各 5 层时，下次元素爆发消耗层数并造成混合伤害。"
+source_condition = "两类层数独立，最多各 10 层。"
+value = {
+"source_text": "混合爆发 250% 符文强度"
+}
+synergy_tags = Array[String](["hybrid", "converter", "on_hit", "skill", "element"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "强迫玩家同时使用普攻式和技能式触发，形成双修闭环。"
+fit = "虚幻武器、符文双持、虚空裂隙。"
+risk = "单一路线构筑难以触发。"
+why_close = "转译“物法皆修”的普攻给 AP、技能给 AD 的双向成长。"
+implementation_hint = "PlayerState 保存 duality_stacks。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/void_cascade/aug_duality_charge.tres"
+test_owner = "augment_void_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "强迫玩家同时使用普攻式和技能式触发，形成双修闭环。",
+"condition": "两类层数独立，最多各 10 层。",
+"display_name": "物法双核",
+"effect": "on_hit 获得 1 层秘术核，技能命中获得 1 层武力核；两种核各 5 层时，下次元素爆发消耗层数并造成混合伤害。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "dual_stack",
+"effect_type": "dual_stack",
+"max_proc_depth": 2,
+"params": {
+"skill_hit_stack": "force_core",
+"threshold_each": 5,
+"weapon_hit_stack": "arcane_core"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "mixed_damage_burst",
+"effect_type": "mixed_damage_burst",
+"max_proc_depth": 2,
+"params": {
+"consume_stacks": true,
+"damage_types": ["physical", "magic"]
+}
+}],
+"excludes_tags": [],
+"fit": "虚幻武器、符文双持、虚空裂隙。",
+"id": "aug_duality_charge",
+"implementation_hint": "PlayerState 保存 duality_stacks。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": [],
+"resource_path": "data/content/augments/void_cascade/aug_duality_charge.tres",
+"risk": "单一路线构筑难以触发。",
+"route_id": "void_cascade",
+"route_label": "虚空裂隙连锁",
+"source_augment_name": "物法皆修",
+"source_augment_rarity": "物法皆修:棱彩",
+"synergy_tags": ["hybrid", "converter", "on_hit", "skill", "element"],
+"test_owner": "augment_void_loop.gd",
+"trigger": "on_hit_and_skill_hit",
+"trigger_spec": "trigger_id=on_hit_and_skill_hit; signals=damage_applied_packet; required_packet_keys=source_kind=weapon|skill, target, owner; synthetic_test=emit one weapon and one skill hit",
+"unique": true,
+"upgrade_type": "转换器",
+"value": "混合爆发 250% 符文强度",
+"why_close": "转译“物法皆修”的普攻给 AP、技能给 AD 的双向成长。"
+}
+trigger_spec = {
+"required_packet_keys": ["source_kind", "target", "owner"],
+"required_packet_values": {
+"source_kind": "weapon|skill"
+},
+"signal_names": ["damage_applied_packet"],
+"synthetic_test": "emit one weapon and one skill hit",
+"trigger_id": "on_hit_and_skill_hit"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "dual_stack",
+"effect_type": "dual_stack",
+"max_proc_depth": 2,
+"params": {
+"skill_hit_stack": "force_core",
+"threshold_each": 5,
+"weapon_hit_stack": "arcane_core"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "mixed_damage_burst",
+"effect_type": "mixed_damage_burst",
+"max_proc_depth": 2,
+"params": {
+"consume_stacks": true,
+"damage_types": ["physical", "magic"]
+}
+}])

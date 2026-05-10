@@ -1,0 +1,101 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_cruel_comet"
+display_name = "残忍彗星"
+description = "控制敌人时在目标位置召唤延迟彗星，造成范围魔法伤害。"
+source_augment_name = "残忍"
+source_augment_rarity = "残忍:棱彩"
+route_id = "colossus_furnace"
+route_label = "巨像熔炉"
+rarity = "gold"
+max_rank = 2
+unique = false
+upgrade_type = "放大器"
+source_trigger = "on_control"
+effect = "控制敌人时在目标位置召唤延迟彗星，造成范围魔法伤害。"
+source_condition = "每次技能每目标有独立冷却。"
+value = {
+"source_text": "彗星 160% 符文强度 + 2% 最大生命"
+}
+synergy_tags = Array[String](["control", "comet", "aoe", "tank"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "把控制链变成可见爆发。"
+fit = "巨像勇气、折磨者烙印。"
+risk = "控制太短时怪可能走出范围。"
+why_close = "直接来自“残忍”。"
+implementation_hint = "Telegraph 0.6 秒后结算。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/colossus_furnace/aug_cruel_comet.tres"
+test_owner = "augment_colossus_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "把控制链变成可见爆发。",
+"condition": "每次技能每目标有独立冷却。",
+"display_name": "残忍彗星",
+"effect": "控制敌人时在目标位置召唤延迟彗星，造成范围魔法伤害。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "control_spawn_delayed_strike",
+"effect_type": "control_spawn_delayed_strike",
+"max_proc_depth": 2,
+"params": {
+"damage_type": "magic",
+"delay_source": "value",
+"strike_role": "comet"
+}
+}],
+"excludes_tags": [],
+"fit": "巨像勇气、折磨者烙印。",
+"id": "aug_cruel_comet",
+"implementation_hint": "Telegraph 0.6 秒后结算。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 2,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": [],
+"resource_path": "data/content/augments/colossus_furnace/aug_cruel_comet.tres",
+"risk": "控制太短时怪可能走出范围。",
+"route_id": "colossus_furnace",
+"route_label": "巨像熔炉",
+"source_augment_name": "残忍",
+"source_augment_rarity": "残忍:棱彩",
+"synergy_tags": ["control", "comet", "aoe", "tank"],
+"test_owner": "augment_colossus_loop.gd",
+"trigger": "on_control",
+"trigger_spec": "trigger_id=on_control; signals=control_applied; required_packet_keys=target, control_tag, owner, hit_position; synthetic_test=apply knockback/slow control fixture",
+"unique": false,
+"upgrade_type": "放大器",
+"value": "彗星 160% 符文强度 + 2% 最大生命",
+"why_close": "直接来自“残忍”。"
+}
+trigger_spec = {
+"required_packet_keys": ["target", "control_tag", "owner", "hit_position"],
+"required_packet_values": {
+
+},
+"signal_names": ["control_applied"],
+"synthetic_test": "apply knockback/slow control fixture",
+"trigger_id": "on_control"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "control_spawn_delayed_strike",
+"effect_type": "control_spawn_delayed_strike",
+"max_proc_depth": 2,
+"params": {
+"damage_type": "magic",
+"delay_source": "value",
+"strike_role": "comet"
+}
+}])

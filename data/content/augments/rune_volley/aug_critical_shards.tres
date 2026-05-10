@@ -1,0 +1,109 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_critical_shards"
+display_name = "暴击飞晶"
+description = "任意暴击会发射 2 枚追踪飞晶；若暴击来自技能，则飞晶数量按暴击率最多增至 4 枚。"
+source_augment_name = "暴击飞弹、双生火焰"
+source_augment_rarity = "暴击飞弹:金色；双生火焰:银色"
+route_id = "rune_volley"
+route_label = "符文弹幕链"
+rarity = "gold"
+max_rank = 2
+unique = false
+upgrade_type = "放大器"
+source_trigger = "on_crit"
+effect = "任意暴击会发射 2 枚追踪飞晶；若暴击来自技能，则飞晶数量按暴击率最多增至 4 枚。"
+source_condition = "每个来源 0.25 秒内最多触发一次。"
+value = {
+"source_text": "2-4 枚；每枚 20% 符文强度"
+}
+synergy_tags = Array[String](["crit", "missile", "projectile", "skill"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "暴击越多，飞弹越多；飞弹又可触发元素层。"
+fit = "珠光符文、台风分裂。"
+risk = "大量弹体需控制性能。"
+why_close = "对应“暴击飞弹/双生火焰”的暴击生成额外弹体。"
+implementation_hint = "对象池化 HomingShard，限制每秒生成上限。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/rune_volley/aug_critical_shards.tres"
+test_owner = "augment_rune_volley_loop.gd"
+checkpoint_priority = 6
+manifest_fields = {
+"checkpoint_priority": 6,
+"combo_value": "暴击越多，飞弹越多；飞弹又可触发元素层。",
+"condition": "每个来源 0.25 秒内最多触发一次。",
+"display_name": "暴击飞晶",
+"effect": "任意暴击会发射 2 枚追踪飞晶；若暴击来自技能，则飞晶数量按暴击率最多增至 4 枚。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "crit_shard",
+"effect_type": "spawn_projectile",
+"max_proc_depth": 2,
+"params": {
+"base_count": 2,
+"homing": true,
+"max_active_per_owner": 16,
+"max_count": 4,
+"proc_flag": "crit_shard",
+"projectile_role": "crit_shard",
+"trigger": "crit"
+}
+}],
+"excludes_tags": [],
+"fit": "珠光符文、台风分裂。",
+"id": "aug_critical_shards",
+"implementation_hint": "对象池化 HomingShard，限制每秒生成上限。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 2,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": [],
+"resource_path": "data/content/augments/rune_volley/aug_critical_shards.tres",
+"risk": "大量弹体需控制性能。",
+"route_id": "rune_volley",
+"route_label": "符文弹幕链",
+"source_augment_name": "暴击飞弹、双生火焰",
+"source_augment_rarity": "暴击飞弹:金色；双生火焰:银色",
+"synergy_tags": ["crit", "missile", "projectile", "skill"],
+"test_owner": "augment_rune_volley_loop.gd",
+"trigger": "on_crit",
+"trigger_spec": "trigger_id=on_crit; signals=damage_applied_packet; required_packet_keys=is_crit, target, owner, hit_position, proc_chain_id; synthetic_test=force crit packet",
+"unique": false,
+"upgrade_type": "放大器",
+"value": "2-4 枚；每枚 20% 符文强度",
+"why_close": "对应“暴击飞弹/双生火焰”的暴击生成额外弹体。"
+}
+trigger_spec = {
+"required_packet_keys": ["is_crit", "target", "owner", "hit_position", "proc_chain_id"],
+"required_packet_values": {
+
+},
+"signal_names": ["damage_applied_packet"],
+"synthetic_test": "force crit packet",
+"trigger_id": "on_crit"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "crit_shard",
+"effect_type": "spawn_projectile",
+"max_proc_depth": 2,
+"params": {
+"base_count": 2,
+"homing": true,
+"max_active_per_owner": 16,
+"max_count": 4,
+"proc_flag": "crit_shard",
+"projectile_role": "crit_shard",
+"trigger": "crit"
+}
+}])

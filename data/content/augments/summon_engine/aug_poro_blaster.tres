@@ -1,0 +1,115 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_poro_blaster"
+display_name = "魄罗爆破手"
+description = "命中积攒魄罗充能；满充能发射一只大魄罗，造成伤害并击退。高频命中可快速连发。"
+source_augment_name = "魄罗爆破手"
+source_augment_rarity = "魄罗爆破手:金色"
+route_id = "summon_engine"
+route_label = "自动奇观"
+rarity = "gold"
+max_rank = 2
+unique = false
+upgrade_type = "召唤型/放大器"
+source_trigger = "on_hit_charge"
+effect = "命中积攒魄罗充能；满充能发射一只大魄罗，造成伤害并击退。高频命中可快速连发。"
+source_condition = "最多储存 3 只魄罗。"
+value = {
+"source_text": "10 命中充能；大魄罗 180%"
+}
+synergy_tags = Array[String](["summon", "charge", "on_hit", "knockback"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "把高频命中转化成自动控制单位。"
+fit = "符文双持、台风分裂。"
+risk = "低频武器充能慢。"
+why_close = "直接来自“魄罗爆破手”。"
+implementation_hint = "ChargeCounter based on valid_hit。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/summon_engine/aug_poro_blaster.tres"
+test_owner = "augment_summon_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "把高频命中转化成自动控制单位。",
+"condition": "最多储存 3 只魄罗。",
+"display_name": "魄罗爆破手",
+"effect": "命中积攒魄罗充能；满充能发射一只大魄罗，造成伤害并击退。高频命中可快速连发。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "charge_on_hit",
+"effect_type": "charge_on_hit",
+"max_proc_depth": 2,
+"params": {
+"charge_tag": "poro_charge"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "spawn_projectile_at_full_charge",
+"effect_type": "spawn_projectile_at_full_charge",
+"max_proc_depth": 2,
+"params": {
+"effects": ["damage", "knockback"],
+"projectile_role": "big_poro"
+}
+}],
+"excludes_tags": [],
+"fit": "符文双持、台风分裂。",
+"id": "aug_poro_blaster",
+"implementation_hint": "ChargeCounter based on valid_hit。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 2,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": [],
+"resource_path": "data/content/augments/summon_engine/aug_poro_blaster.tres",
+"risk": "低频武器充能慢。",
+"route_id": "summon_engine",
+"route_label": "自动奇观",
+"source_augment_name": "魄罗爆破手",
+"source_augment_rarity": "魄罗爆破手:金色",
+"synergy_tags": ["summon", "charge", "on_hit", "knockback"],
+"test_owner": "augment_summon_loop.gd",
+"trigger": "on_hit_charge",
+"trigger_spec": "trigger_id=on_hit_charge; signals=damage_applied_packet; required_packet_keys=owner, target, charge_state, on_hit_efficiency; synthetic_test=emit repeated hits until charged",
+"unique": false,
+"upgrade_type": "召唤型/放大器",
+"value": "10 命中充能；大魄罗 180%",
+"why_close": "直接来自“魄罗爆破手”。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "target", "charge_state", "on_hit_efficiency"],
+"required_packet_values": {
+
+},
+"signal_names": ["damage_applied_packet"],
+"synthetic_test": "emit repeated hits until charged",
+"trigger_id": "on_hit_charge"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "charge_on_hit",
+"effect_type": "charge_on_hit",
+"max_proc_depth": 2,
+"params": {
+"charge_tag": "poro_charge"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "spawn_projectile_at_full_charge",
+"effect_type": "spawn_projectile_at_full_charge",
+"max_proc_depth": 2,
+"params": {
+"effects": ["damage", "knockback"],
+"projectile_role": "big_poro"
+}
+}])

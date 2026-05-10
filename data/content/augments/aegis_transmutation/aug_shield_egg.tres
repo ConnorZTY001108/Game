@@ -1,0 +1,101 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_shield_egg"
+display_name = "护盾爆蛋"
+description = "护盾破裂或自然结束时爆炸，对周围敌人造成与护盾值相关的魔法伤害。"
+source_augment_name = "砸开那颗蛋"
+source_augment_rarity = "砸开那颗蛋:银色"
+route_id = "aegis_transmutation"
+route_label = "圣盾转化"
+rarity = "silver"
+max_rank = 3
+unique = false
+upgrade_type = "启动器"
+source_trigger = "on_shield_break_or_expire"
+effect = "护盾破裂或自然结束时爆炸，对周围敌人造成与护盾值相关的魔法伤害。"
+source_condition = "同一护盾只爆一次；小护盾可合并结算。"
+value = {
+"source_text": "伤害 = 60% 护盾吸收值"
+}
+synergy_tags = Array[String](["shield", "explode", "aoe"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "让每个护盾都有输出价值。"
+fit = "巨脑法盾、风语祝福、圣火转化。"
+risk = "没有护盾来源时无收益。"
+why_close = "直接来自“砸开那颗蛋”。"
+implementation_hint = "ShieldInstance 记录 absorbed_value。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/aegis_transmutation/aug_shield_egg.tres"
+test_owner = "augment_aegis_loop.gd"
+checkpoint_priority = 4
+manifest_fields = {
+"checkpoint_priority": 4,
+"combo_value": "让每个护盾都有输出价值。",
+"condition": "同一护盾只爆一次；小护盾可合并结算。",
+"display_name": "护盾爆蛋",
+"effect": "护盾破裂或自然结束时爆炸，对周围敌人造成与护盾值相关的魔法伤害。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "shield_end_explosion",
+"effect_type": "shield_end_explosion",
+"max_proc_depth": 2,
+"params": {
+"damage_scales_with": "shield_amount",
+"radius_source": true,
+"triggers": ["break", "expire"]
+}
+}],
+"excludes_tags": [],
+"fit": "巨脑法盾、风语祝福、圣火转化。",
+"id": "aug_shield_egg",
+"implementation_hint": "ShieldInstance 记录 absorbed_value。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": true,
+"max_rank": 3,
+"normalized_rarity": "silver",
+"rarity": "银色",
+"required_tags": [],
+"resource_path": "data/content/augments/aegis_transmutation/aug_shield_egg.tres",
+"risk": "没有护盾来源时无收益。",
+"route_id": "aegis_transmutation",
+"route_label": "圣盾转化",
+"source_augment_name": "砸开那颗蛋",
+"source_augment_rarity": "砸开那颗蛋:银色",
+"synergy_tags": ["shield", "explode", "aoe"],
+"test_owner": "augment_aegis_loop.gd",
+"trigger": "on_shield_break_or_expire",
+"trigger_spec": "trigger_id=on_shield_break_or_expire; signals=shield_broken, shield_expired; required_packet_keys=owner, shield_amount, hit_position; synthetic_test=create shield then break/expire",
+"unique": false,
+"upgrade_type": "启动器",
+"value": "伤害 = 60% 护盾吸收值",
+"why_close": "直接来自“砸开那颗蛋”。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "shield_amount", "hit_position"],
+"required_packet_values": {
+
+},
+"signal_names": ["shield_broken", "shield_expired"],
+"synthetic_test": "create shield then break/expire",
+"trigger_id": "on_shield_break_or_expire"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "shield_end_explosion",
+"effect_type": "shield_end_explosion",
+"max_proc_depth": 2,
+"params": {
+"damage_scales_with": "shield_amount",
+"radius_source": true,
+"triggers": ["break", "expire"]
+}
+}])

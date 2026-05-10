@@ -1,0 +1,117 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_divine_intervention"
+display_name = "神圣干预"
+description = "战斗开始 15 秒后，每 35 秒落下一颗护体星：你短暂无敌；若无敌期间触碰敌人，则魅惑/减速并造成小伤害。"
+source_augment_name = "神圣干预、舞会女王"
+source_augment_rarity = "神圣干预:金色；舞会女王:棱彩"
+route_id = "summon_engine"
+route_label = "自动奇观"
+rarity = "gold"
+max_rank = 1
+unique = true
+upgrade_type = "生存型/规则改写型"
+source_trigger = "periodic"
+effect = "战斗开始 15 秒后，每 35 秒落下一颗护体星：你短暂无敌；若无敌期间触碰敌人，则魅惑/减速并造成小伤害。"
+source_condition = "无敌不免疫位移控制，可选配置。"
+value = {
+"source_text": "无敌 1.2 秒；魅惑/减速 1 秒"
+}
+synergy_tags = Array[String](["periodic", "invulnerable", "charm", "survival"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "周期性大招窗口，给自动奇观路线安全进场时刻。"
+fit = "魄罗王弹跳、巨像熔炉。"
+risk = "时间点固定，可能浪费。"
+why_close = "融合“神圣干预”的自动免伤和“舞会女王”的自动魅惑。"
+implementation_hint = "Timer 从 run_time 开始。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/summon_engine/aug_divine_intervention.tres"
+test_owner = "augment_summon_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "周期性大招窗口，给自动奇观路线安全进场时刻。",
+"condition": "无敌不免疫位移控制，可选配置。",
+"display_name": "神圣干预",
+"effect": "战斗开始 15 秒后，每 35 秒落下一颗护体星：你短暂无敌；若无敌期间触碰敌人，则魅惑/减速并造成小伤害。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "periodic_invulnerability_star",
+"effect_type": "periodic_invulnerability_star",
+"max_proc_depth": 2,
+"params": {
+"effects": ["invulnerable"],
+"initial_delay": 15.0,
+"interval": 35.0
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "contact_effect_while_invulnerable",
+"effect_type": "contact_effect_while_invulnerable",
+"max_proc_depth": 2,
+"params": {
+"effects": ["charm_or_slow", "small_damage"]
+}
+}],
+"excludes_tags": [],
+"fit": "魄罗王弹跳、巨像熔炉。",
+"id": "aug_divine_intervention",
+"implementation_hint": "Timer 从 run_time 开始。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": [],
+"resource_path": "data/content/augments/summon_engine/aug_divine_intervention.tres",
+"risk": "时间点固定，可能浪费。",
+"route_id": "summon_engine",
+"route_label": "自动奇观",
+"source_augment_name": "神圣干预、舞会女王",
+"source_augment_rarity": "神圣干预:金色；舞会女王:棱彩",
+"synergy_tags": ["periodic", "invulnerable", "charm", "survival"],
+"test_owner": "augment_summon_loop.gd",
+"trigger": "periodic",
+"trigger_spec": "trigger_id=periodic; signals=augment_periodic_tick; required_packet_keys=owner, elapsed_seconds, nearest_enemy, enemy_clusters; synthetic_test=advance scheduler past interval",
+"unique": true,
+"upgrade_type": "生存型/规则改写型",
+"value": "无敌 1.2 秒；魅惑/减速 1 秒",
+"why_close": "融合“神圣干预”的自动免伤和“舞会女王”的自动魅惑。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "elapsed_seconds", "nearest_enemy", "enemy_clusters"],
+"required_packet_values": {
+
+},
+"signal_names": ["augment_periodic_tick"],
+"synthetic_test": "advance scheduler past interval",
+"trigger_id": "periodic"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "periodic_invulnerability_star",
+"effect_type": "periodic_invulnerability_star",
+"max_proc_depth": 2,
+"params": {
+"effects": ["invulnerable"],
+"initial_delay": 15.0,
+"interval": 35.0
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "contact_effect_while_invulnerable",
+"effect_type": "contact_effect_while_invulnerable",
+"max_proc_depth": 2,
+"params": {
+"effects": ["charm_or_slow", "small_damage"]
+}
+}])

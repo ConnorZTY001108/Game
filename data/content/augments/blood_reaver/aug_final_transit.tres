@@ -1,0 +1,133 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_final_transit"
+display_name = "终点列车"
+description = "受到致命伤害时免死并召唤荒原列车穿过屏幕，对路径敌人造成伤害；若列车击杀精英，返还此强化冷却的一部分。"
+source_augment_name = "最终都市列车、俯冲轰炸"
+source_augment_rarity = "最终都市列车:金色；俯冲轰炸:银色"
+route_id = "blood_reaver"
+route_label = "血契收割"
+rarity = "gold"
+max_rank = 1
+unique = true
+upgrade_type = "终结器/生存型"
+source_trigger = "on_fatal_damage"
+effect = "受到致命伤害时免死并召唤荒原列车穿过屏幕，对路径敌人造成伤害；若列车击杀精英，返还此强化冷却的一部分。"
+source_condition = "每局最多触发 2 次。"
+value = {
+"source_text": "免死 1 HP；列车 500% 符文强度"
+}
+synergy_tags = Array[String](["fatal", "deathsave", "line_aoe", "revenge"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "让高风险路线有戏剧化反打。"
+fit = "玻璃大炮、不祥契约。"
+risk = "次数有限，不应替代常规生存。"
+why_close = "转译“阵亡后列车/死亡爆炸”为幸存者可接受的免死反打。"
+implementation_hint = "DeathIntercept 系统在扣血前查询。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/blood_reaver/aug_final_transit.tres"
+test_owner = "augment_blood_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "让高风险路线有戏剧化反打。",
+"condition": "每局最多触发 2 次。",
+"display_name": "终点列车",
+"effect": "受到致命伤害时免死并召唤荒原列车穿过屏幕，对路径敌人造成伤害；若列车击杀精英，返还此强化冷却的一部分。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "prevent_fatal_damage",
+"effect_type": "prevent_fatal_damage",
+"max_proc_depth": 2,
+"params": {
+"cooldown": 90.0,
+"min_health_after": 1
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "spawn_delayed_strike",
+"effect_type": "spawn_delayed_strike",
+"max_proc_depth": 2,
+"params": {
+"path": "screen_sweep",
+"strike_role": "wasteland_train"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "refund_self_cooldown_on_elite_kill",
+"effect_type": "refund_self_cooldown_on_elite_kill",
+"max_proc_depth": 2,
+"params": {
+"partial": true
+}
+}],
+"excludes_tags": [],
+"fit": "玻璃大炮、不祥契约。",
+"id": "aug_final_transit",
+"implementation_hint": "DeathIntercept 系统在扣血前查询。",
+"is_finisher": true,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": [],
+"resource_path": "data/content/augments/blood_reaver/aug_final_transit.tres",
+"risk": "次数有限，不应替代常规生存。",
+"route_id": "blood_reaver",
+"route_label": "血契收割",
+"source_augment_name": "最终都市列车、俯冲轰炸",
+"source_augment_rarity": "最终都市列车:金色；俯冲轰炸:银色",
+"synergy_tags": ["fatal", "deathsave", "line_aoe", "revenge"],
+"test_owner": "augment_blood_loop.gd",
+"trigger": "on_fatal_damage",
+"trigger_spec": "trigger_id=on_fatal_damage; signals=fatal_damage_received; required_packet_keys=owner, incoming_packet, cooldown_state; synthetic_test=send fatal packet",
+"unique": true,
+"upgrade_type": "终结器/生存型",
+"value": "免死 1 HP；列车 500% 符文强度",
+"why_close": "转译“阵亡后列车/死亡爆炸”为幸存者可接受的免死反打。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "incoming_packet", "cooldown_state"],
+"required_packet_values": {
+
+},
+"signal_names": ["fatal_damage_received"],
+"synthetic_test": "send fatal packet",
+"trigger_id": "on_fatal_damage"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "prevent_fatal_damage",
+"effect_type": "prevent_fatal_damage",
+"max_proc_depth": 2,
+"params": {
+"cooldown": 90.0,
+"min_health_after": 1
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "spawn_delayed_strike",
+"effect_type": "spawn_delayed_strike",
+"max_proc_depth": 2,
+"params": {
+"path": "screen_sweep",
+"strike_role": "wasteland_train"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "refund_self_cooldown_on_elite_kill",
+"effect_type": "refund_self_cooldown_on_elite_kill",
+"max_proc_depth": 2,
+"params": {
+"partial": true
+}
+}])

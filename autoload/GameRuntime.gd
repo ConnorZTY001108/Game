@@ -9,12 +9,19 @@ var elapsed_seconds: float = 0.0
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
+func _process(delta: float) -> void:
+	if state != RunState.PLAYING:
+		return
+	elapsed_seconds += delta
+	GameEvents.augment_periodic_tick.emit(elapsed_seconds)
+
 func start_run() -> void:
 	elapsed_seconds = 0.0
 	state = RunState.PLAYING
 	get_tree().paused = false
 	log_state("run_started")
 	GameEvents.run_started.emit()
+	GameEvents.augment_periodic_tick.emit(elapsed_seconds)
 
 func set_paused(is_paused: bool) -> void:
 	if state == RunState.GAME_OVER or state == RunState.VICTORY:

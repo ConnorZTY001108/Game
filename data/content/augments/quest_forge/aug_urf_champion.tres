@@ -1,0 +1,121 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_urf_champion"
+display_name = "海牛勇士任务"
+description = "任务：击杀 600 敌人或参与 6 次精英击杀。完成后进入阿福模式：所有武器冷却大幅缩短，并周期性重置一个随机武器。"
+source_augment_name = "任务：海牛阿福的勇士、无限循环往复"
+source_augment_rarity = "任务：海牛阿福的勇士:棱彩；无限循环往复:棱彩"
+route_id = "quest_forge"
+route_label = "海牛锻炉"
+rarity = "prismatic"
+max_rank = 1
+unique = true
+upgrade_type = "终结器/任务型"
+source_trigger = "quest_progress_on_kill_and_cast"
+effect = "任务：击杀 600 敌人或参与 6 次精英击杀。完成后进入阿福模式：所有武器冷却大幅缩短，并周期性重置一个随机武器。"
+source_condition = "越早拿越强。"
+value = {
+"source_text": "完成后冷却 -25%；每 8 秒刷新 1 武器"
+}
+synergy_tags = Array[String](["quest", "cooldown", "urf", "finisher"])
+required_tags = Array[String](["early_game"])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "做完任务后获得无限火力式节奏爆发。"
+fit = "炼狱导管、符文弹幕。"
+risk = "前期弱，后期拿价值低。"
+why_close = "转译“海牛阿福任务”和“无限循环往复”的高急速。"
+implementation_hint = "QuestResource 保存 progress/complete_reward。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/quest_forge/aug_urf_champion.tres"
+test_owner = "augment_forge_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "做完任务后获得无限火力式节奏爆发。",
+"condition": "越早拿越强。",
+"display_name": "海牛勇士任务",
+"effect": "任务：击杀 600 敌人或参与 6 次精英击杀。完成后进入阿福模式：所有武器冷却大幅缩短，并周期性重置一个随机武器。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "quest_progress",
+"effect_type": "quest_progress",
+"max_proc_depth": 2,
+"params": {
+"complete_if_any_requirement": true,
+"elite_kills_required": 6,
+"normal_kills_required": 600
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "activate_cooldown_mode",
+"effect_type": "activate_cooldown_mode",
+"max_proc_depth": 2,
+"params": {
+"mode": "urf",
+"periodic_random_weapon_reset": true,
+"weapon_cooldown_multiplier": "greatly_reduced"
+}
+}],
+"excludes_tags": [],
+"fit": "炼狱导管、符文弹幕。",
+"id": "aug_urf_champion",
+"implementation_hint": "QuestResource 保存 progress/complete_reward。",
+"is_finisher": true,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "prismatic",
+"rarity": "棱彩",
+"required_tags": ["early_game"],
+"resource_path": "data/content/augments/quest_forge/aug_urf_champion.tres",
+"risk": "前期弱，后期拿价值低。",
+"route_id": "quest_forge",
+"route_label": "海牛锻炉",
+"source_augment_name": "任务：海牛阿福的勇士、无限循环往复",
+"source_augment_rarity": "任务：海牛阿福的勇士:棱彩；无限循环往复:棱彩",
+"synergy_tags": ["quest", "cooldown", "urf", "finisher"],
+"test_owner": "augment_forge_loop.gd",
+"trigger": "quest_progress_on_kill_and_cast",
+"trigger_spec": "trigger_id=quest_progress_on_kill_and_cast; signals=enemy_died, elite_killed, weapon_fired; required_packet_keys=owner, kill_count, elite_count, cast_count; synthetic_test=simulate quest progress",
+"unique": true,
+"upgrade_type": "终结器/任务型",
+"value": "完成后冷却 -25%；每 8 秒刷新 1 武器",
+"why_close": "转译“海牛阿福任务”和“无限循环往复”的高急速。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "kill_count", "elite_count", "cast_count"],
+"required_packet_values": {
+
+},
+"signal_names": ["enemy_died", "elite_killed", "weapon_fired"],
+"synthetic_test": "simulate quest progress",
+"trigger_id": "quest_progress_on_kill_and_cast"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "quest_progress",
+"effect_type": "quest_progress",
+"max_proc_depth": 2,
+"params": {
+"complete_if_any_requirement": true,
+"elite_kills_required": 6,
+"normal_kills_required": 600
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "activate_cooldown_mode",
+"effect_type": "activate_cooldown_mode",
+"max_proc_depth": 2,
+"params": {
+"mode": "urf",
+"periodic_random_weapon_reset": true,
+"weapon_cooldown_multiplier": "greatly_reduced"
+}
+}])

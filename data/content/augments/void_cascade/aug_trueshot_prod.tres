@@ -1,0 +1,119 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_trueshot_prod"
+display_name = "精准奇才"
+description = "从 420 以上距离造成伤害时，向目标发射穿透精准光矢；若命中精英，返还该武器 15% 冷却。"
+source_augment_name = "精准奇才、老练狙神"
+source_augment_rarity = "精准奇才:棱彩；老练狙神:金色"
+route_id = "void_cascade"
+route_label = "虚空裂隙连锁"
+rarity = "gold"
+max_rank = 2
+unique = false
+upgrade_type = "放大器"
+source_trigger = "on_long_range_hit"
+effect = "从 420 以上距离造成伤害时，向目标发射穿透精准光矢；若命中精英，返还该武器 15% 冷却。"
+source_condition = "每 0.8 秒触发一次。"
+value = {
+"source_text": "光矢 120% 符文强度"
+}
+synergy_tags = Array[String](["long_range", "projectile", "cooldown", "poke"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "奖励走位和远程命中，让长手构筑有专属循环。"
+fit = "远程符文弹、虚空裂隙。"
+risk = "近战和 orbit 不适合。"
+why_close = "结合“精准奇才”的远距弹幕与“老练狙神”的远距返还冷却。"
+implementation_hint = "hit_event.distance_from_player。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/void_cascade/aug_trueshot_prod.tres"
+test_owner = "augment_void_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "奖励走位和远程命中，让长手构筑有专属循环。",
+"condition": "每 0.8 秒触发一次。",
+"display_name": "精准奇才",
+"effect": "从 420 以上距离造成伤害时，向目标发射穿透精准光矢；若命中精英，返还该武器 15% 冷却。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "long_range_bonus_projectile",
+"effect_type": "long_range_bonus_projectile",
+"max_proc_depth": 2,
+"params": {
+"min_distance": 420,
+"piercing": true,
+"projectile_role": "trueshot_bolt"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "refund_cooldown",
+"effect_type": "refund_cooldown",
+"max_proc_depth": 2,
+"params": {
+"refund_ratio": 0.15,
+"target_class": "elite"
+}
+}],
+"excludes_tags": [],
+"fit": "远程符文弹、虚空裂隙。",
+"id": "aug_trueshot_prod",
+"implementation_hint": "hit_event.distance_from_player。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 2,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": [],
+"resource_path": "data/content/augments/void_cascade/aug_trueshot_prod.tres",
+"risk": "近战和 orbit 不适合。",
+"route_id": "void_cascade",
+"route_label": "虚空裂隙连锁",
+"source_augment_name": "精准奇才、老练狙神",
+"source_augment_rarity": "精准奇才:棱彩；老练狙神:金色",
+"synergy_tags": ["long_range", "projectile", "cooldown", "poke"],
+"test_owner": "augment_void_loop.gd",
+"trigger": "on_long_range_hit",
+"trigger_spec": "trigger_id=on_long_range_hit; signals=damage_applied_packet; required_packet_keys=owner, target, source_position, hit_position, distance; synthetic_test=emit hit over distance threshold",
+"unique": false,
+"upgrade_type": "放大器",
+"value": "光矢 120% 符文强度",
+"why_close": "结合“精准奇才”的远距弹幕与“老练狙神”的远距返还冷却。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "target", "source_position", "hit_position", "distance"],
+"required_packet_values": {
+
+},
+"signal_names": ["damage_applied_packet"],
+"synthetic_test": "emit hit over distance threshold",
+"trigger_id": "on_long_range_hit"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "long_range_bonus_projectile",
+"effect_type": "long_range_bonus_projectile",
+"max_proc_depth": 2,
+"params": {
+"min_distance": 420,
+"piercing": true,
+"projectile_role": "trueshot_bolt"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "refund_cooldown",
+"effect_type": "refund_cooldown",
+"max_proc_depth": 2,
+"params": {
+"refund_ratio": 0.15,
+"target_class": "elite"
+}
+}])

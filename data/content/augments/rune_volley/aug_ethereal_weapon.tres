@@ -1,0 +1,103 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_ethereal_weapon"
+display_name = "虚幻武器"
+description = "技能和 orbit 命中也会施加当前武器的 on_hit 效果。"
+source_augment_name = "虚幻武器"
+source_augment_rarity = "虚幻武器:金色"
+route_id = "rune_volley"
+route_label = "符文弹幕链"
+rarity = "gold"
+max_rank = 1
+unique = true
+upgrade_type = "转换器"
+source_trigger = "on_skill_hit"
+effect = "技能和 orbit 命中也会施加当前武器的 on_hit 效果。"
+source_condition = "同一敌人每 0.6 秒最多被同一技能触发一次。"
+value = {
+"source_text": "on_hit 效率 60%"
+}
+synergy_tags = Array[String](["on_hit", "skill", "orbit", "converter"])
+required_tags = Array[String](["has_on_hit"])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "把技能命中转化为普攻特效入口，极大提高联动密度。"
+fit = "orbit 法阵、元素叠层、火上浇油。"
+risk = "若 on_hit 本身很强，需要单目标冷却。"
+why_close = "直接转译“虚幻武器”的技能触发攻击特效。"
+implementation_hint = "在 hit_effect_resolver 加 per_target_cooldown_key。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/rune_volley/aug_ethereal_weapon.tres"
+test_owner = "augment_rune_volley_loop.gd"
+checkpoint_priority = 10
+manifest_fields = {
+"checkpoint_priority": 10,
+"combo_value": "把技能命中转化为普攻特效入口，极大提高联动密度。",
+"condition": "同一敌人每 0.6 秒最多被同一技能触发一次。",
+"display_name": "虚幻武器",
+"effect": "技能和 orbit 命中也会施加当前武器的 on_hit 效果。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "ethereal_on_hit",
+"effect_type": "apply_on_hit_package",
+"max_proc_depth": 2,
+"params": {
+"efficiency": 1.0,
+"proc_flag": "ethereal_on_hit",
+"source_cooldown": 0.25,
+"source_kinds": ["skill", "orbit"]
+}
+}],
+"excludes_tags": [],
+"fit": "orbit 法阵、元素叠层、火上浇油。",
+"id": "aug_ethereal_weapon",
+"implementation_hint": "在 hit_effect_resolver 加 per_target_cooldown_key。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": ["has_on_hit"],
+"resource_path": "data/content/augments/rune_volley/aug_ethereal_weapon.tres",
+"risk": "若 on_hit 本身很强，需要单目标冷却。",
+"route_id": "rune_volley",
+"route_label": "符文弹幕链",
+"source_augment_name": "虚幻武器",
+"source_augment_rarity": "虚幻武器:金色",
+"synergy_tags": ["on_hit", "skill", "orbit", "converter"],
+"test_owner": "augment_rune_volley_loop.gd",
+"trigger": "on_skill_hit",
+"trigger_spec": "trigger_id=on_skill_hit; signals=damage_applied_packet; required_packet_keys=source_kind=skill|rune|zone|orbit, target, hit_position, tags; synthetic_test=emit skill hit packet",
+"unique": true,
+"upgrade_type": "转换器",
+"value": "on_hit 效率 60%",
+"why_close": "直接转译“虚幻武器”的技能触发攻击特效。"
+}
+trigger_spec = {
+"required_packet_keys": ["source_kind", "target", "hit_position", "tags"],
+"required_packet_values": {
+"source_kind": "skill|rune|zone|orbit"
+},
+"signal_names": ["damage_applied_packet"],
+"synthetic_test": "emit skill hit packet",
+"trigger_id": "on_skill_hit"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "ethereal_on_hit",
+"effect_type": "apply_on_hit_package",
+"max_proc_depth": 2,
+"params": {
+"efficiency": 1.0,
+"proc_flag": "ethereal_on_hit",
+"source_cooldown": 0.25,
+"source_kinds": ["skill", "orbit"]
+}
+}])

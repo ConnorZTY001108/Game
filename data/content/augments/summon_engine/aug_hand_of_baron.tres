@@ -1,0 +1,101 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_hand_of_baron"
+display_name = "男爵之手"
+description = "击杀精英或拾取特殊祭坛后召唤 2 名荒原符兵；符兵沿玩家周围巡逻并攻击敌人。"
+source_augment_name = "男爵之手"
+source_augment_rarity = "男爵之手:棱彩"
+route_id = "summon_engine"
+route_label = "自动奇观"
+rarity = "gold"
+max_rank = 1
+unique = true
+upgrade_type = "召唤型/经济型"
+source_trigger = "on_elite_kill_or_pickup"
+effect = "击杀精英或拾取特殊祭坛后召唤 2 名荒原符兵；符兵沿玩家周围巡逻并攻击敌人。"
+source_condition = "符兵受仆从大师增强。"
+value = {
+"source_text": "符兵 12 秒；每只 45%/秒"
+}
+synergy_tags = Array[String](["summon", "minion", "elite", "baron"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "把地图推进转译为幸存者的临时随从压力。"
+fit = "仆从大师、红包。"
+risk = "随从 AI 需要简洁稳定。"
+why_close = "保留“男爵强化小兵”的地图单位幻想。"
+implementation_hint = "SummonedMinion steering: orbit + seek。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/summon_engine/aug_hand_of_baron.tres"
+test_owner = "augment_summon_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "把地图推进转译为幸存者的临时随从压力。",
+"condition": "符兵受仆从大师增强。",
+"display_name": "男爵之手",
+"effect": "击杀精英或拾取特殊祭坛后召唤 2 名荒原符兵；符兵沿玩家周围巡逻并攻击敌人。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "summon_on_elite_kill_or_pickup",
+"effect_type": "summon_on_elite_kill_or_pickup",
+"max_proc_depth": 2,
+"params": {
+"behavior": "patrol_and_attack",
+"count": 2,
+"summon_role": "rune_soldier"
+}
+}],
+"excludes_tags": [],
+"fit": "仆从大师、红包。",
+"id": "aug_hand_of_baron",
+"implementation_hint": "SummonedMinion steering: orbit + seek。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": [],
+"resource_path": "data/content/augments/summon_engine/aug_hand_of_baron.tres",
+"risk": "随从 AI 需要简洁稳定。",
+"route_id": "summon_engine",
+"route_label": "自动奇观",
+"source_augment_name": "男爵之手",
+"source_augment_rarity": "男爵之手:棱彩",
+"synergy_tags": ["summon", "minion", "elite", "baron"],
+"test_owner": "augment_summon_loop.gd",
+"trigger": "on_elite_kill_or_pickup",
+"trigger_spec": "trigger_id=on_elite_kill_or_pickup; signals=elite_killed, pickup_collected; required_packet_keys=owner, target_class, pickup_id; synthetic_test=kill elite and collect altar pickup",
+"unique": true,
+"upgrade_type": "召唤型/经济型",
+"value": "符兵 12 秒；每只 45%/秒",
+"why_close": "保留“男爵强化小兵”的地图单位幻想。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "target_class", "pickup_id"],
+"required_packet_values": {
+
+},
+"signal_names": ["elite_killed", "pickup_collected"],
+"synthetic_test": "kill elite and collect altar pickup",
+"trigger_id": "on_elite_kill_or_pickup"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "summon_on_elite_kill_or_pickup",
+"effect_type": "summon_on_elite_kill_or_pickup",
+"max_proc_depth": 2,
+"params": {
+"behavior": "patrol_and_attack",
+"count": 2,
+"summon_role": "rune_soldier"
+}
+}])

@@ -1,0 +1,99 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_flashbang"
+display_name = "闪光爆破"
+description = "冲刺或闪烁结束时爆炸，伤害并减速附近敌人。"
+source_augment_name = "闪光弹"
+source_augment_rarity = "闪光弹:银色"
+route_id = "snowstep_vanguard"
+route_label = "雪步先锋"
+rarity = "silver"
+max_rank = 3
+unique = false
+upgrade_type = "放大器"
+source_trigger = "on_dash_or_blink"
+effect = "冲刺或闪烁结束时爆炸，伤害并减速附近敌人。"
+source_condition = "每 0.6 秒最多触发一次。"
+value = {
+"source_text": "120% 符文强度；50% 减速 1.2 秒"
+}
+synergy_tags = Array[String](["dash", "blink", "explode", "slow"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "把机动变成清群和控场。"
+fit = "神圣雪印、闪烁备用、全凭身法。"
+risk = "不位移则无收益。"
+why_close = "直接来自“闪光弹”。"
+implementation_hint = "DashEvent 结束点生成 AoE。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/snowstep_vanguard/aug_flashbang.tres"
+test_owner = "augment_snowstep_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "把机动变成清群和控场。",
+"condition": "每 0.6 秒最多触发一次。",
+"display_name": "闪光爆破",
+"effect": "冲刺或闪烁结束时爆炸，伤害并减速附近敌人。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "dash_blink_end_explosion",
+"effect_type": "dash_blink_end_explosion",
+"max_proc_depth": 2,
+"params": {
+"effects": ["damage", "slow"],
+"radius_source": "value"
+}
+}],
+"excludes_tags": [],
+"fit": "神圣雪印、闪烁备用、全凭身法。",
+"id": "aug_flashbang",
+"implementation_hint": "DashEvent 结束点生成 AoE。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 3,
+"normalized_rarity": "silver",
+"rarity": "银色",
+"required_tags": [],
+"resource_path": "data/content/augments/snowstep_vanguard/aug_flashbang.tres",
+"risk": "不位移则无收益。",
+"route_id": "snowstep_vanguard",
+"route_label": "雪步先锋",
+"source_augment_name": "闪光弹",
+"source_augment_rarity": "闪光弹:银色",
+"synergy_tags": ["dash", "blink", "explode", "slow"],
+"test_owner": "augment_snowstep_loop.gd",
+"trigger": "on_dash_or_blink",
+"trigger_spec": "trigger_id=on_dash_or_blink; signals=dash_finished, blink_used; required_packet_keys=owner, end_position, nearby_enemies; synthetic_test=finish dash/blink near enemies",
+"unique": false,
+"upgrade_type": "放大器",
+"value": "120% 符文强度；50% 减速 1.2 秒",
+"why_close": "直接来自“闪光弹”。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "end_position", "nearby_enemies"],
+"required_packet_values": {
+
+},
+"signal_names": ["dash_finished", "blink_used"],
+"synthetic_test": "finish dash/blink near enemies",
+"trigger_id": "on_dash_or_blink"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "dash_blink_end_explosion",
+"effect_type": "dash_blink_end_explosion",
+"max_proc_depth": 2,
+"params": {
+"effects": ["damage", "slow"],
+"radius_source": "value"
+}
+}])

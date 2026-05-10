@@ -1,0 +1,103 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_sonic_holy"
+display_name = "圣盾音爆"
+description = "治疗或护盾触发时，在玩家周围释放音爆，造成伤害、减速，并附加 1 层符火。"
+source_augment_name = "圣火、天音爆"
+source_augment_rarity = "圣火:金色；天音爆:银色"
+route_id = "aegis_transmutation"
+route_label = "圣盾转化"
+rarity = "gold"
+max_rank = 1
+unique = true
+upgrade_type = "转换器"
+source_trigger = "on_shield_or_heal"
+effect = "治疗或护盾触发时，在玩家周围释放音爆，造成伤害、减速，并附加 1 层符火。"
+source_condition = "0.8 秒冷却。"
+value = {
+"source_text": "100% 符文强度；40% 减速 1 秒"
+}
+synergy_tags = Array[String](["shield", "heal", "slow", "burn", "converter"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "防御动作同时启动火焰与控场。"
+fit = "圣火转化、炼狱导管、巨像熔炉。"
+risk = "触发过频会盖过主武器。"
+why_close = "结合“圣火”和“天音爆”的保护触发伤害/减速。"
+implementation_hint = "AreaDamage + BurnStackEvent。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/aegis_transmutation/aug_sonic_holy.tres"
+test_owner = "augment_aegis_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "防御动作同时启动火焰与控场。",
+"condition": "0.8 秒冷却。",
+"display_name": "圣盾音爆",
+"effect": "治疗或护盾触发时，在玩家周围释放音爆，造成伤害、减速，并附加 1 层符火。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "protection_pulse",
+"effect_type": "protection_pulse",
+"max_proc_depth": 2,
+"params": {
+"burn_stacks": 1,
+"effects": ["damage", "slow", "burn_stack"],
+"radius": 180,
+"sources": ["heal", "shield"]
+}
+}],
+"excludes_tags": [],
+"fit": "圣火转化、炼狱导管、巨像熔炉。",
+"id": "aug_sonic_holy",
+"implementation_hint": "AreaDamage + BurnStackEvent。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": [],
+"resource_path": "data/content/augments/aegis_transmutation/aug_sonic_holy.tres",
+"risk": "触发过频会盖过主武器。",
+"route_id": "aegis_transmutation",
+"route_label": "圣盾转化",
+"source_augment_name": "圣火、天音爆",
+"source_augment_rarity": "圣火:金色；天音爆:银色",
+"synergy_tags": ["shield", "heal", "slow", "burn", "converter"],
+"test_owner": "augment_aegis_loop.gd",
+"trigger": "on_shield_or_heal",
+"trigger_spec": "trigger_id=on_shield_or_heal; signals=shield_gained, heal_received; required_packet_keys=owner, amount, packet, source_kind; synthetic_test=emit shield and heal events",
+"unique": true,
+"upgrade_type": "转换器",
+"value": "100% 符文强度；40% 减速 1 秒",
+"why_close": "结合“圣火”和“天音爆”的保护触发伤害/减速。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "amount", "packet", "source_kind"],
+"required_packet_values": {
+
+},
+"signal_names": ["shield_gained", "heal_received"],
+"synthetic_test": "emit shield and heal events",
+"trigger_id": "on_shield_or_heal"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "protection_pulse",
+"effect_type": "protection_pulse",
+"max_proc_depth": 2,
+"params": {
+"burn_stacks": 1,
+"effects": ["damage", "slow", "burn_stack"],
+"radius": 180,
+"sources": ["heal", "shield"]
+}
+}])

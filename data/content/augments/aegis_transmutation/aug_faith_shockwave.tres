@@ -1,0 +1,117 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_faith_shockwave"
+display_name = "信念冲击波"
+description = "你在护盾存在期间造成伤害会叠“信念”；满 30 层释放冲击波，并斩杀低生命普通敌人。"
+source_augment_name = "信念者的强化"
+source_augment_rarity = "信念者的强化:棱彩"
+route_id = "aegis_transmutation"
+route_label = "圣盾转化"
+rarity = "prismatic"
+max_rank = 1
+unique = true
+upgrade_type = "终结器"
+source_trigger = "on_damage_while_shielded_or_after_heal"
+effect = "你在护盾存在期间造成伤害会叠“信念”；满 30 层释放冲击波，并斩杀低生命普通敌人。"
+source_condition = "精英/Boss 不斩杀，改为额外自适应伤害。"
+value = {
+"source_text": "冲击波 300% 符文强度；斩杀 6%"
+}
+synergy_tags = Array[String](["shield", "heal", "execute", "shockwave", "finisher"])
+required_tags = Array[String](["shield_or_heal"])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "给保护流一个主动清屏峰值。"
+fit = "会心治疗、风语祝福、符文双持。"
+risk = "需要持续护盾覆盖。"
+why_close = "把原表“治疗/护盾友军后队友输出叠虔诚”转译为“受保护时自身输出叠信念”。"
+implementation_hint = "信念层通过 DamageEvent + player.has_shield 判断。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/aegis_transmutation/aug_faith_shockwave.tres"
+test_owner = "augment_aegis_loop.gd"
+checkpoint_priority = 15
+manifest_fields = {
+"checkpoint_priority": 15,
+"combo_value": "给保护流一个主动清屏峰值。",
+"condition": "精英/Boss 不斩杀，改为额外自适应伤害。",
+"display_name": "信念冲击波",
+"effect": "你在护盾存在期间造成伤害会叠“信念”；满 30 层释放冲击波，并斩杀低生命普通敌人。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "stack_while_shielded_or_recent_heal",
+"effect_type": "stack_while_shielded_or_recent_heal",
+"max_proc_depth": 2,
+"params": {
+"stack_tag": "faith",
+"threshold": 30
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "faith_shockwave",
+"effect_type": "spawn_shockwave",
+"max_proc_depth": 2,
+"params": {
+"execute_low_hp_normal": true,
+"proc_flag": "faith_shockwave"
+}
+}],
+"excludes_tags": [],
+"fit": "会心治疗、风语祝福、符文双持。",
+"id": "aug_faith_shockwave",
+"implementation_hint": "信念层通过 DamageEvent + player.has_shield 判断。",
+"is_finisher": true,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "prismatic",
+"rarity": "棱彩",
+"required_tags": ["shield_or_heal"],
+"resource_path": "data/content/augments/aegis_transmutation/aug_faith_shockwave.tres",
+"risk": "需要持续护盾覆盖。",
+"route_id": "aegis_transmutation",
+"route_label": "圣盾转化",
+"source_augment_name": "信念者的强化",
+"source_augment_rarity": "信念者的强化:棱彩",
+"synergy_tags": ["shield", "heal", "execute", "shockwave", "finisher"],
+"test_owner": "augment_aegis_loop.gd",
+"trigger": "on_damage_while_shielded_or_after_heal",
+"trigger_spec": "trigger_id=on_damage_while_shielded_or_after_heal; signals=damage_applied_packet, heal_received; required_packet_keys=owner, target, shield_active, recent_heal_seconds; synthetic_test=damage while shielded and after heal",
+"unique": true,
+"upgrade_type": "终结器",
+"value": "冲击波 300% 符文强度；斩杀 6%",
+"why_close": "把原表“治疗/护盾友军后队友输出叠虔诚”转译为“受保护时自身输出叠信念”。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "target", "shield_active", "recent_heal_seconds"],
+"required_packet_values": {
+
+},
+"signal_names": ["damage_applied_packet", "heal_received"],
+"synthetic_test": "damage while shielded and after heal",
+"trigger_id": "on_damage_while_shielded_or_after_heal"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "stack_while_shielded_or_recent_heal",
+"effect_type": "stack_while_shielded_or_recent_heal",
+"max_proc_depth": 2,
+"params": {
+"stack_tag": "faith",
+"threshold": 30
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "faith_shockwave",
+"effect_type": "spawn_shockwave",
+"max_proc_depth": 2,
+"params": {
+"execute_low_hp_normal": true,
+"proc_flag": "faith_shockwave"
+}
+}])

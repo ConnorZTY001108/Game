@@ -1,0 +1,115 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_shadow_runner"
+display_name = "暗影疾奔"
+description = "冲刺后获得爆发移速；参与击杀精英后短暂潜行，潜行结束时下一次伤害提高。"
+source_augment_name = "暗影疾奔、夜狩"
+source_augment_rarity = "暗影疾奔:银色；夜狩:金色"
+route_id = "snowstep_vanguard"
+route_label = "雪步先锋"
+rarity = "gold"
+max_rank = 1
+unique = true
+upgrade_type = "生存型/放大器"
+source_trigger = "on_dash_or_kill"
+effect = "冲刺后获得爆发移速；参与击杀精英后短暂潜行，潜行结束时下一次伤害提高。"
+source_condition = "普通怪击杀只给少量移速。"
+value = {
+"source_text": "移速 +70% 衰减；潜行 1.2 秒"
+}
+synergy_tags = Array[String](["dash", "stealth", "speed", "kill"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "让位移后有追击、脱战和爆发窗口。"
+fit = "神圣雪印、血债飞踢。"
+risk = "潜行不能在 Boss 技能中完全免伤。"
+why_close = "来自“暗影疾奔”和“夜狩”。"
+implementation_hint = "Stealth 不取消已锁定投射物，只降低新锁定。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/snowstep_vanguard/aug_shadow_runner.tres"
+test_owner = "augment_snowstep_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "让位移后有追击、脱战和爆发窗口。",
+"condition": "普通怪击杀只给少量移速。",
+"display_name": "暗影疾奔",
+"effect": "冲刺后获得爆发移速；参与击杀精英后短暂潜行，潜行结束时下一次伤害提高。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "dash_speed_burst",
+"effect_type": "dash_speed_burst",
+"max_proc_depth": 2,
+"params": {
+"duration_source": "value"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "elite_kill_stealth",
+"effect_type": "elite_kill_stealth",
+"max_proc_depth": 2,
+"params": {
+"duration_source": "value",
+"next_damage_bonus": true
+}
+}],
+"excludes_tags": [],
+"fit": "神圣雪印、血债飞踢。",
+"id": "aug_shadow_runner",
+"implementation_hint": "Stealth 不取消已锁定投射物，只降低新锁定。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": [],
+"resource_path": "data/content/augments/snowstep_vanguard/aug_shadow_runner.tres",
+"risk": "潜行不能在 Boss 技能中完全免伤。",
+"route_id": "snowstep_vanguard",
+"route_label": "雪步先锋",
+"source_augment_name": "暗影疾奔、夜狩",
+"source_augment_rarity": "暗影疾奔:银色；夜狩:金色",
+"synergy_tags": ["dash", "stealth", "speed", "kill"],
+"test_owner": "augment_snowstep_loop.gd",
+"trigger": "on_dash_or_kill",
+"trigger_spec": "trigger_id=on_dash_or_kill; signals=dash_finished, elite_killed; required_packet_keys=owner, target, elapsed_seconds; synthetic_test=dash then kill elite",
+"unique": true,
+"upgrade_type": "生存型/放大器",
+"value": "移速 +70% 衰减；潜行 1.2 秒",
+"why_close": "来自“暗影疾奔”和“夜狩”。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "target", "elapsed_seconds"],
+"required_packet_values": {
+
+},
+"signal_names": ["dash_finished", "elite_killed"],
+"synthetic_test": "dash then kill elite",
+"trigger_id": "on_dash_or_kill"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "dash_speed_burst",
+"effect_type": "dash_speed_burst",
+"max_proc_depth": 2,
+"params": {
+"duration_source": "value"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "elite_kill_stealth",
+"effect_type": "elite_kill_stealth",
+"max_proc_depth": 2,
+"params": {
+"duration_source": "value",
+"next_damage_bonus": true
+}
+}])

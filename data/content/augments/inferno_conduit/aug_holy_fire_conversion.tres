@@ -1,0 +1,101 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_holy_fire_conversion"
+display_name = "圣火转化"
+description = "获得治疗或护盾时，对附近敌人施加可叠加符火。"
+source_augment_name = "圣火"
+source_augment_rarity = "圣火:金色"
+route_id = "inferno_conduit"
+route_label = "炼狱导管"
+rarity = "gold"
+max_rank = 1
+unique = true
+upgrade_type = "转换器"
+source_trigger = "on_shield_or_heal"
+effect = "获得治疗或护盾时，对附近敌人施加可叠加符火。"
+source_condition = "拾取回血也算；每次触发有 0.5 秒冷却。"
+value = {
+"source_text": "附近 5 敌各 2 层符火"
+}
+synergy_tags = Array[String](["burn", "shield", "heal", "converter"])
+required_tags = Array[String](["heal_or_shield"])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "把防御资源转为灼烧启动器。"
+fit = "护盾爆蛋、死亡之环、慢炖。"
+risk = "无回复/护盾构筑不适合。"
+why_close = "转译“圣火”的治疗护盾施加无限灼烧。"
+implementation_hint = "统一 HealEvent 和 ShieldEvent 触发。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/inferno_conduit/aug_holy_fire_conversion.tres"
+test_owner = "augment_inferno_loop.gd"
+checkpoint_priority = 12
+manifest_fields = {
+"checkpoint_priority": 12,
+"combo_value": "把防御资源转为灼烧启动器。",
+"condition": "拾取回血也算；每次触发有 0.5 秒冷却。",
+"display_name": "圣火转化",
+"effect": "获得治疗或护盾时，对附近敌人施加可叠加符火。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "convert_shield_heal_to_burn",
+"effect_type": "convert_shield_heal_to_burn",
+"max_proc_depth": 2,
+"params": {
+"burn_stack_tag": "rune_fire",
+"nearby_radius": 220,
+"source_cooldown": 0.5
+}
+}],
+"excludes_tags": [],
+"fit": "护盾爆蛋、死亡之环、慢炖。",
+"id": "aug_holy_fire_conversion",
+"implementation_hint": "统一 HealEvent 和 ShieldEvent 触发。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": ["heal_or_shield"],
+"resource_path": "data/content/augments/inferno_conduit/aug_holy_fire_conversion.tres",
+"risk": "无回复/护盾构筑不适合。",
+"route_id": "inferno_conduit",
+"route_label": "炼狱导管",
+"source_augment_name": "圣火",
+"source_augment_rarity": "圣火:金色",
+"synergy_tags": ["burn", "shield", "heal", "converter"],
+"test_owner": "augment_inferno_loop.gd",
+"trigger": "on_shield_or_heal",
+"trigger_spec": "trigger_id=on_shield_or_heal; signals=shield_gained, heal_received; required_packet_keys=owner, amount, packet, source_kind; synthetic_test=emit shield and heal events",
+"unique": true,
+"upgrade_type": "转换器",
+"value": "附近 5 敌各 2 层符火",
+"why_close": "转译“圣火”的治疗护盾施加无限灼烧。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "amount", "packet", "source_kind"],
+"required_packet_values": {
+
+},
+"signal_names": ["shield_gained", "heal_received"],
+"synthetic_test": "emit shield and heal events",
+"trigger_id": "on_shield_or_heal"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "convert_shield_heal_to_burn",
+"effect_type": "convert_shield_heal_to_burn",
+"max_proc_depth": 2,
+"params": {
+"burn_stack_tag": "rune_fire",
+"nearby_radius": 220,
+"source_cooldown": 0.5
+}
+}])

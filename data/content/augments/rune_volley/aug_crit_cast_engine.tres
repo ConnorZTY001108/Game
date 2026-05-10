@@ -1,0 +1,119 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_crit_cast_engine"
+display_name = "会心施法机"
+description = "将 35% 暴击率转化为技能急速；若攻击速度超过上限，溢出攻速也转化为技能急速。"
+source_augment_name = "由暴生急、纯粹主义者 - 术师"
+source_augment_rarity = "由暴生急:银色；纯粹主义者 - 术师:银色"
+route_id = "rune_volley"
+route_label = "符文弹幕链"
+rarity = "silver"
+max_rank = 2
+unique = false
+upgrade_type = "转换器"
+source_trigger = "passive_stat_convert"
+effect = "将 35% 暴击率转化为技能急速；若攻击速度超过上限，溢出攻速也转化为技能急速。"
+source_condition = "不会降低原暴击率，只按当前值映射。"
+value = {
+"source_text": "技能急速 = 暴击率*0.35 + 溢出攻速*0.25"
+}
+synergy_tags = Array[String](["crit", "cooldown", "converter", "skill_haste"])
+required_tags = Array[String](["crit_chance"])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "让暴击弹幕流也能进入技能循环流。"
+fit = "珠光符文、炼狱导管。"
+risk = "面板类，爽感依赖其它触发器。"
+why_close = "转译“由暴生急”和“纯粹主义者”的属性互换。"
+implementation_hint = "派生属性不要回写基础属性，避免循环。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/rune_volley/aug_crit_cast_engine.tres"
+test_owner = "augment_rune_volley_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "让暴击弹幕流也能进入技能循环流。",
+"condition": "不会降低原暴击率，只按当前值映射。",
+"display_name": "会心施法机",
+"effect": "将 35% 暴击率转化为技能急速；若攻击速度超过上限，溢出攻速也转化为技能急速。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "convert_stat",
+"effect_type": "convert_stat",
+"max_proc_depth": 2,
+"params": {
+"from_stat": "crit_chance",
+"ratio": 0.35,
+"to_stat": "cooldown_haste"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "convert_overflow_stat",
+"effect_type": "convert_overflow_stat",
+"max_proc_depth": 2,
+"params": {
+"from_stat": "attack_speed",
+"to_stat": "cooldown_haste"
+}
+}],
+"excludes_tags": [],
+"fit": "珠光符文、炼狱导管。",
+"id": "aug_crit_cast_engine",
+"implementation_hint": "派生属性不要回写基础属性，避免循环。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 2,
+"normalized_rarity": "silver",
+"rarity": "银色",
+"required_tags": ["crit_chance"],
+"resource_path": "data/content/augments/rune_volley/aug_crit_cast_engine.tres",
+"risk": "面板类，爽感依赖其它触发器。",
+"route_id": "rune_volley",
+"route_label": "符文弹幕链",
+"source_augment_name": "由暴生急、纯粹主义者 - 术师",
+"source_augment_rarity": "由暴生急:银色；纯粹主义者 - 术师:银色",
+"synergy_tags": ["crit", "cooldown", "converter", "skill_haste"],
+"test_owner": "augment_rune_volley_loop.gd",
+"trigger": "passive_stat_convert",
+"trigger_spec": "trigger_id=passive_stat_convert; signals=augment_acquired, stat_recalculated; required_packet_keys=owner, stat_snapshot, augment_id; synthetic_test=acquire augment and recalc stats",
+"unique": false,
+"upgrade_type": "转换器",
+"value": "技能急速 = 暴击率*0.35 + 溢出攻速*0.25",
+"why_close": "转译“由暴生急”和“纯粹主义者”的属性互换。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "stat_snapshot", "augment_id"],
+"required_packet_values": {
+
+},
+"signal_names": ["augment_acquired", "stat_recalculated"],
+"synthetic_test": "acquire augment and recalc stats",
+"trigger_id": "passive_stat_convert"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "convert_stat",
+"effect_type": "convert_stat",
+"max_proc_depth": 2,
+"params": {
+"from_stat": "crit_chance",
+"ratio": 0.35,
+"to_stat": "cooldown_haste"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "convert_overflow_stat",
+"effect_type": "convert_overflow_stat",
+"max_proc_depth": 2,
+"params": {
+"from_stat": "attack_speed",
+"to_stat": "cooldown_haste"
+}
+}])

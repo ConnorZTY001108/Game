@@ -1,0 +1,119 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_void_rift"
+display_name = "虚空裂隙"
+description = "技能或元素爆发命中时在目标位置留下裂隙；2 个裂隙距离小于 260 时连线并爆炸，造成魔法伤害和减速。"
+source_augment_name = "虚空裂隙"
+source_augment_rarity = "虚空裂隙:棱彩"
+route_id = "void_cascade"
+route_label = "虚空裂隙连锁"
+rarity = "prismatic"
+max_rank = 1
+unique = true
+upgrade_type = "启动器"
+source_trigger = "on_skill_hit"
+effect = "技能或元素爆发命中时在目标位置留下裂隙；2 个裂隙距离小于 260 时连线并爆炸，造成魔法伤害和减速。"
+source_condition = "每个敌人每 0.5 秒最多生成 1 个裂隙。"
+value = {
+"source_text": "裂隙 5 秒；连线 130% 符文强度"
+}
+synergy_tags = Array[String](["void", "rifts", "skill", "slow"])
+required_tags = Array[String](["skill_hit"])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "把普通命中变成地图空间谜题和连锁伤害。"
+fit = "穿透 projectile、范围法术。"
+risk = "裂隙过多需要上限。"
+why_close = "直接来自“虚空裂隙”。"
+implementation_hint = "RiftManager 管理最近点配对。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/void_cascade/aug_void_rift.tres"
+test_owner = "augment_void_loop.gd"
+checkpoint_priority = 3
+manifest_fields = {
+"checkpoint_priority": 3,
+"combo_value": "把普通命中变成地图空间谜题和连锁伤害。",
+"condition": "每个敌人每 0.5 秒最多生成 1 个裂隙。",
+"display_name": "虚空裂隙",
+"effect": "技能或元素爆发命中时在目标位置留下裂隙；2 个裂隙距离小于 260 时连线并爆炸，造成魔法伤害和减速。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "spawn_rift",
+"effect_type": "spawn_rift",
+"max_proc_depth": 2,
+"params": {
+"pair_distance": 260,
+"source_kinds": ["skill", "element"]
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "rift_line",
+"effect_type": "rift_pair_explosion",
+"max_proc_depth": 2,
+"params": {
+"applies_slow": true,
+"damage_type": "magic",
+"proc_flag": "rift_line"
+}
+}],
+"excludes_tags": [],
+"fit": "穿透 projectile、范围法术。",
+"id": "aug_void_rift",
+"implementation_hint": "RiftManager 管理最近点配对。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": true,
+"max_rank": 1,
+"normalized_rarity": "prismatic",
+"rarity": "棱彩",
+"required_tags": ["skill_hit"],
+"resource_path": "data/content/augments/void_cascade/aug_void_rift.tres",
+"risk": "裂隙过多需要上限。",
+"route_id": "void_cascade",
+"route_label": "虚空裂隙连锁",
+"source_augment_name": "虚空裂隙",
+"source_augment_rarity": "虚空裂隙:棱彩",
+"synergy_tags": ["void", "rifts", "skill", "slow"],
+"test_owner": "augment_void_loop.gd",
+"trigger": "on_skill_hit",
+"trigger_spec": "trigger_id=on_skill_hit; signals=damage_applied_packet; required_packet_keys=source_kind=skill|rune|zone|orbit, target, hit_position, tags; synthetic_test=emit skill hit packet",
+"unique": true,
+"upgrade_type": "启动器",
+"value": "裂隙 5 秒；连线 130% 符文强度",
+"why_close": "直接来自“虚空裂隙”。"
+}
+trigger_spec = {
+"required_packet_keys": ["source_kind", "target", "hit_position", "tags"],
+"required_packet_values": {
+"source_kind": "skill|rune|zone|orbit"
+},
+"signal_names": ["damage_applied_packet"],
+"synthetic_test": "emit skill hit packet",
+"trigger_id": "on_skill_hit"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "spawn_rift",
+"effect_type": "spawn_rift",
+"max_proc_depth": 2,
+"params": {
+"pair_distance": 260,
+"source_kinds": ["skill", "element"]
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "rift_line",
+"effect_type": "rift_pair_explosion",
+"max_proc_depth": 2,
+"params": {
+"applies_slow": true,
+"damage_type": "magic",
+"proc_flag": "rift_line"
+}
+}])

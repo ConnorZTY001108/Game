@@ -23,5 +23,15 @@ func _process(delta: float) -> void:
 
 func _on_area_entered(area: Area2D) -> void:
 	if area.get_parent() == player:
+		var tags: Array[String] = ["pickup", "experience"]
+		var packet := DamageSystem.make_packet(0.0, tags, {
+			"owner": player,
+			"source_kind": "pickup",
+			"source_id": "experience_pickup",
+			"pickup_id": "experience",
+			"amount": amount,
+			"hit_position": global_position
+		})
+		GameEvents.pickup_collected.emit(self, player, packet)
 		GameEvents.experience_collected.emit(amount)
 		queue_free()

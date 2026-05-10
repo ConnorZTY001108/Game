@@ -1,0 +1,107 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_orbital_laser"
+display_name = "轨道镭射"
+description = "每 14 秒锁定敌人最密集区域，延迟 0.8 秒后发射轨道镭射，造成持续伤害和少量最大生命真伤。"
+source_augment_name = "轨道镭射"
+source_augment_rarity = "轨道镭射:棱彩"
+route_id = "summon_engine"
+route_label = "自动奇观"
+rarity = "prismatic"
+max_rank = 1
+unique = true
+upgrade_type = "终结器/召唤型"
+source_trigger = "periodic_enemy_cluster"
+effect = "每 14 秒锁定敌人最密集区域，延迟 0.8 秒后发射轨道镭射，造成持续伤害和少量最大生命真伤。"
+source_condition = "最多同时 1 条镭射。"
+value = {
+"source_text": "持续 2 秒；每秒 140%；Boss 真伤 0.8%/秒"
+}
+synergy_tags = Array[String](["laser", "periodic", "area", "true_damage"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "周期性给玩家清屏和打 Boss 的大招感。"
+fit = "虚空坍缩、仆从大师不影响镭射。"
+risk = "延迟落点可能空。"
+why_close = "直接来自“轨道镭射”。"
+implementation_hint = "ClusterFinder + telegraph。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/summon_engine/aug_orbital_laser.tres"
+test_owner = "augment_summon_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "周期性给玩家清屏和打 Boss 的大招感。",
+"condition": "最多同时 1 条镭射。",
+"display_name": "轨道镭射",
+"effect": "每 14 秒锁定敌人最密集区域，延迟 0.8 秒后发射轨道镭射，造成持续伤害和少量最大生命真伤。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "periodic_cluster_strike",
+"effect_type": "periodic_cluster_strike",
+"max_proc_depth": 2,
+"params": {
+"damage_type": "mixed",
+"delay": 0.8,
+"interval": 14.0,
+"max_active": 1,
+"max_hp_true_damage": "small",
+"strike_role": "orbital_laser"
+}
+}],
+"excludes_tags": [],
+"fit": "虚空坍缩、仆从大师不影响镭射。",
+"id": "aug_orbital_laser",
+"implementation_hint": "ClusterFinder + telegraph。",
+"is_finisher": true,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "prismatic",
+"rarity": "棱彩",
+"required_tags": [],
+"resource_path": "data/content/augments/summon_engine/aug_orbital_laser.tres",
+"risk": "延迟落点可能空。",
+"route_id": "summon_engine",
+"route_label": "自动奇观",
+"source_augment_name": "轨道镭射",
+"source_augment_rarity": "轨道镭射:棱彩",
+"synergy_tags": ["laser", "periodic", "area", "true_damage"],
+"test_owner": "augment_summon_loop.gd",
+"trigger": "periodic_enemy_cluster",
+"trigger_spec": "trigger_id=periodic_enemy_cluster; signals=augment_periodic_tick; required_packet_keys=enemy_clusters, owner, elapsed_seconds; synthetic_test=spawn dense enemy cluster then tick",
+"unique": true,
+"upgrade_type": "终结器/召唤型",
+"value": "持续 2 秒；每秒 140%；Boss 真伤 0.8%/秒",
+"why_close": "直接来自“轨道镭射”。"
+}
+trigger_spec = {
+"required_packet_keys": ["enemy_clusters", "owner", "elapsed_seconds"],
+"required_packet_values": {
+
+},
+"signal_names": ["augment_periodic_tick"],
+"synthetic_test": "spawn dense enemy cluster then tick",
+"trigger_id": "periodic_enemy_cluster"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "periodic_cluster_strike",
+"effect_type": "periodic_cluster_strike",
+"max_proc_depth": 2,
+"params": {
+"damage_type": "mixed",
+"delay": 0.8,
+"interval": 14.0,
+"max_active": 1,
+"max_hp_true_damage": "small",
+"strike_role": "orbital_laser"
+}
+}])

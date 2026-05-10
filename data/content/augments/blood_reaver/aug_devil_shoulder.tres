@@ -1,0 +1,131 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_devil_shoulder"
+display_name = "肩上恶魔"
+description = "恶魔持续汲取生命；你的所有伤害附加真实伤害，并有概率掉落生命残片。"
+source_augment_name = "你肩上的恶魔"
+source_augment_rarity = "你肩上的恶魔:棱彩"
+route_id = "blood_reaver"
+route_label = "血契收割"
+rarity = "prismatic"
+max_rank = 1
+unique = true
+upgrade_type = "代价型"
+source_trigger = "periodic_drain_and_on_damage"
+effect = "恶魔持续汲取生命；你的所有伤害附加真实伤害，并有概率掉落生命残片。"
+source_condition = "生命残片被吸附时治疗。"
+value = {
+"source_text": "每秒流失 1% 最大生命；附加 8% 真伤"
+}
+synergy_tags = Array[String](["self_drain", "true_damage", "life_fragment", "risk"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "持续压力换来所有伤害类型的稳定放大。"
+fit = "死亡之环、吸血习性、护盾爆蛋。"
+risk = "长时间空窗会被自身流血杀死。"
+why_close = "来自“你肩上的恶魔”的汲取生命、真伤、生命残片。"
+implementation_hint = "残片用 Pickup 类型，带 owner_only。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/blood_reaver/aug_devil_shoulder.tres"
+test_owner = "augment_blood_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "持续压力换来所有伤害类型的稳定放大。",
+"condition": "生命残片被吸附时治疗。",
+"display_name": "肩上恶魔",
+"effect": "恶魔持续汲取生命；你的所有伤害附加真实伤害，并有概率掉落生命残片。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "periodic_self_drain",
+"effect_type": "periodic_self_drain",
+"max_proc_depth": 2,
+"params": {
+"cannot_kill": true
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "add_true_damage_to_all_damage",
+"effect_type": "add_true_damage_to_all_damage",
+"max_proc_depth": 2,
+"params": {
+"source_cooldown": 0.1
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "drop_pickup_on_damage",
+"effect_type": "drop_pickup_on_damage",
+"max_proc_depth": 2,
+"params": {
+"chance_source": "value",
+"pickup_role": "life_fragment"
+}
+}],
+"excludes_tags": [],
+"fit": "死亡之环、吸血习性、护盾爆蛋。",
+"id": "aug_devil_shoulder",
+"implementation_hint": "残片用 Pickup 类型，带 owner_only。",
+"is_finisher": false,
+"is_high_risk": true,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "prismatic",
+"rarity": "棱彩",
+"required_tags": [],
+"resource_path": "data/content/augments/blood_reaver/aug_devil_shoulder.tres",
+"risk": "长时间空窗会被自身流血杀死。",
+"route_id": "blood_reaver",
+"route_label": "血契收割",
+"source_augment_name": "你肩上的恶魔",
+"source_augment_rarity": "你肩上的恶魔:棱彩",
+"synergy_tags": ["self_drain", "true_damage", "life_fragment", "risk"],
+"test_owner": "augment_blood_loop.gd",
+"trigger": "periodic_drain_and_on_damage",
+"trigger_spec": "trigger_id=periodic_drain_and_on_damage; signals=augment_periodic_tick, damage_applied_packet; required_packet_keys=owner, elapsed_seconds, target, amount; synthetic_test=tick drain then damage target",
+"unique": true,
+"upgrade_type": "代价型",
+"value": "每秒流失 1% 最大生命；附加 8% 真伤",
+"why_close": "来自“你肩上的恶魔”的汲取生命、真伤、生命残片。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "elapsed_seconds", "target", "amount"],
+"required_packet_values": {
+
+},
+"signal_names": ["augment_periodic_tick", "damage_applied_packet"],
+"synthetic_test": "tick drain then damage target",
+"trigger_id": "periodic_drain_and_on_damage"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "periodic_self_drain",
+"effect_type": "periodic_self_drain",
+"max_proc_depth": 2,
+"params": {
+"cannot_kill": true
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "add_true_damage_to_all_damage",
+"effect_type": "add_true_damage_to_all_damage",
+"max_proc_depth": 2,
+"params": {
+"source_cooldown": 0.1
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "drop_pickup_on_damage",
+"effect_type": "drop_pickup_on_damage",
+"max_proc_depth": 2,
+"params": {
+"chance_source": "value",
+"pickup_role": "life_fragment"
+}
+}])

@@ -1,0 +1,115 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_dashing_engine"
+display_name = "全凭身法"
+description = "所有冲刺、闪烁、雪印短冲和位移型武器冷却大幅缩短；每拾取 20 经验再返还一次位移冷却。"
+source_augment_name = "全凭身法"
+source_augment_rarity = "全凭身法:棱彩"
+route_id = "snowstep_vanguard"
+route_label = "雪步先锋"
+rarity = "gold"
+max_rank = 1
+unique = true
+upgrade_type = "放大器"
+source_trigger = "passive_cooldown"
+effect = "所有冲刺、闪烁、雪印短冲和位移型武器冷却大幅缩短；每拾取 20 经验再返还一次位移冷却。"
+source_condition = "不影响免死类逃生冷却。"
+value = {
+"source_text": "位移冷却 -35%；拾取返还 25%"
+}
+synergy_tags = Array[String](["dash", "cooldown", "pickup", "mobility"])
+required_tags = Array[String](["has_dash_or_blink"])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "让机动路线从保命变成循环引擎。"
+fit = "闪光爆破、速度恶魔。"
+risk = "无位移构筑不适合。"
+why_close = "来自“全凭身法”的位移技能急速。"
+implementation_hint = "CooldownGroup: mobility。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/snowstep_vanguard/aug_dashing_engine.tres"
+test_owner = "augment_snowstep_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "让机动路线从保命变成循环引擎。",
+"condition": "不影响免死类逃生冷却。",
+"display_name": "全凭身法",
+"effect": "所有冲刺、闪烁、雪印短冲和位移型武器冷却大幅缩短；每拾取 20 经验再返还一次位移冷却。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "modify_mobility_cooldowns",
+"effect_type": "modify_mobility_cooldowns",
+"max_proc_depth": 2,
+"params": {
+"op": "multiply",
+"value": "reduced"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "refund_mobility_cooldown_on_xp",
+"effect_type": "refund_mobility_cooldown_on_xp",
+"max_proc_depth": 2,
+"params": {
+"xp_threshold": 20
+}
+}],
+"excludes_tags": [],
+"fit": "闪光爆破、速度恶魔。",
+"id": "aug_dashing_engine",
+"implementation_hint": "CooldownGroup: mobility。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": ["has_dash_or_blink"],
+"resource_path": "data/content/augments/snowstep_vanguard/aug_dashing_engine.tres",
+"risk": "无位移构筑不适合。",
+"route_id": "snowstep_vanguard",
+"route_label": "雪步先锋",
+"source_augment_name": "全凭身法",
+"source_augment_rarity": "全凭身法:棱彩",
+"synergy_tags": ["dash", "cooldown", "pickup", "mobility"],
+"test_owner": "augment_snowstep_loop.gd",
+"trigger": "passive_cooldown",
+"trigger_spec": "trigger_id=passive_cooldown; signals=augment_acquired, experience_collected; required_packet_keys=owner, mobility_cooldowns, xp_amount; synthetic_test=acquire and collect XP",
+"unique": true,
+"upgrade_type": "放大器",
+"value": "位移冷却 -35%；拾取返还 25%",
+"why_close": "来自“全凭身法”的位移技能急速。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "mobility_cooldowns", "xp_amount"],
+"required_packet_values": {
+
+},
+"signal_names": ["augment_acquired", "experience_collected"],
+"synthetic_test": "acquire and collect XP",
+"trigger_id": "passive_cooldown"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "modify_mobility_cooldowns",
+"effect_type": "modify_mobility_cooldowns",
+"max_proc_depth": 2,
+"params": {
+"op": "multiply",
+"value": "reduced"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "refund_mobility_cooldown_on_xp",
+"effect_type": "refund_mobility_cooldown_on_xp",
+"max_proc_depth": 2,
+"params": {
+"xp_threshold": 20
+}
+}])

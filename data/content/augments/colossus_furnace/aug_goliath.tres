@@ -1,0 +1,167 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_goliath"
+display_name = "歌利亚巨人"
+description = "体型变大，最大生命和适应之力大幅提高；受弹体命中概率提高，但近身光环半径扩大。"
+source_augment_name = "歌利亚巨人"
+source_augment_rarity = "歌利亚巨人:棱彩"
+route_id = "colossus_furnace"
+route_label = "巨像熔炉"
+rarity = "prismatic"
+max_rank = 1
+unique = true
+upgrade_type = "代价型/生存型"
+source_trigger = "passive"
+effect = "体型变大，最大生命和适应之力大幅提高；受弹体命中概率提高，但近身光环半径扩大。"
+source_condition = "不能与玻璃大炮同时出现。"
+value = {
+"source_text": "最大生命 +40%；体型 +35%；光环半径 +25%"
+}
+synergy_tags = Array[String](["body_size", "max_hp", "aura", "risk"])
+required_tags = Array[String]([])
+excludes_tags = Array[String](["giant_body"])
+excludes_ids = Array[String]([])
+combo_value = "把站场路线推向巨型前排幻想。"
+fit = "献祭引擎、慢炖法阵。"
+risk = "更容易被包围和命中。"
+why_close = "直接来自“歌利亚巨人”。"
+implementation_hint = "body_size 影响碰撞和光环半径。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/colossus_furnace/aug_goliath.tres"
+test_owner = "augment_colossus_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "把站场路线推向巨型前排幻想。",
+"condition": "不能与玻璃大炮同时出现。",
+"display_name": "歌利亚巨人",
+"effect": "体型变大，最大生命和适应之力大幅提高；受弹体命中概率提高，但近身光环半径扩大。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "modify_body_scale",
+"effect_type": "modify_body_scale",
+"max_proc_depth": 2,
+"params": {
+"value": "increased"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "modify_max_health",
+"effect_type": "modify_max_health",
+"max_proc_depth": 2,
+"params": {
+"op": "add_percent",
+"value": "large"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "modify_adaptive_force",
+"effect_type": "modify_adaptive_force",
+"max_proc_depth": 2,
+"params": {
+"op": "add_percent",
+"value": "large"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "modify_incoming_hit_profile",
+"effect_type": "modify_incoming_hit_profile",
+"max_proc_depth": 2,
+"params": {
+"easier_to_hit": true
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "modify_aura_radius",
+"effect_type": "modify_aura_radius",
+"max_proc_depth": 2,
+"params": {
+"op": "add_percent",
+"value": "increased"
+}
+}],
+"excludes_tags": ["giant_body"],
+"fit": "献祭引擎、慢炖法阵。",
+"id": "aug_goliath",
+"implementation_hint": "body_size 影响碰撞和光环半径。",
+"is_finisher": false,
+"is_high_risk": true,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "prismatic",
+"rarity": "棱彩",
+"required_tags": [],
+"resource_path": "data/content/augments/colossus_furnace/aug_goliath.tres",
+"risk": "更容易被包围和命中。",
+"route_id": "colossus_furnace",
+"route_label": "巨像熔炉",
+"source_augment_name": "歌利亚巨人",
+"source_augment_rarity": "歌利亚巨人:棱彩",
+"synergy_tags": ["body_size", "max_hp", "aura", "risk"],
+"test_owner": "augment_colossus_loop.gd",
+"trigger": "passive",
+"trigger_spec": "trigger_id=passive; signals=augment_acquired, stat_recalculated; required_packet_keys=owner, augment_id, stat_snapshot; synthetic_test=acquire augment",
+"unique": true,
+"upgrade_type": "代价型/生存型",
+"value": "最大生命 +40%；体型 +35%；光环半径 +25%",
+"why_close": "直接来自“歌利亚巨人”。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "augment_id", "stat_snapshot"],
+"required_packet_values": {
+
+},
+"signal_names": ["augment_acquired", "stat_recalculated"],
+"synthetic_test": "acquire augment",
+"trigger_id": "passive"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "modify_body_scale",
+"effect_type": "modify_body_scale",
+"max_proc_depth": 2,
+"params": {
+"value": "increased"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "modify_max_health",
+"effect_type": "modify_max_health",
+"max_proc_depth": 2,
+"params": {
+"op": "add_percent",
+"value": "large"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "modify_adaptive_force",
+"effect_type": "modify_adaptive_force",
+"max_proc_depth": 2,
+"params": {
+"op": "add_percent",
+"value": "large"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "modify_incoming_hit_profile",
+"effect_type": "modify_incoming_hit_profile",
+"max_proc_depth": 2,
+"params": {
+"easier_to_hit": true
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "modify_aura_radius",
+"effect_type": "modify_aura_radius",
+"max_proc_depth": 2,
+"params": {
+"op": "add_percent",
+"value": "increased"
+}
+}])

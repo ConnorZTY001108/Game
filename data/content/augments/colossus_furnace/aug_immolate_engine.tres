@@ -1,0 +1,115 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_immolate_engine"
+display_name = "献祭引擎"
+description = "获得献祭光环：附近敌人持续受灼烧；每有 1 名敌人在光环内死亡，获得少量符文金币或任务进度。"
+source_augment_name = "任务：艾卡西亚的陷落、升级：献祭"
+source_augment_rarity = "任务：艾卡西亚的陷落:棱彩；升级：献祭:银色"
+route_id = "colossus_furnace"
+route_label = "巨像熔炉"
+rarity = "prismatic"
+max_rank = 1
+unique = true
+upgrade_type = "启动器/经济型"
+source_trigger = "periodic_aura"
+effect = "获得献祭光环：附近敌人持续受灼烧；每有 1 名敌人在光环内死亡，获得少量符文金币或任务进度。"
+source_condition = "金币收益对普通怪有每秒上限。"
+value = {
+"source_text": "光环 70%/秒；每 25 击杀 +1 金币"
+}
+synergy_tags = Array[String](["aura", "burn", "economy", "tank", "quest"])
+required_tags = Array[String](["close_range"])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "坦克站怪堆也能滚经济和灼烧。"
+fit = "慢炖、巨像、圣盾。"
+risk = "远程流几乎不用。"
+why_close = "转译艾卡西亚/献祭装备线。"
+implementation_hint = "AuraDamage + capped GoldDrop。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/colossus_furnace/aug_immolate_engine.tres"
+test_owner = "augment_colossus_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "坦克站怪堆也能滚经济和灼烧。",
+"condition": "金币收益对普通怪有每秒上限。",
+"display_name": "献祭引擎",
+"effect": "获得献祭光环：附近敌人持续受灼烧；每有 1 名敌人在光环内死亡，获得少量符文金币或任务进度。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "periodic_aura",
+"effect_type": "periodic_aura",
+"max_proc_depth": 2,
+"params": {
+"aura_role": "immolate",
+"damage_type": "burn"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "grant_currency_or_progress_on_aura_death",
+"effect_type": "grant_currency_or_progress_on_aura_death",
+"max_proc_depth": 2,
+"params": {
+"currency": "rune_gold"
+}
+}],
+"excludes_tags": [],
+"fit": "慢炖、巨像、圣盾。",
+"id": "aug_immolate_engine",
+"implementation_hint": "AuraDamage + capped GoldDrop。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": true,
+"max_rank": 1,
+"normalized_rarity": "prismatic",
+"rarity": "棱彩",
+"required_tags": ["close_range"],
+"resource_path": "data/content/augments/colossus_furnace/aug_immolate_engine.tres",
+"risk": "远程流几乎不用。",
+"route_id": "colossus_furnace",
+"route_label": "巨像熔炉",
+"source_augment_name": "任务：艾卡西亚的陷落、升级：献祭",
+"source_augment_rarity": "任务：艾卡西亚的陷落:棱彩；升级：献祭:银色",
+"synergy_tags": ["aura", "burn", "economy", "tank", "quest"],
+"test_owner": "augment_colossus_loop.gd",
+"trigger": "periodic_aura",
+"trigger_spec": "trigger_id=periodic_aura; signals=augment_periodic_tick; required_packet_keys=owner, elapsed_seconds, nearby_enemies; synthetic_test=tick with enemies inside/outside radius",
+"unique": true,
+"upgrade_type": "启动器/经济型",
+"value": "光环 70%/秒；每 25 击杀 +1 金币",
+"why_close": "转译艾卡西亚/献祭装备线。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "elapsed_seconds", "nearby_enemies"],
+"required_packet_values": {
+
+},
+"signal_names": ["augment_periodic_tick"],
+"synthetic_test": "tick with enemies inside/outside radius",
+"trigger_id": "periodic_aura"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "periodic_aura",
+"effect_type": "periodic_aura",
+"max_proc_depth": 2,
+"params": {
+"aura_role": "immolate",
+"damage_type": "burn"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "grant_currency_or_progress_on_aura_death",
+"effect_type": "grant_currency_or_progress_on_aura_death",
+"max_proc_depth": 2,
+"params": {
+"currency": "rune_gold"
+}
+}])

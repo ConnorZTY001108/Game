@@ -1,0 +1,105 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_laser_heal_array"
+display_name = "激光治疗阵"
+description = "每 12 秒生成一束跟随最近精英方向的治疗激光；激光治疗玩家，伤害并减速敌人。"
+source_augment_name = "激光治疗"
+source_augment_rarity = "激光治疗:棱彩"
+route_id = "aegis_transmutation"
+route_label = "圣盾转化"
+rarity = "gold"
+max_rank = 1
+unique = true
+upgrade_type = "召唤型/生存型"
+source_trigger = "periodic"
+effect = "每 12 秒生成一束跟随最近精英方向的治疗激光；激光治疗玩家，伤害并减速敌人。"
+source_condition = "激光持续 2.5 秒。"
+value = {
+"source_text": "治疗 2% 最大生命/秒；伤害 70%/秒"
+}
+synergy_tags = Array[String](["laser", "heal", "slow", "periodic"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "周期性给站位和保护路线一段强势窗口。"
+fit = "死亡之环、风语祝福、巨像。"
+risk = "方向自动，无法精确瞄准。"
+why_close = "来自“激光治疗”。"
+implementation_hint = "LineArea2D 跟随目标方向锁定。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/aegis_transmutation/aug_laser_heal_array.tres"
+test_owner = "augment_aegis_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "周期性给站位和保护路线一段强势窗口。",
+"condition": "激光持续 2.5 秒。",
+"display_name": "激光治疗阵",
+"effect": "每 12 秒生成一束跟随最近精英方向的治疗激光；激光治疗玩家，伤害并减速敌人。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "periodic_laser",
+"effect_type": "periodic_laser",
+"max_proc_depth": 2,
+"params": {
+"enemy_effects": ["damage", "slow"],
+"interval": 12.0,
+"max_active": 1,
+"player_effect": "heal",
+"targeting": "nearest_elite_direction"
+}
+}],
+"excludes_tags": [],
+"fit": "死亡之环、风语祝福、巨像。",
+"id": "aug_laser_heal_array",
+"implementation_hint": "LineArea2D 跟随目标方向锁定。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": [],
+"resource_path": "data/content/augments/aegis_transmutation/aug_laser_heal_array.tres",
+"risk": "方向自动，无法精确瞄准。",
+"route_id": "aegis_transmutation",
+"route_label": "圣盾转化",
+"source_augment_name": "激光治疗",
+"source_augment_rarity": "激光治疗:棱彩",
+"synergy_tags": ["laser", "heal", "slow", "periodic"],
+"test_owner": "augment_aegis_loop.gd",
+"trigger": "periodic",
+"trigger_spec": "trigger_id=periodic; signals=augment_periodic_tick; required_packet_keys=owner, elapsed_seconds, nearest_enemy, enemy_clusters; synthetic_test=advance scheduler past interval",
+"unique": true,
+"upgrade_type": "召唤型/生存型",
+"value": "治疗 2% 最大生命/秒；伤害 70%/秒",
+"why_close": "来自“激光治疗”。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "elapsed_seconds", "nearest_enemy", "enemy_clusters"],
+"required_packet_values": {
+
+},
+"signal_names": ["augment_periodic_tick"],
+"synthetic_test": "advance scheduler past interval",
+"trigger_id": "periodic"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "periodic_laser",
+"effect_type": "periodic_laser",
+"max_proc_depth": 2,
+"params": {
+"enemy_effects": ["damage", "slow"],
+"interval": 12.0,
+"max_active": 1,
+"player_effect": "heal",
+"targeting": "nearest_elite_direction"
+}
+}])

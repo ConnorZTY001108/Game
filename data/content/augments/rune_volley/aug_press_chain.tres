@@ -1,0 +1,121 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_press_chain"
+display_name = "强攻三环"
+description = "对同一目标累计 3 次命中后造成一次自适应爆发，并让其 3 秒内受到你的伤害 +12%。"
+source_augment_name = "地狱三头犬、点亮他们！"
+source_augment_rarity = "地狱三头犬:棱彩；点亮他们！:银色"
+route_id = "rune_volley"
+route_label = "符文弹幕链"
+rarity = "gold"
+max_rank = 3
+unique = false
+upgrade_type = "启动器"
+source_trigger = "on_hit"
+effect = "对同一目标累计 3 次命中后造成一次自适应爆发，并让其 3 秒内受到你的伤害 +12%。"
+source_condition = "多目标各自计数；Boss 计数不会过期。"
+value = {
+"source_text": "三环爆发 80% 武器强度"
+}
+synergy_tags = Array[String](["on_hit", "vulnerability", "burst"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "高频弹体有稳定单体爆发，后续放大所有路线伤害。"
+fit = "符文双持、台风、双发快射。"
+risk = "清小怪时可能过度单体。"
+why_close = "对应“强攻/丛刃”和“第4下”的计数爆发体验。"
+implementation_hint = "EnemyStatus 添加 hit_counter_by_owner。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/rune_volley/aug_press_chain.tres"
+test_owner = "augment_rune_volley_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "高频弹体有稳定单体爆发，后续放大所有路线伤害。",
+"condition": "多目标各自计数；Boss 计数不会过期。",
+"display_name": "强攻三环",
+"effect": "对同一目标累计 3 次命中后造成一次自适应爆发，并让其 3 秒内受到你的伤害 +12%。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "stack_on_target",
+"effect_type": "stack_on_target",
+"max_proc_depth": 2,
+"params": {
+"duration": 3.0,
+"stack_tag": "press_chain",
+"threshold": 3
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "apply_damage_and_vulnerability",
+"effect_type": "apply_damage_and_vulnerability",
+"max_proc_depth": 2,
+"params": {
+"damage_type": "adaptive",
+"vulnerability_percent": 0.12,
+"vulnerability_seconds": 3.0
+}
+}],
+"excludes_tags": [],
+"fit": "符文双持、台风、双发快射。",
+"id": "aug_press_chain",
+"implementation_hint": "EnemyStatus 添加 hit_counter_by_owner。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": true,
+"max_rank": 3,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": [],
+"resource_path": "data/content/augments/rune_volley/aug_press_chain.tres",
+"risk": "清小怪时可能过度单体。",
+"route_id": "rune_volley",
+"route_label": "符文弹幕链",
+"source_augment_name": "地狱三头犬、点亮他们！",
+"source_augment_rarity": "地狱三头犬:棱彩；点亮他们！:银色",
+"synergy_tags": ["on_hit", "vulnerability", "burst"],
+"test_owner": "augment_rune_volley_loop.gd",
+"trigger": "on_hit",
+"trigger_spec": "trigger_id=on_hit; signals=projectile_hit, damage_applied_packet; required_packet_keys=source_kind, weapon_id, weapon_tags, target, on_hit_efficiency; synthetic_test=emit weapon on-hit packet",
+"unique": false,
+"upgrade_type": "启动器",
+"value": "三环爆发 80% 武器强度",
+"why_close": "对应“强攻/丛刃”和“第4下”的计数爆发体验。"
+}
+trigger_spec = {
+"required_packet_keys": ["source_kind", "weapon_id", "weapon_tags", "target", "on_hit_efficiency"],
+"required_packet_values": {
+
+},
+"signal_names": ["projectile_hit", "damage_applied_packet"],
+"synthetic_test": "emit weapon on-hit packet",
+"trigger_id": "on_hit"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "stack_on_target",
+"effect_type": "stack_on_target",
+"max_proc_depth": 2,
+"params": {
+"duration": 3.0,
+"stack_tag": "press_chain",
+"threshold": 3
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "apply_damage_and_vulnerability",
+"effect_type": "apply_damage_and_vulnerability",
+"max_proc_depth": 2,
+"params": {
+"damage_type": "adaptive",
+"vulnerability_percent": 0.12,
+"vulnerability_seconds": 3.0
+}
+}])

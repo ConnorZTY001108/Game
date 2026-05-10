@@ -1,0 +1,121 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_firebrand_runes"
+display_name = "火上浇油"
+description = "on_hit 额外叠 1 层符火；普通 projectile 对已灼烧敌人额外 +10% 伤害。"
+source_augment_name = "火上浇油"
+source_augment_rarity = "火上浇油:金色"
+route_id = "inferno_conduit"
+route_label = "炼狱导管"
+rarity = "gold"
+max_rank = 3
+unique = false
+upgrade_type = "启动器"
+source_trigger = "on_hit"
+effect = "on_hit 额外叠 1 层符火；普通 projectile 对已灼烧敌人额外 +10% 伤害。"
+source_condition = "叠层不刷新所有来源，只刷新自身来源持续。"
+value = {
+"source_text": "1 层符火；+10% 对灼烧伤害"
+}
+synergy_tags = Array[String](["burn", "on_hit", "projectile"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "让普攻/弹幕自然接入灼烧体系。"
+fit = "符文双持、台风分裂、虚幻武器。"
+risk = "纯技能慢速流需要导管启动。"
+why_close = "转译“火上浇油”的无限灼烧 on-hit。"
+implementation_hint = "StatusStack 使用 source_id 分组。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/inferno_conduit/aug_firebrand_runes.tres"
+test_owner = "augment_inferno_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "让普攻/弹幕自然接入灼烧体系。",
+"condition": "叠层不刷新所有来源，只刷新自身来源持续。",
+"display_name": "火上浇油",
+"effect": "on_hit 额外叠 1 层符火；普通 projectile 对已灼烧敌人额外 +10% 伤害。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "add_burn_stack",
+"effect_type": "add_burn_stack",
+"max_proc_depth": 2,
+"params": {
+"amount": 1,
+"from_sources": ["on_hit"],
+"stack_tag": "rune_fire"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "modify_damage_vs_status",
+"effect_type": "modify_damage_vs_status",
+"max_proc_depth": 2,
+"params": {
+"damage_bonus": 0.1,
+"source": "projectile",
+"status": "burning"
+}
+}],
+"excludes_tags": [],
+"fit": "符文双持、台风分裂、虚幻武器。",
+"id": "aug_firebrand_runes",
+"implementation_hint": "StatusStack 使用 source_id 分组。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": true,
+"max_rank": 3,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": [],
+"resource_path": "data/content/augments/inferno_conduit/aug_firebrand_runes.tres",
+"risk": "纯技能慢速流需要导管启动。",
+"route_id": "inferno_conduit",
+"route_label": "炼狱导管",
+"source_augment_name": "火上浇油",
+"source_augment_rarity": "火上浇油:金色",
+"synergy_tags": ["burn", "on_hit", "projectile"],
+"test_owner": "augment_inferno_loop.gd",
+"trigger": "on_hit",
+"trigger_spec": "trigger_id=on_hit; signals=projectile_hit, damage_applied_packet; required_packet_keys=source_kind, weapon_id, weapon_tags, target, on_hit_efficiency; synthetic_test=emit weapon on-hit packet",
+"unique": false,
+"upgrade_type": "启动器",
+"value": "1 层符火；+10% 对灼烧伤害",
+"why_close": "转译“火上浇油”的无限灼烧 on-hit。"
+}
+trigger_spec = {
+"required_packet_keys": ["source_kind", "weapon_id", "weapon_tags", "target", "on_hit_efficiency"],
+"required_packet_values": {
+
+},
+"signal_names": ["projectile_hit", "damage_applied_packet"],
+"synthetic_test": "emit weapon on-hit packet",
+"trigger_id": "on_hit"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "add_burn_stack",
+"effect_type": "add_burn_stack",
+"max_proc_depth": 2,
+"params": {
+"amount": 1,
+"from_sources": ["on_hit"],
+"stack_tag": "rune_fire"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "modify_damage_vs_status",
+"effect_type": "modify_damage_vs_status",
+"max_proc_depth": 2,
+"params": {
+"damage_bonus": 0.1,
+"source": "projectile",
+"status": "burning"
+}
+}])

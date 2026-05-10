@@ -5,6 +5,7 @@ const CharacterDataScript := preload("res://data/resources/character_data.gd")
 const HealthComponentScript := preload("res://scripts/components/HealthComponent.gd")
 const WeaponControllerScene := preload("res://scenes/weapons/WeaponController.tscn")
 const DAMAGE_BLINK_SECONDS := 0.35
+const LOW_HP_EVENT_RATIO := 0.35
 
 @export var character_data: CharacterDataScript = preload("res://data/content/characters/wasteland_walker.tres")
 
@@ -19,6 +20,7 @@ var _temporary_pickup_radius_bonus: float = 0.0
 var _temporary_pickup_radius_bonus_serial: int = 0
 var _damage_blink_remaining: float = 0.0
 var _visual_base_modulate: Color = Color.WHITE
+var _low_hp_event_active: bool = false
 
 func _ready() -> void:
 	if visual != null:
@@ -43,6 +45,7 @@ func _apply_character_data() -> void:
 	damage_multiplier = character_data.damage_multiplier
 	cooldown_multiplier = character_data.cooldown_multiplier
 	pickup_radius = character_data.pickup_radius
+	_low_hp_event_active = false
 	_mount_starting_weapon()
 
 func _mount_starting_weapon() -> void:
@@ -104,9 +107,13 @@ func add_weapon(weapon_data: Resource) -> bool:
 func take_contact_damage(amount: float) -> void:
 	var health_before := health_component.current_health
 	var state_before := GameRuntime.get_state_name()
+	var packet := _make_contact_damage_packet(amount)
+	if amount > 0.0 and health_component.is_dead == false and amount >= health_before:
+		GameEvents.fatal_damage_received.emit(self, packet.duplicate(true))
 	if amount > 0.0 and health_component.is_dead == false:
 		_start_damage_blink()
 	health_component.apply_damage(amount)
+	_emit_low_hp_if_needed(packet)
 	GameRuntime.log_state("player_contact_damage_applied", {
 		"amount": amount,
 		"state_before": state_before,
@@ -124,6 +131,30 @@ func is_damage_blink_active() -> bool:
 func _on_died() -> void:
 	GameEvents.player_died.emit()
 	GameRuntime.finish_run("defeat")
+
+func _make_contact_damage_packet(amount: float) -> Dictionary:
+	var tags: Array[String] = ["contact"]
+	return DamageSystem.make_packet(amount, tags, {
+		"owner": null,
+		"target": self,
+		"source_kind": "contact",
+		"source_id": "enemy_contact",
+		"hit_position": global_position
+	})
+
+func _emit_low_hp_if_needed(packet: Dictionary) -> void:
+	var ratio := 0.0
+	if health_component.max_health > 0.0:
+		ratio = health_component.current_health / health_component.max_health
+	if ratio > LOW_HP_EVENT_RATIO:
+		_low_hp_event_active = false
+		return
+	if _low_hp_event_active or health_component.is_dead:
+		return
+	_low_hp_event_active = true
+	var event_packet := packet.duplicate(true)
+	event_packet["health_ratio"] = ratio
+	GameEvents.low_hp_entered.emit(self, ratio, event_packet)
 
 func _start_damage_blink() -> void:
 	_damage_blink_remaining = DAMAGE_BLINK_SECONDS

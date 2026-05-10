@@ -1,0 +1,123 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_infernal_detonation"
+display_name = "炼狱终爆"
+description = "敌人达到 10 层符火时消耗 6 层，召唤一次小型炼狱爆炸；精英/Boss 每第 3 次爆炸改为轨道火束。"
+source_augment_name = "炼狱龙魂、轨道镭射"
+source_augment_rarity = "炼狱龙魂:银色；轨道镭射:棱彩"
+route_id = "inferno_conduit"
+route_label = "炼狱导管"
+rarity = "prismatic"
+max_rank = 1
+unique = true
+upgrade_type = "终结器"
+source_trigger = "on_burn_stack_threshold"
+effect = "敌人达到 10 层符火时消耗 6 层，召唤一次小型炼狱爆炸；精英/Boss 每第 3 次爆炸改为轨道火束。"
+source_condition = "同一目标 1.2 秒内最多触发一次。"
+value = {
+"source_text": "爆炸 180% 符文强度；轨道火束 5% 最大生命"
+}
+synergy_tags = Array[String](["burn", "explode", "laser", "finisher"])
+required_tags = Array[String](["burn"])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "给灼烧循环一个视觉与伤害终点。"
+fit = "炼狱导管、火上浇油、慢炖。"
+risk = "阈值过低会遮蔽其它构筑。"
+why_close = "融合“炼狱龙魂”的爆炸与“轨道镭射”的终局感。"
+implementation_hint = "StackThresholdTrigger + delayed AoE marker。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/inferno_conduit/aug_infernal_detonation.tres"
+test_owner = "augment_inferno_loop.gd"
+checkpoint_priority = 13
+manifest_fields = {
+"checkpoint_priority": 13,
+"combo_value": "给灼烧循环一个视觉与伤害终点。",
+"condition": "同一目标 1.2 秒内最多触发一次。",
+"display_name": "炼狱终爆",
+"effect": "敌人达到 10 层符火时消耗 6 层，召唤一次小型炼狱爆炸；精英/Boss 每第 3 次爆炸改为轨道火束。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "burn_detonation",
+"effect_type": "burn_threshold_explosion",
+"max_proc_depth": 2,
+"params": {
+"consume_stacks": 6,
+"damage_type": "magic",
+"proc_flag": "burn_detonation",
+"threshold": 10
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "replace_every_nth_on_class",
+"effect_type": "replace_every_nth_on_class",
+"max_proc_depth": 2,
+"params": {
+"effect_type": "delayed_fire_beam",
+"n": 3,
+"target_classes": ["elite", "boss"]
+}
+}],
+"excludes_tags": [],
+"fit": "炼狱导管、火上浇油、慢炖。",
+"id": "aug_infernal_detonation",
+"implementation_hint": "StackThresholdTrigger + delayed AoE marker。",
+"is_finisher": true,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "prismatic",
+"rarity": "棱彩",
+"required_tags": ["burn"],
+"resource_path": "data/content/augments/inferno_conduit/aug_infernal_detonation.tres",
+"risk": "阈值过低会遮蔽其它构筑。",
+"route_id": "inferno_conduit",
+"route_label": "炼狱导管",
+"source_augment_name": "炼狱龙魂、轨道镭射",
+"source_augment_rarity": "炼狱龙魂:银色；轨道镭射:棱彩",
+"synergy_tags": ["burn", "explode", "laser", "finisher"],
+"test_owner": "augment_inferno_loop.gd",
+"trigger": "on_burn_stack_threshold",
+"trigger_spec": "trigger_id=on_burn_stack_threshold; signals=burn_stack_threshold; required_packet_keys=target, stacks, hit_position, owner; synthetic_test=force threshold event",
+"unique": true,
+"upgrade_type": "终结器",
+"value": "爆炸 180% 符文强度；轨道火束 5% 最大生命",
+"why_close": "融合“炼狱龙魂”的爆炸与“轨道镭射”的终局感。"
+}
+trigger_spec = {
+"required_packet_keys": ["target", "stacks", "hit_position", "owner"],
+"required_packet_values": {
+
+},
+"signal_names": ["burn_stack_threshold"],
+"synthetic_test": "force threshold event",
+"trigger_id": "on_burn_stack_threshold"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "burn_detonation",
+"effect_type": "burn_threshold_explosion",
+"max_proc_depth": 2,
+"params": {
+"consume_stacks": 6,
+"damage_type": "magic",
+"proc_flag": "burn_detonation",
+"threshold": 10
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "replace_every_nth_on_class",
+"effect_type": "replace_every_nth_on_class",
+"max_proc_depth": 2,
+"params": {
+"effect_type": "delayed_fire_beam",
+"n": 3,
+"target_classes": ["elite", "boss"]
+}
+}])

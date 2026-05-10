@@ -1,0 +1,129 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_vampirism"
+display_name = "吸血习性"
+description = "获得全能吸血；作为代价，普通治疗拾取效果降低，但由你造成伤害产生的治疗提高。"
+source_augment_name = "吸血习性、渴血"
+source_augment_rarity = "吸血习性:金色；渴血:银色"
+route_id = "blood_reaver"
+route_label = "血契收割"
+rarity = "gold"
+max_rank = 2
+unique = false
+upgrade_type = "生存型/转换器"
+source_trigger = "on_damage_dealt"
+effect = "获得全能吸血；作为代价，普通治疗拾取效果降低，但由你造成伤害产生的治疗提高。"
+source_condition = "死亡之环按实际治疗量转伤。"
+value = {
+"source_text": "+12% 全能吸血；拾取治疗 -35%"
+}
+synergy_tags = Array[String](["lifesteal", "heal", "converter", "risk"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "把输出直接变成续航，服务血契路线。"
+fit = "不祥契约、肩上恶魔、死亡之环。"
+risk = "低伤害构筑会变脆。"
+why_close = "转译“吸血习性/渴血”的全能吸血与代价。"
+implementation_hint = "HealSource 标记 pickup/damage_based。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/blood_reaver/aug_vampirism.tres"
+test_owner = "augment_blood_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "把输出直接变成续航，服务血契路线。",
+"condition": "死亡之环按实际治疗量转伤。",
+"display_name": "吸血习性",
+"effect": "获得全能吸血；作为代价，普通治疗拾取效果降低，但由你造成伤害产生的治疗提高。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "grant_omnivamp",
+"effect_type": "grant_omnivamp",
+"max_proc_depth": 2,
+"params": {
+"scope": "all_damage"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "modify_pickup_healing",
+"effect_type": "modify_pickup_healing",
+"max_proc_depth": 2,
+"params": {
+"multiplier": "reduced"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "modify_damage_healing",
+"effect_type": "modify_damage_healing",
+"max_proc_depth": 2,
+"params": {
+"multiplier": "increased"
+}
+}],
+"excludes_tags": [],
+"fit": "不祥契约、肩上恶魔、死亡之环。",
+"id": "aug_vampirism",
+"implementation_hint": "HealSource 标记 pickup/damage_based。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 2,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": [],
+"resource_path": "data/content/augments/blood_reaver/aug_vampirism.tres",
+"risk": "低伤害构筑会变脆。",
+"route_id": "blood_reaver",
+"route_label": "血契收割",
+"source_augment_name": "吸血习性、渴血",
+"source_augment_rarity": "吸血习性:金色；渴血:银色",
+"synergy_tags": ["lifesteal", "heal", "converter", "risk"],
+"test_owner": "augment_blood_loop.gd",
+"trigger": "on_damage_dealt",
+"trigger_spec": "trigger_id=on_damage_dealt; signals=damage_applied_packet; required_packet_keys=owner, target, final_amount, damage_type; synthetic_test=apply outgoing damage",
+"unique": false,
+"upgrade_type": "生存型/转换器",
+"value": "+12% 全能吸血；拾取治疗 -35%",
+"why_close": "转译“吸血习性/渴血”的全能吸血与代价。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "target", "final_amount", "damage_type"],
+"required_packet_values": {
+
+},
+"signal_names": ["damage_applied_packet"],
+"synthetic_test": "apply outgoing damage",
+"trigger_id": "on_damage_dealt"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "grant_omnivamp",
+"effect_type": "grant_omnivamp",
+"max_proc_depth": 2,
+"params": {
+"scope": "all_damage"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "modify_pickup_healing",
+"effect_type": "modify_pickup_healing",
+"max_proc_depth": 2,
+"params": {
+"multiplier": "reduced"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "modify_damage_healing",
+"effect_type": "modify_damage_healing",
+"max_proc_depth": 2,
+"params": {
+"multiplier": "increased"
+}
+}])

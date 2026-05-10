@@ -1,0 +1,133 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_stuck_with_me"
+display_name = "困在这里"
+description = "每 22 秒释放嘲讽环：附近敌人被拉向你并短暂攻击你，同时你获得伤害减免；结束时根据吸收伤害爆炸。"
+source_augment_name = "和我一起困在这里"
+source_augment_rarity = "和我一起困在这里:棱彩"
+route_id = "colossus_furnace"
+route_label = "巨像熔炉"
+rarity = "prismatic"
+max_rank = 1
+unique = true
+upgrade_type = "终结器"
+source_trigger = "periodic_taunt_pulse"
+effect = "每 22 秒释放嘲讽环：附近敌人被拉向你并短暂攻击你，同时你获得伤害减免；结束时根据吸收伤害爆炸。"
+source_condition = "Boss 不被嘲讽，只受拉扯减速。"
+value = {
+"source_text": "减伤 60%；爆炸 = 35% 吸收伤害"
+}
+synergy_tags = Array[String](["taunt", "damage_reduction", "explode", "tank", "finisher"])
+required_tags = Array[String](["max_hp_scaler"])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "给坦克路线一个强制聚怪清屏时刻。"
+fit = "巨像勇气、护盾爆蛋、慢炖。"
+risk = "嘲讽期间若减伤断档很危险。"
+why_close = "转译“终极触发嘲讽+减伤”为周期坦克大招。"
+implementation_hint = "记录窗口内 damage_prevented。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/colossus_furnace/aug_stuck_with_me.tres"
+test_owner = "augment_colossus_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "给坦克路线一个强制聚怪清屏时刻。",
+"condition": "Boss 不被嘲讽，只受拉扯减速。",
+"display_name": "困在这里",
+"effect": "每 22 秒释放嘲讽环：附近敌人被拉向你并短暂攻击你，同时你获得伤害减免；结束时根据吸收伤害爆炸。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "periodic_taunt_pulse",
+"effect_type": "periodic_taunt_pulse",
+"max_proc_depth": 2,
+"params": {
+"force_attack_owner": true,
+"interval": 22.0,
+"pull_enemies": true
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "temporary_damage_reduction",
+"effect_type": "temporary_damage_reduction",
+"max_proc_depth": 2,
+"params": {
+"during": "taunt"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "explode_absorbed_damage",
+"effect_type": "explode_absorbed_damage",
+"max_proc_depth": 2,
+"params": {
+"at_end": true
+}
+}],
+"excludes_tags": [],
+"fit": "巨像勇气、护盾爆蛋、慢炖。",
+"id": "aug_stuck_with_me",
+"implementation_hint": "记录窗口内 damage_prevented。",
+"is_finisher": true,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "prismatic",
+"rarity": "棱彩",
+"required_tags": ["max_hp_scaler"],
+"resource_path": "data/content/augments/colossus_furnace/aug_stuck_with_me.tres",
+"risk": "嘲讽期间若减伤断档很危险。",
+"route_id": "colossus_furnace",
+"route_label": "巨像熔炉",
+"source_augment_name": "和我一起困在这里",
+"source_augment_rarity": "和我一起困在这里:棱彩",
+"synergy_tags": ["taunt", "damage_reduction", "explode", "tank", "finisher"],
+"test_owner": "augment_colossus_loop.gd",
+"trigger": "periodic_taunt_pulse",
+"trigger_spec": "trigger_id=periodic_taunt_pulse; signals=augment_periodic_tick, damage_applied_packet; required_packet_keys=owner, absorbed_damage_ledger, nearby_enemies; synthetic_test=tick taunt and apply absorbed damage",
+"unique": true,
+"upgrade_type": "终结器",
+"value": "减伤 60%；爆炸 = 35% 吸收伤害",
+"why_close": "转译“终极触发嘲讽+减伤”为周期坦克大招。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "absorbed_damage_ledger", "nearby_enemies"],
+"required_packet_values": {
+
+},
+"signal_names": ["augment_periodic_tick", "damage_applied_packet"],
+"synthetic_test": "tick taunt and apply absorbed damage",
+"trigger_id": "periodic_taunt_pulse"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "periodic_taunt_pulse",
+"effect_type": "periodic_taunt_pulse",
+"max_proc_depth": 2,
+"params": {
+"force_attack_owner": true,
+"interval": 22.0,
+"pull_enemies": true
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "temporary_damage_reduction",
+"effect_type": "temporary_damage_reduction",
+"max_proc_depth": 2,
+"params": {
+"during": "taunt"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "explode_absorbed_damage",
+"effect_type": "explode_absorbed_damage",
+"max_proc_depth": 2,
+"params": {
+"at_end": true
+}
+}])
