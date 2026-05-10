@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/enemies/Enemy.tscn" id="9_enemy_scene"]
-[ext_resource type="Resource" path="res://data/content/waves/m0_wave.tres" id="8_m0_wave"]
+[ext_resource type="Resource" path="res://data/content/waves/m1_wave.tres" id="8_m1_wave"]
 [ext_resource type="Script" path="res://scripts/systems/DropSystem.gd" id="10_drop_system"]
 [ext_resource type="Script" path="res://scripts/systems/SpawnSystem.gd" id="7_spawn_system"]
 [ext_resource type="Script" path="res://scripts/systems/RunTimerSystem.gd" id="6_run_timer"]
@@ -10,6 +10,8 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="2_cy3et"]
 [ext_resource type="PackedScene" path="res://scenes/ui/LevelUpPanel.tscn" id="3_fc40x"]
 [ext_resource type="PackedScene" path="res://scenes/ui/DebugOverlay.tscn" id="4_gnhp1"]
+[ext_resource type="PackedScene" path="res://scenes/ui/SettlementPanel.tscn" id="11_settlement"]
+[ext_resource type="PackedScene" path="res://scenes/map/MapDirector.tscn" id="12_map_director"]
 
 [node name="RunScene" type="Node2D" unique_id=1644201574]
 script = ExtResource("5_run_scene")
@@ -25,11 +27,19 @@ offset_bottom = 1200.0
 mouse_filter = 2
 color = Color(0.28, 0.25, 0.18, 1)
 
+[node name="Map" type="Node2D" parent="World"]
+
+[node name="MapDirector" parent="World/Map" instance=ExtResource("12_map_director")]
+player_path = NodePath("../../Player")
+
 [node name="Bounds" type="Node2D" parent="World" unique_id=138558224]
 
 [node name="PlayerSpawn" type="Marker2D" parent="World" unique_id=871015848]
 
 [node name="Player" type="CharacterBody2D" parent="World" unique_id=675620330 instance=ExtResource("1_unlb4")]
+
+[node name="Camera2D" type="Camera2D" parent="World/Player" unique_id=1962566735]
+enabled = true
 
 [node name="Enemies" type="Node2D" parent="World" unique_id=1100469798]
 
@@ -41,11 +51,12 @@ color = Color(0.28, 0.25, 0.18, 1)
 
 [node name="RunTimerSystem" type="Node" parent="Systems" unique_id=708216484]
 script = ExtResource("6_run_timer")
+run_duration_seconds = 360.0
 
 [node name="SpawnSystem" type="Node" parent="Systems" unique_id=2107303868]
 script = ExtResource("7_spawn_system")
 
-wave_data = ExtResource("8_m0_wave")
+wave_data = ExtResource("8_m1_wave")
 enemy_scene = ExtResource("9_enemy_scene")
 enemies_path = NodePath("../../World/Enemies")
 player_path = NodePath("../../World/Player")
@@ -71,7 +82,15 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 player_path = NodePath("../../World/Player")
+[node name="SettlementPanel" type="Control" parent="CanvasLayer" instance=ExtResource("11_settlement")]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
 [node name="DebugOverlay" type="Control" parent="CanvasLayer" unique_id=1729742890 instance=ExtResource("4_gnhp1")]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

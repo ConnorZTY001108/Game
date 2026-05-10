@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/map/HazardRift.gd" id="1_rift"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hazard"]
+radius = 110.0
+
+[node name="HazardRift" type="Area2D"]
+script = ExtResource("1_rift")
+collision_layer = 0
+collision_mask = 1
+
+[node name="Visual" type="Polygon2D" parent="."]
+z_index = -3
+color = Color(1, 1, 1, 1)
+polygon = PackedVector2Array(-28, -84, 28, -54, 10, -16, 38, 12, -4, 88, -36, 30, -18, -14)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_hazard")

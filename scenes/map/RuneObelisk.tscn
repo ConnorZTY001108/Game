@@ -1,0 +1,29 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/map/RuneObelisk.gd" id="1_obelisk"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_activation"]
+radius = 96.0
+
+[node name="RuneObelisk" type="Area2D"]
+script = ExtResource("1_obelisk")
+collision_layer = 0
+collision_mask = 1
+
+[node name="Base" type="Polygon2D" parent="."]
+z_index = -6
+color = Color(0.18, 0.16, 0.13, 1)
+polygon = PackedVector2Array(-34, 42, -24, -44, 0, -66, 28, -42, 34, 42)
+
+[node name="Core" type="Polygon2D" parent="."]
+z_index = -5
+color = Color(0.48, 0.82, 0.72, 0.92)
+polygon = PackedVector2Array(0, -42, 18, -10, 0, 32, -18, -10)
+
+[node name="Ring" type="Polygon2D" parent="."]
+z_index = -7
+color = Color(0.52, 0.44, 0.29, 0.55)
+polygon = PackedVector2Array(0, -78, 68, -34, 68, 34, 0, 78, -68, 34, -68, -34)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_activation")

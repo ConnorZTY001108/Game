@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3]
+
+[ext_resource type="Script" path="res://data/resources/upgrade_data.gd" id="1_upgrade_data"]
+[ext_resource type="Resource" path="res://data/content/weapons/sigil_orbit.tres" id="2_sigil_orbit"]
+
+[resource]
+script = ExtResource("1_upgrade_data")
+id = "weapon_sigil_orbit_pick"
+display_name = "唤起环印守卫"
+description = "新增一把近身环印武器，周期性打击玩家周围敌人；供 M1 升级池接入。"
+route_id = "storm_orbit"
+route_label = "风暴环印"
+summary = "获得第二武器：环印守卫。"
+details = "环印守卫周期性脉冲命中近身敌人，并能触发风暴环印路线。"
+max_rank = 1
+unique = true
+upgrade_type = "weapon_pick"
+stat_key = "sigil_orbit"
+value = 0.0
+weapon = ExtResource("2_sigil_orbit")

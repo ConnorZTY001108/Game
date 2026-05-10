@@ -28,7 +28,9 @@ func _process(delta: float) -> void:
 
 func _on_area_entered(area: Area2D) -> void:
 	var target := area.get_parent()
-	DamageSystem.apply_damage(target, damage, tags, payload)
+	var hit_payload := payload.duplicate(true)
+	hit_payload["hit_position"] = global_position
+	DamageSystem.apply_damage(target, damage, tags, hit_payload)
 	if remaining_pierce <= 0:
 		queue_free()
 	else:

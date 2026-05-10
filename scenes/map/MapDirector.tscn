@@ -1,0 +1,255 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/map/MapDirector.gd" id="1_director"]
+[ext_resource type="Script" path="res://scripts/map/MapLandmark.gd" id="2_landmark"]
+[ext_resource type="Script" path="res://scripts/map/MapRegion.gd" id="3_region"]
+[ext_resource type="Script" path="res://scripts/map/MapObjectiveSystem.gd" id="4_objectives"]
+[ext_resource type="PackedScene" path="res://scenes/map/RuneObelisk.tscn" id="5_obelisk"]
+[ext_resource type="PackedScene" path="res://scenes/map/ExperienceCache.tscn" id="6_cache"]
+[ext_resource type="PackedScene" path="res://scenes/map/HazardRift.tscn" id="7_rift"]
+[ext_resource type="PackedScene" path="res://scenes/map/EliteTriggerPoint.tscn" id="8_trigger"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/Enemy.tscn" id="9_enemy"]
+[ext_resource type="Resource" path="res://data/content/enemies/dust_thrall.tres" id="10_dust"]
+[ext_resource type="Resource" path="res://data/content/enemies/ash_runner.tres" id="11_ash"]
+[ext_resource type="Resource" path="res://data/content/enemies/bone_brute.tres" id="12_bone"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_altar"]
+size = Vector2(1200, 900)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ash"]
+size = Vector2(1200, 1000)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_stone"]
+size = Vector2(1200, 1000)
+
+[node name="MapDirector" type="Node2D"]
+script = ExtResource("1_director")
+
+[node name="Regions" type="Node2D" parent="."]
+
+[node name="AltarRegion" type="Area2D" parent="Regions"]
+script = ExtResource("3_region")
+collision_layer = 0
+collision_mask = 0
+region_id = "altar_region"
+display_name = "破碎符文祭坛"
+priority = 10
+
+[node name="Visual" type="Polygon2D" parent="Regions/AltarRegion"]
+z_index = -90
+color = Color(0.27, 0.24, 0.18, 0.46)
+polygon = PackedVector2Array(-600, -450, 600, -450, 600, 450, -600, 450)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Regions/AltarRegion"]
+shape = SubResource("RectangleShape2D_altar")
+
+[node name="AshRegion" type="Area2D" parent="Regions"]
+position = Vector2(900, -180)
+script = ExtResource("3_region")
+collision_layer = 0
+collision_mask = 0
+region_id = "ash_region"
+display_name = "灰烬焦土"
+priority = 20
+
+[node name="Visual" type="Polygon2D" parent="Regions/AshRegion"]
+z_index = -90
+color = Color(0.16, 0.15, 0.14, 0.55)
+polygon = PackedVector2Array(-600, -500, 600, -500, 600, 500, -600, 500)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Regions/AshRegion"]
+shape = SubResource("RectangleShape2D_ash")
+
+[node name="StoneRegion" type="Area2D" parent="Regions"]
+position = Vector2(-900, 280)
+script = ExtResource("3_region")
+collision_layer = 0
+collision_mask = 0
+region_id = "stone_region"
+display_name = "风化碎石地"
+priority = 15
+
+[node name="Visual" type="Polygon2D" parent="Regions/StoneRegion"]
+z_index = -90
+color = Color(0.42, 0.39, 0.32, 0.44)
+polygon = PackedVector2Array(-600, -500, 600, -500, 600, 500, -600, 500)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Regions/StoneRegion"]
+shape = SubResource("RectangleShape2D_stone")
+
+[node name="Landmarks" type="Node2D" parent="."]
+
+[node name="SpawnAltar" type="Node2D" parent="Landmarks"]
+script = ExtResource("2_landmark")
+landmark_id = "spawn_altar"
+display_name = "破碎符文祭坛"
+importance = 3
+
+[node name="Base" type="Polygon2D" parent="Landmarks/SpawnAltar"]
+z_index = -40
+color = Color(0.18, 0.14, 0.1, 1)
+polygon = PackedVector2Array(0, -58, 54, -24, 48, 34, 0, 58, -48, 34, -54, -24)
+
+[node name="Core" type="Polygon2D" parent="Landmarks/SpawnAltar"]
+z_index = -39
+color = Color(0.67, 0.55, 0.34, 1)
+polygon = PackedVector2Array(0, -42, 36, -16, 32, 24, 0, 42, -32, 24, -36, -16)
+
+[node name="RuneGlow" type="Polygon2D" parent="Landmarks/SpawnAltar"]
+z_index = -38
+color = Color(0.8, 0.95, 0.65, 0.72)
+polygon = PackedVector2Array(0, -16, 16, 0, 0, 16, -16, 0)
+
+[node name="StoneNorth" type="Polygon2D" parent="Landmarks/SpawnAltar"]
+z_index = -41
+color = Color(0.36, 0.32, 0.25, 1)
+position = Vector2(0, -96)
+polygon = PackedVector2Array(-16, -10, 16, -12, 22, 8, -12, 16)
+
+[node name="StoneEast" type="Polygon2D" parent="Landmarks/SpawnAltar"]
+z_index = -41
+color = Color(0.36, 0.32, 0.25, 1)
+position = Vector2(92, 20)
+polygon = PackedVector2Array(-14, -14, 18, -8, 18, 14, -18, 12)
+
+[node name="StoneWest" type="Polygon2D" parent="Landmarks/SpawnAltar"]
+z_index = -41
+color = Color(0.36, 0.32, 0.25, 1)
+position = Vector2(-92, 22)
+polygon = PackedVector2Array(-18, -8, 14, -14, 20, 14, -16, 16)
+
+[node name="BrokenTower" type="Node2D" parent="Landmarks"]
+position = Vector2(560, -520)
+script = ExtResource("2_landmark")
+landmark_id = "broken_tower"
+display_name = "断裂高塔"
+importance = 2
+
+[node name="Shadow" type="Polygon2D" parent="Landmarks/BrokenTower"]
+z_index = -42
+color = Color(0.06, 0.05, 0.04, 0.62)
+polygon = PackedVector2Array(-46, 80, 38, 74, 76, 104, -28, 112)
+
+[node name="TowerBody" type="Polygon2D" parent="Landmarks/BrokenTower"]
+z_index = -40
+color = Color(0.32, 0.31, 0.29, 1)
+polygon = PackedVector2Array(-38, 76, -26, -132, 34, -104, 44, 78)
+
+[node name="TowerBreak" type="Polygon2D" parent="Landmarks/BrokenTower"]
+z_index = -39
+color = Color(0.18, 0.17, 0.16, 1)
+polygon = PackedVector2Array(-28, -132, 2, -170, 34, -104, 2, -122)
+
+[node name="GlowingRiftLandmark" type="Node2D" parent="Landmarks"]
+position = Vector2(1350, -260)
+script = ExtResource("2_landmark")
+landmark_id = "glowing_rift_landmark"
+display_name = "发光裂隙"
+importance = 3
+
+[node name="RiftOuter" type="Polygon2D" parent="Landmarks/GlowingRiftLandmark"]
+z_index = -40
+color = Color(0.08, 0.08, 0.12, 1)
+polygon = PackedVector2Array(-22, -96, 24, -62, 12, -18, 34, 22, -8, 98, -30, 34, -16, -20)
+
+[node name="RiftCore" type="Polygon2D" parent="Landmarks/GlowingRiftLandmark"]
+z_index = -39
+color = Color(0.25, 0.9, 1, 0.9)
+polygon = PackedVector2Array(-8, -70, 14, -46, 4, -14, 18, 18, -6, 68, -14, 26, -8, -16)
+
+[node name="RuinGate" type="Node2D" parent="Landmarks"]
+position = Vector2(-1340, 360)
+script = ExtResource("2_landmark")
+landmark_id = "ruin_gate"
+display_name = "废墟门"
+importance = 2
+
+[node name="LeftPillar" type="Polygon2D" parent="Landmarks/RuinGate"]
+z_index = -40
+color = Color(0.36, 0.34, 0.3, 1)
+polygon = PackedVector2Array(-170, 72, -150, -92, -94, -84, -86, 72)
+
+[node name="RightPillar" type="Polygon2D" parent="Landmarks/RuinGate"]
+z_index = -40
+color = Color(0.36, 0.34, 0.3, 1)
+polygon = PackedVector2Array(88, 72, 96, -84, 152, -92, 172, 72)
+
+[node name="TopSpan" type="Polygon2D" parent="Landmarks/RuinGate"]
+z_index = -39
+color = Color(0.29, 0.28, 0.25, 1)
+polygon = PackedVector2Array(-156, -112, 152, -112, 132, -58, -132, -58)
+
+[node name="Objectives" type="Node2D" parent="."]
+
+[node name="ObjectiveSystem" type="Node" parent="Objectives"]
+script = ExtResource("4_objectives")
+objectives_path = NodePath("..")
+
+[node name="Obelisks" type="Node2D" parent="Objectives"]
+
+[node name="ObeliskAltar" parent="Objectives/Obelisks" instance=ExtResource("5_obelisk")]
+position = Vector2(420, -260)
+obelisk_id = "obelisk_altar"
+display_name = "祭坛符文碑"
+reward_type = "experience"
+reward_value = 12.0
+objective_system_path = NodePath("../../ObjectiveSystem")
+
+[node name="ObeliskAsh" parent="Objectives/Obelisks" instance=ExtResource("5_obelisk")]
+position = Vector2(1350, -650)
+obelisk_id = "obelisk_ash"
+display_name = "焦土符文碑"
+reward_type = "heal"
+reward_value = 20.0
+objective_system_path = NodePath("../../ObjectiveSystem")
+
+[node name="ObeliskStone" parent="Objectives/Obelisks" instance=ExtResource("5_obelisk")]
+position = Vector2(-1250, 760)
+obelisk_id = "obelisk_stone"
+display_name = "碎石符文碑"
+reward_type = "pickup_bonus"
+reward_value = 32.0
+pickup_bonus_duration_seconds = 20.0
+objective_system_path = NodePath("../../ObjectiveSystem")
+
+[node name="Caches" type="Node2D" parent="Objectives"]
+
+[node name="XpCacheNorth" parent="Objectives/Caches" instance=ExtResource("6_cache")]
+position = Vector2(250, -1050)
+cache_id = "xp_cache_north"
+display_name = "北侧经验残片"
+pickup_count = 6
+objective_system_path = NodePath("../../ObjectiveSystem")
+
+[node name="XpCacheWest" parent="Objectives/Caches" instance=ExtResource("6_cache")]
+position = Vector2(-950, 100)
+cache_id = "xp_cache_west"
+display_name = "西侧经验残片"
+pickup_count = 8
+objective_system_path = NodePath("../../ObjectiveSystem")
+
+[node name="Hazards" type="Node2D" parent="Objectives"]
+
+[node name="RiftAsh01" parent="Objectives/Hazards" instance=ExtResource("7_rift")]
+position = Vector2(1100, -250)
+rift_id = "rift_ash_01"
+display_name = "灰烬裂隙一"
+
+[node name="RiftAsh02" parent="Objectives/Hazards" instance=ExtResource("7_rift")]
+position = Vector2(1680, 120)
+rift_id = "rift_ash_02"
+display_name = "灰烬裂隙二"
+
+[node name="Triggers" type="Node2D" parent="Objectives"]
+
+[node name="RuinGateAmbush" parent="Objectives/Triggers" instance=ExtResource("8_trigger")]
+position = Vector2(-1500, 350)
+trigger_id = "ruin_gate_ambush"
+display_name = "废墟石门"
+enemies_path = NodePath("../../../../../Enemies")
+player_path = NodePath("../../../../../Player")
+enemy_scene = ExtResource("9_enemy")
+dust_thrall_data = ExtResource("10_dust")
+ash_runner_data = ExtResource("11_ash")
+bone_brute_data = ExtResource("12_bone")
+objective_system_path = NodePath("../../ObjectiveSystem")

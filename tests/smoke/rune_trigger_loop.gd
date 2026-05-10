@@ -148,6 +148,10 @@ func _run() -> void:
 		push_error("Rune triggered payload was %s" % [recorder.payload])
 		quit(1)
 		return
+	if recorder.payload.get("route_id", "") != "scorch_projectile" or recorder.payload.get("source_weapon_id", "") != "rune_bolt":
+		push_error("Scorch route payload was not readable: %s" % [recorder.payload])
+		quit(1)
+		return
 	var stacks_by_target: Dictionary = element_status_system.get("stacks_by_target")
 	if stacks_by_target.has(target) and (stacks_by_target[target] as Dictionary).has("scorch"):
 		push_error("ElementStatusSystem did not clear scorch stacks after trigger")

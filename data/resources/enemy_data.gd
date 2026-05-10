@@ -9,3 +9,4 @@ extends Resource
 @export var experience_value: int = 1
 @export var behavior_type: String = "chase"
 @export var element_rules: Array[String] = []
+@export var visual_texture: Texture2D

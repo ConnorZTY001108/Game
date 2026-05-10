@@ -5,6 +5,8 @@ const DAMAGE_FOCUS_PATH := "res://data/content/upgrades/damage_focus.tres"
 const COOLDOWN_FOCUS_PATH := "res://data/content/upgrades/cooldown_focus.tres"
 const PICKUP_FOCUS_PATH := "res://data/content/upgrades/pickup_focus.tres"
 const SCORCH_MARK_PICK_PATH := "res://data/content/upgrades/scorch_mark_pick.tres"
+const WEAPON_SIGIL_ORBIT_PICK_PATH := "res://data/content/upgrades/weapon_sigil_orbit_pick.tres"
+const STORM_ORBIT_PICK_PATH := "res://data/content/upgrades/storm_orbit_pick.tres"
 
 class UpgradeSelectedRecorder:
 	extends Node
@@ -30,6 +32,25 @@ func _collect_generated_options(upgrade_system: Node, attempts: int) -> Dictiona
 				continue
 			generated[resource.resource_path] = resource
 	return generated
+
+func _assert_readable_option_buttons(level_panel: Node) -> bool:
+	var options_container := level_panel.get_node("Panel/Margin/Content/Options")
+	if options_container.get_child_count() != 3:
+		push_error("LevelUpPanel rendered %d option buttons, expected 3" % options_container.get_child_count())
+		return false
+	for child in options_container.get_children():
+		var button := child as Button
+		if button == null:
+			push_error("LevelUpPanel option child is not a Button")
+			return false
+		var lines := button.text.split("\n", false)
+		if lines.size() < 3:
+			push_error("LevelUpPanel option is not route-readable: %s" % button.text)
+			return false
+		if not button.text.contains("|") and not button.text.contains("条件"):
+			push_error("LevelUpPanel option is missing route/effect text: %s" % button.text)
+			return false
+	return true
 
 func _run() -> void:
 	for script_path in [
@@ -115,9 +136,19 @@ func _run() -> void:
 		push_error("LevelUpPanel did not show three options")
 		quit(1)
 		return
+	if not _assert_readable_option_buttons(level_panel):
+		quit(1)
+		return
 
-	var generated_options := _collect_generated_options(upgrade_system, 8)
-	for path in [DAMAGE_FOCUS_PATH, COOLDOWN_FOCUS_PATH, PICKUP_FOCUS_PATH, SCORCH_MARK_PICK_PATH]:
+	var generated_options := _collect_generated_options(upgrade_system, 12)
+	for path in [
+		DAMAGE_FOCUS_PATH,
+		COOLDOWN_FOCUS_PATH,
+		PICKUP_FOCUS_PATH,
+		SCORCH_MARK_PICK_PATH,
+		WEAPON_SIGIL_ORBIT_PICK_PATH,
+		STORM_ORBIT_PICK_PATH
+	]:
 		if not generated_options.has(path):
 			push_error("UpgradeSystem never generated %s" % path)
 			quit(1)
@@ -218,10 +249,16 @@ func _run() -> void:
 		push_error("First pending level-up choice was not shown")
 		quit(1)
 		return
+	if not _assert_readable_option_buttons(level_panel):
+		quit(1)
+		return
 
 	level_panel.call("_select_option", level_panel.current_options[0])
 	if int(game_runtime.get("state")) != 3 or level_panel.visible == false or level_panel.current_options.size() != 3:
 		push_error("Second pending level-up choice was lost after first selection")
+		quit(1)
+		return
+	if not _assert_readable_option_buttons(level_panel):
 		quit(1)
 		return
 

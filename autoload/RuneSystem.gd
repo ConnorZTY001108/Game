@@ -51,8 +51,19 @@ func _on_weapon_hit(target: Node, payload: Dictionary) -> void:
 			ElementStatusSystem.clear_stack(target, element_tag)
 			if target.has_method("apply_damage"):
 				var damage_tags: Array[String] = [element_tag, "rune_bonus"]
+				var effect_tag := _get_string(rune, "effect", "")
+				if effect_tag != "" and effect_tag != "add_element_stack":
+					damage_tags.append(effect_tag)
 				target.apply_damage(_get_float(rune, "bonus_damage", 0.0), damage_tags)
-			GameEvents.rune_triggered.emit(rune_id, target, {"element": element_tag, "stacks": stacks})
+			GameEvents.rune_triggered.emit(rune_id, target, {
+				"element": element_tag,
+				"stacks": stacks,
+				"route_id": _get_string(rune, "route_id", ""),
+				"route_label": _get_string(rune, "route_label", ""),
+				"effect": _get_string(rune, "effect", ""),
+				"short_effect": _get_string(rune, "short_effect", ""),
+				"source_weapon_id": str(payload.get("weapon_id", ""))
+			})
 
 func _rune_applies(rune: Resource, payload: Dictionary) -> bool:
 	var weapon_tags: Array = payload.get("weapon_tags", [])

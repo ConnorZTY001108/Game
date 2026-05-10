@@ -23,6 +23,20 @@ func apply_damage(amount: float) -> void:
 		return
 	current_health = max(0.0, current_health - amount)
 	health_changed.emit(current_health, max_health)
+	_emit_player_damage_feedback(amount)
 	if current_health <= 0.0:
 		is_dead = true
 		died.emit()
+
+func _emit_player_damage_feedback(amount: float) -> void:
+	var owner_node := get_parent()
+	if owner_node == null or owner_node.has_method("take_contact_damage") == false:
+		return
+	var world_position := Vector2.ZERO
+	if owner_node is Node2D:
+		world_position = (owner_node as Node2D).global_position
+	GameEvents.feedback_requested.emit("player_damage", "受击：-%d" % int(amount), world_position, {
+		"amount": amount,
+		"current_health": current_health,
+		"max_health": max_health
+	})

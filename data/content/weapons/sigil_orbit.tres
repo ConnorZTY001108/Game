@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://data/resources/weapon_data.gd" id="1_weapon_data"]
+
+[resource]
+script = ExtResource("1_weapon_data")
+id = "sigil_orbit"
+display_name = "环印守卫"
+description = "周期性灼亮玩家周围的近身区域，不发射弹体，专门清理贴脸的高速敌人。"
+attack_mode = "orbit_pulse"
+damage = 7.0
+cooldown = 0.75
+area_radius = 128.0
+tick_interval = 0.55
+orbit_radius = 82.0
+pulse_duration = 0.18
+range = 128.0
+tags = Array[String](["area", "orbit", "rune"])

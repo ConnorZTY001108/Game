@@ -1,5 +1,9 @@
 extends SceneTree
 
+# M0-only bootstrap generator.
+# Do not run this against M1+ work unless you intend to recreate the original
+# M0 scene wiring; it binds RunScene SpawnSystem back to m0_wave.tres.
+
 func _init() -> void:
 	_make_dirs()
 	_save_scene(_weapon_controller(), "res://scenes/weapons/WeaponController.tscn")
@@ -276,6 +280,8 @@ func _bind_generated_scene_scripts() -> void:
 	_bind_scene_script("res://scenes/ui/DebugOverlay.tscn", "1_debug", "res://scripts/ui/DebugOverlay.gd", "[node name=\"DebugOverlay\" type=\"Control\"")
 
 func _bind_spawn_system_config() -> void:
+	# M0-only: this deliberately preserves the original baseline m0_wave.tres.
+	# M1+ scenes should be edited directly or by a dedicated migration, not this generator.
 	var scene_path := "res://scenes/run/RunScene.tscn"
 	var absolute_path := ProjectSettings.globalize_path(scene_path)
 	var file := FileAccess.open(absolute_path, FileAccess.READ)

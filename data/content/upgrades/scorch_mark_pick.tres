@@ -8,14 +8,24 @@ script = ExtResource("1_au54t")
 id = "scorch_mark"
 display_name = "灼痕"
 description = "符文弹命中会施加灼痕层数。三层触发额外伤害。"
+route_id = "scorch_projectile"
+route_label = "灼痕弹链"
+short_effect = "符文弹三次命中后爆发灼痕伤害"
+details = "触发条件：projectile/rune 命中同一目标累计 3 层。适合远程符文弹连锁。"
 stream_tags = Array[String](["m0_chain"])
-applies_to_weapon_tags = Array[String](["projectile", "rune"])
+applies_to_weapon_tags = Array[String](["projectile"])
 
 [resource]
 script = ExtResource("2_6e84f")
 id = "scorch_mark_pick"
 display_name = "灼痕"
 description = "装备灼痕符文链。"
+route_id = "scorch_projectile"
+route_label = "灼痕弹链"
+summary = "符文弹命中叠加灼痕，第三层爆发额外伤害。"
+details = "条件：projectile/rune 命中同一目标 3 次。路线 A，保留 M0 Scorch Mark 触发契约。"
+max_rank = 1
+unique = true
 upgrade_type = "rune"
 stat_key = ""
 value = 0.0

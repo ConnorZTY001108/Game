@@ -7,3 +7,7 @@ script = ExtResource("1_ks217")
 id = "damage_focus"
 display_name = "锋锐符文弹"
 description = "符文弹造成的伤害提高 15%。"
+route_id = "rune_bolt_core"
+route_label = "符文弹强化"
+summary = "提高符文弹与符文伤害。"
+details = "稳定提高当前主武器输出，可多次选择。"

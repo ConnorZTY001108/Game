@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="EnemyData" format=3]
 
 [ext_resource type="Script" path="res://data/resources/enemy_data.gd" id="1_kaop5"]
+[ext_resource type="Texture2D" path="res://assets/enemies/dust_thrall.png" id="2_dust_visual"]
 
 [resource]
 script = ExtResource("1_kaop5")
@@ -8,4 +9,8 @@ id = "dust_thrall"
 display_name = "尘骸仆从"
 max_health = 32.0
 move_speed = 125.0
+contact_damage = 8.0
+experience_value = 1
+behavior_type = "chase"
 element_rules = Array[String](["scorch_stack"])
+visual_texture = ExtResource("2_dust_visual")

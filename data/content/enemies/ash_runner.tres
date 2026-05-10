@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://data/resources/enemy_data.gd" id="1_vxqbp"]
+[ext_resource type="Texture2D" path="res://assets/enemies/ash_runner.png" id="2_ash_visual"]
+
+[resource]
+script = ExtResource("1_vxqbp")
+id = "ash_runner"
+display_name = "灰烬奔行者"
+max_health = 18.0
+move_speed = 190.0
+contact_damage = 6.0
+experience_value = 1
+behavior_type = "chase"
+element_rules = Array[String](["scorch_stack"])
+visual_texture = ExtResource("2_ash_visual")

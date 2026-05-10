@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/map/MapRegion.gd" id="1_region"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_region"]
+size = Vector2(1000, 800)
+
+[node name="MapRegion" type="Area2D"]
+script = ExtResource("1_region")
+collision_layer = 0
+collision_mask = 0
+
+[node name="Visual" type="Polygon2D" parent="."]
+z_index = -90
+color = Color(0.33, 0.29, 0.22, 0.36)
+polygon = PackedVector2Array(-500, -400, 500, -400, 500, 400, -500, 400)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_region")

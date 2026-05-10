@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://data/resources/enemy_data.gd" id="1_2qb43"]
+[ext_resource type="Texture2D" path="res://assets/enemies/bone_brute.png" id="2_bone_visual"]
+
+[resource]
+script = ExtResource("1_2qb43")
+id = "bone_brute"
+display_name = "骸骨蛮兵"
+max_health = 96.0
+move_speed = 85.0
+contact_damage = 14.0
+experience_value = 4
+behavior_type = "chase"
+element_rules = Array[String](["scorch_stack"])
+visual_texture = ExtResource("2_bone_visual")

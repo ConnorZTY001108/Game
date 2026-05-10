@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="WaveData" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://data/resources/wave_data.gd" id="1_6jfou"]
+[ext_resource type="Resource" path="res://data/content/enemies/dust_thrall.tres" id="2_dust"]
+[ext_resource type="Resource" path="res://data/content/enemies/ash_runner.tres" id="3_ash"]
+[ext_resource type="Resource" path="res://data/content/enemies/bone_brute.tres" id="4_bone"]
+
+[resource]
+script = ExtResource("1_6jfou")
+id = "m1_wave"
+duration_seconds = 360.0
+spawn_interval = 1.2
+max_alive = 40
+spawn_radius = 760.0
+enemy_data = ExtResource("2_dust")
+phases = Array[Dictionary]([{
+"start_time": 0.0,
+"duration": 120.0,
+"spawn_interval": 1.15,
+"max_alive": 28,
+"spawn_radius": 760.0,
+"enemy_pool": Array[Resource]([ExtResource("2_dust")])
+}, {
+"start_time": 120.0,
+"duration": 120.0,
+"spawn_interval": 0.85,
+"max_alive": 42,
+"spawn_radius": 820.0,
+"enemy_pool": Array[Resource]([ExtResource("2_dust"), ExtResource("2_dust"), ExtResource("3_ash")])
+}, {
+"start_time": 240.0,
+"duration": 120.0,
+"spawn_interval": 0.62,
+"max_alive": 60,
+"spawn_radius": 900.0,
+"enemy_pool": Array[Resource]([ExtResource("2_dust"), ExtResource("3_ash"), ExtResource("3_ash"), ExtResource("4_bone")])
+}])
