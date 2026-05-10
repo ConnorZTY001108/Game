@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/pickups/ExperiencePickup.gd" id="1_pickup"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_mijpy"]
+radius = 8.0
+
+[node name="ExperiencePickup" type="Area2D" unique_id=860379579]
+script = ExtResource("1_pickup")
+
+[node name="Outline" type="Polygon2D" parent="." unique_id=818388190]
+color = Color(0.02, 0.08, 0.03, 1)
+polygon = PackedVector2Array(0, -11.25, 10, -3.75, 6.25, 10, -6.25, 10, -10, -3.75)
+
+[node name="Visual" type="Polygon2D" parent="." unique_id=1057345178]
+color = Color(0.35, 1, 0.25, 1)
+polygon = PackedVector2Array(0, -9, 8, -3, 5, 8, -5, 8, -8, -3)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1143306896]
+shape = SubResource("CircleShape2D_mijpy")

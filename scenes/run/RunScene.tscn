@@ -1,0 +1,79 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/enemies/Enemy.tscn" id="9_enemy_scene"]
+[ext_resource type="Resource" path="res://data/content/waves/m0_wave.tres" id="8_m0_wave"]
+[ext_resource type="Script" path="res://scripts/systems/DropSystem.gd" id="10_drop_system"]
+[ext_resource type="Script" path="res://scripts/systems/SpawnSystem.gd" id="7_spawn_system"]
+[ext_resource type="Script" path="res://scripts/systems/RunTimerSystem.gd" id="6_run_timer"]
+[ext_resource type="Script" path="res://scripts/run/RunScene.gd" id="5_run_scene"]
+[ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="1_unlb4"]
+[ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="2_cy3et"]
+[ext_resource type="PackedScene" path="res://scenes/ui/LevelUpPanel.tscn" id="3_fc40x"]
+[ext_resource type="PackedScene" path="res://scenes/ui/DebugOverlay.tscn" id="4_gnhp1"]
+
+[node name="RunScene" type="Node2D" unique_id=1644201574]
+script = ExtResource("5_run_scene")
+
+[node name="World" type="Node2D" parent="." unique_id=1229365206]
+
+[node name="Ground" type="ColorRect" parent="World" unique_id=1189348818]
+z_index = -100
+offset_left = -2000.0
+offset_top = -1200.0
+offset_right = 2000.0
+offset_bottom = 1200.0
+mouse_filter = 2
+color = Color(0.28, 0.25, 0.18, 1)
+
+[node name="Bounds" type="Node2D" parent="World" unique_id=138558224]
+
+[node name="PlayerSpawn" type="Marker2D" parent="World" unique_id=871015848]
+
+[node name="Player" type="CharacterBody2D" parent="World" unique_id=675620330 instance=ExtResource("1_unlb4")]
+
+[node name="Enemies" type="Node2D" parent="World" unique_id=1100469798]
+
+[node name="Projectiles" type="Node2D" parent="World" unique_id=1239215219]
+
+[node name="Pickups" type="Node2D" parent="World" unique_id=1631832712]
+
+[node name="Systems" type="Node" parent="." unique_id=959864306]
+
+[node name="RunTimerSystem" type="Node" parent="Systems" unique_id=708216484]
+script = ExtResource("6_run_timer")
+
+[node name="SpawnSystem" type="Node" parent="Systems" unique_id=2107303868]
+script = ExtResource("7_spawn_system")
+
+wave_data = ExtResource("8_m0_wave")
+enemy_scene = ExtResource("9_enemy_scene")
+enemies_path = NodePath("../../World/Enemies")
+player_path = NodePath("../../World/Player")
+[node name="DropSystem" type="Node" parent="Systems" unique_id=345570048]
+script = ExtResource("10_drop_system")
+
+pickups_path = NodePath("../../World/Pickups")
+player_path = NodePath("../../World/Player")
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=855893048]
+
+[node name="HUD" type="Control" parent="CanvasLayer" unique_id=157666848 instance=ExtResource("2_cy3et")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="LevelUpPanel" type="Control" parent="CanvasLayer" unique_id=388331562 instance=ExtResource("3_fc40x")]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+player_path = NodePath("../../World/Player")
+[node name="DebugOverlay" type="Control" parent="CanvasLayer" unique_id=1729742890 instance=ExtResource("4_gnhp1")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2

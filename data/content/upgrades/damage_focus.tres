@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3]
+
+[ext_resource type="Script" path="res://data/resources/upgrade_data.gd" id="1_ks217"]
+
+[resource]
+script = ExtResource("1_ks217")
+id = "damage_focus"
+display_name = "锋锐符文弹"
+description = "符文弹造成的伤害提高 15%。"

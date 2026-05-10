@@ -1,0 +1,45 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/components/StatusReceiver.gd" id="11_status_receiver"]
+[ext_resource type="Script" path="res://scripts/components/HealthComponent.gd" id="4_enemy_health"]
+[ext_resource type="Script" path="res://scripts/enemies/Enemy.gd" id="3_enemy"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_jsdvy"]
+radius = 14.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hpe7p"]
+radius = 18.0
+
+[node name="Enemy" type="CharacterBody2D" unique_id=1464398376]
+script = ExtResource("3_enemy")
+
+[node name="Outline" type="Polygon2D" parent="." unique_id=646103662]
+color = Color(0.08, 0.03, 0.02, 1)
+polygon = PackedVector2Array(0, -20.06, 20.06, 0, 0, 20.06, -20.06, 0)
+
+[node name="Visual" type="Polygon2D" parent="." unique_id=350072212]
+color = Color(0.95, 0.27, 0.16, 1)
+polygon = PackedVector2Array(0, -17, 17, 0, 0, 17, -17, 0)
+
+[node name="HealthComponent" type="Node" parent="." unique_id=1796841650]
+script = ExtResource("4_enemy_health")
+
+[node name="HitboxComponent" type="Area2D" parent="." unique_id=818839164]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=1563298685]
+shape = SubResource("CircleShape2D_jsdvy")
+
+[node name="ContactArea" type="Area2D" parent="." unique_id=1118603352]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ContactArea" unique_id=1897007407]
+shape = SubResource("CircleShape2D_hpe7p")
+
+[node name="DropComponent" type="Node" parent="." unique_id=42468792]
+
+[node name="StatusReceiver" type="Node" parent="." unique_id=1668503627]
+script = ExtResource("11_status_receiver")
+
+[connection signal="body_entered" from="ContactArea" to="." method="_on_contact_area_body_entered"]
+
+[connection signal="body_exited" from="ContactArea" to="." method="_on_contact_area_body_exited"]

@@ -1,0 +1,31 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/DebugOverlay.gd" id="1_debug"]
+[node name="DebugOverlay" type="Control" unique_id=1729742890]
+script = ExtResource("1_debug")
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=287825799]
+custom_minimum_size = Vector2(208, 100)
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -224.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = 116.0
+
+[node name="Margin" type="MarginContainer" parent="Panel" unique_id=793663228]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="DebugLabel" type="Label" parent="Panel/Margin" unique_id=1023170742]
+layout_mode = 2
+text = "帧率: 0"

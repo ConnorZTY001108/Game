@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3]
+
+[ext_resource type="Script" path="res://data/resources/upgrade_data.gd" id="1_yi7a0"]
+
+[resource]
+script = ExtResource("1_yi7a0")
+id = "pickup_focus"
+display_name = "符文感知"
+description = "拾取半径增加 24 像素。"
+upgrade_type = "player_stat"
+stat_key = "pickup_radius"
+value = 24.0

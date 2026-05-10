@@ -1,0 +1,54 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/HUD.gd" id="1_hud"]
+[node name="HUD" type="Control" unique_id=157666848]
+script = ExtResource("1_hud")
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=618090399]
+custom_minimum_size = Vector2(510, 44)
+layout_mode = 0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 16.0
+offset_bottom = 16.0
+
+[node name="Margin" type="MarginContainer" parent="Panel" unique_id=746268919]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 6
+
+[node name="Stats" type="HBoxContainer" parent="Panel/Margin" unique_id=1962666738]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="HealthLabel" type="Label" parent="Panel/Margin/Stats" unique_id=1263823160]
+custom_minimum_size = Vector2(76, 24)
+layout_mode = 2
+text = "生命: 0/0"
+
+[node name="LevelLabel" type="Label" parent="Panel/Margin/Stats" unique_id=860161491]
+custom_minimum_size = Vector2(76, 24)
+layout_mode = 2
+text = "等级: 1"
+
+[node name="ExperienceLabel" type="Label" parent="Panel/Margin/Stats" unique_id=1594558551]
+custom_minimum_size = Vector2(76, 24)
+layout_mode = 2
+text = "经验: 0"
+
+[node name="TimerLabel" type="Label" parent="Panel/Margin/Stats" unique_id=316516426]
+custom_minimum_size = Vector2(76, 24)
+layout_mode = 2
+text = "时间: 00:00"
+
+[node name="KillLabel" type="Label" parent="Panel/Margin/Stats" unique_id=130336885]
+custom_minimum_size = Vector2(76, 24)
+layout_mode = 2
+text = "击杀: 0"

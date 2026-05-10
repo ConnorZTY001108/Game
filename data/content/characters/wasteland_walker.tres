@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3]
+
+[ext_resource type="Script" path="res://data/resources/character_data.gd" id="1_pb4rd"]
+[ext_resource type="Script" path="res://data/resources/weapon_data.gd" id="2_tmtai"]
+
+[sub_resource type="Resource" id="Resource_k0eyq"]
+script = ExtResource("2_tmtai")
+id = "rune_bolt"
+display_name = "符文弹"
+description = "自动向最近的敌人发射符文弹。"
+damage = 12.0
+cooldown = 0.75
+projectile_speed = 560.0
+projectile_lifetime = 1.3
+range = 640.0
+tags = Array[String](["projectile", "rune"])
+
+[resource]
+script = ExtResource("1_pb4rd")
+id = "wasteland_walker"
+display_name = "荒原行者"
+starting_weapon = SubResource("Resource_k0eyq")
+passive_tags = Array[String](["m0_basic"])

@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3]
+
+[ext_resource type="Script" path="res://data/resources/rune_data.gd" id="1_au54t"]
+[ext_resource type="Script" path="res://data/resources/upgrade_data.gd" id="2_6e84f"]
+
+[sub_resource type="Resource" id="Resource_uyw8f"]
+script = ExtResource("1_au54t")
+id = "scorch_mark"
+display_name = "灼痕"
+description = "符文弹命中会施加灼痕层数。三层触发额外伤害。"
+stream_tags = Array[String](["m0_chain"])
+applies_to_weapon_tags = Array[String](["projectile", "rune"])
+
+[resource]
+script = ExtResource("2_6e84f")
+id = "scorch_mark_pick"
+display_name = "灼痕"
+description = "装备灼痕符文链。"
+upgrade_type = "rune"
+stat_key = ""
+value = 0.0
+rune = SubResource("Resource_uyw8f")

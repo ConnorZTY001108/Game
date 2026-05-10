@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="RuneData" format=3]
+
+[ext_resource type="Script" path="res://data/resources/rune_data.gd" id="1_wkam0"]
+
+[resource]
+script = ExtResource("1_wkam0")
+id = "scorch_mark"
+display_name = "灼痕"
+description = "符文弹命中会施加灼痕层数。三层触发额外伤害。"
+stream_tags = Array[String](["m0_chain"])
+applies_to_weapon_tags = Array[String](["projectile", "rune"])

@@ -1,0 +1,27 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/components/HealthComponent.gd" id="2_health"]
+[ext_resource type="Script" path="res://scripts/player/Player.gd" id="1_player"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_o8nba"]
+radius = 72.0
+
+[node name="Player" type="CharacterBody2D" unique_id=675620330]
+script = ExtResource("1_player")
+
+[node name="Outline" type="Polygon2D" parent="." unique_id=144646435]
+color = Color(0.05, 0.08, 0.08, 1)
+polygon = PackedVector2Array(0, -21.6, 19.2, 14.400001, 0, 24, -19.2, 14.400001)
+
+[node name="Visual" type="Polygon2D" parent="." unique_id=297146676]
+color = Color(0.15, 0.9, 1, 1)
+polygon = PackedVector2Array(0, -18, 16, 12, 0, 20, -16, 12)
+
+[node name="HealthComponent" type="Node" parent="." unique_id=1013029492]
+script = ExtResource("2_health")
+
+[node name="PickupArea" type="Area2D" parent="." unique_id=1784718748]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickupArea" unique_id=1128907441]
+shape = SubResource("CircleShape2D_o8nba")
+
+[node name="WeaponMount" type="Node2D" parent="." unique_id=798861001]

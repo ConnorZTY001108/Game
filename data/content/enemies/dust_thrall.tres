@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://data/resources/enemy_data.gd" id="1_kaop5"]
+
+[resource]
+script = ExtResource("1_kaop5")
+id = "dust_thrall"
+display_name = "尘骸仆从"
+max_health = 32.0
+move_speed = 125.0
+element_rules = Array[String](["scorch_stack"])
