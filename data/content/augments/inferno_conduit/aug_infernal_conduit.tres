@@ -1,0 +1,119 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_infernal_conduit"
+display_name = "炼狱导管"
+description = "命中敌人施加“符火”灼烧。符火每次跳伤返还最近一次使用武器 4% 冷却。"
+source_augment_name = "炼狱导管"
+source_augment_rarity = "炼狱导管:棱彩"
+route_id = "inferno_conduit"
+route_label = "炼狱导管"
+rarity = "prismatic"
+max_rank = 1
+unique = true
+upgrade_type = "启动器"
+source_trigger = "on_skill_or_element_hit"
+effect = "命中敌人施加“符火”灼烧。符火每次跳伤返还最近一次使用武器 4% 冷却。"
+source_condition = "每个敌人最多 12 层；同源冷却返还有 0.15 秒节流。"
+value = {
+"source_text": "每层 8% 符文强度/秒，3 秒"
+}
+synergy_tags = Array[String](["burn", "dot", "cooldown", "skill"])
+required_tags = Array[String](["skill_hit"])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "形成火越多、冷却越快、火更多的闭环。"
+fit = "范围技能、orbit、珠光符文。"
+risk = "高层 DoT 要防性能与无限返还。"
+why_close = "核心来自“炼狱导管”的灼烧返还冷却。"
+implementation_hint = "DoT tick 合并批处理，cooldown_refund_queue。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/inferno_conduit/aug_infernal_conduit.tres"
+test_owner = "augment_inferno_loop.gd"
+checkpoint_priority = 2
+manifest_fields = {
+"checkpoint_priority": 2,
+"combo_value": "形成火越多、冷却越快、火更多的闭环。",
+"condition": "每个敌人最多 12 层；同源冷却返还有 0.15 秒节流。",
+"display_name": "炼狱导管",
+"effect": "命中敌人施加“符火”灼烧。符火每次跳伤返还最近一次使用武器 4% 冷却。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "add_burn_stack",
+"effect_type": "add_burn_stack",
+"max_proc_depth": 2,
+"params": {
+"amount": 1,
+"from_sources": ["skill", "element"],
+"stack_tag": "rune_fire"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "refund_cooldown_on_dot",
+"effect_type": "refund_cooldown_on_dot",
+"max_proc_depth": 2,
+"params": {
+"cooldown_source": "recent_weapon",
+"refund_ratio": 0.04
+}
+}],
+"excludes_tags": [],
+"fit": "范围技能、orbit、珠光符文。",
+"id": "aug_infernal_conduit",
+"implementation_hint": "DoT tick 合并批处理，cooldown_refund_queue。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": true,
+"max_rank": 1,
+"normalized_rarity": "prismatic",
+"rarity": "棱彩",
+"required_tags": ["skill_hit"],
+"resource_path": "data/content/augments/inferno_conduit/aug_infernal_conduit.tres",
+"risk": "高层 DoT 要防性能与无限返还。",
+"route_id": "inferno_conduit",
+"route_label": "炼狱导管",
+"source_augment_name": "炼狱导管",
+"source_augment_rarity": "炼狱导管:棱彩",
+"synergy_tags": ["burn", "dot", "cooldown", "skill"],
+"test_owner": "augment_inferno_loop.gd",
+"trigger": "on_skill_or_element_hit",
+"trigger_spec": "trigger_id=on_skill_or_element_hit; signals=damage_applied_packet, rune_triggered; required_packet_keys=source_kind, element_tags, target, hit_position, cooldown_source_id; synthetic_test=emit skill and rune packets",
+"unique": true,
+"upgrade_type": "启动器",
+"value": "每层 8% 符文强度/秒，3 秒",
+"why_close": "核心来自“炼狱导管”的灼烧返还冷却。"
+}
+trigger_spec = {
+"required_packet_keys": ["source_kind", "element_tags", "target", "hit_position", "cooldown_source_id"],
+"required_packet_values": {
+
+},
+"signal_names": ["damage_applied_packet", "rune_triggered"],
+"synthetic_test": "emit skill and rune packets",
+"trigger_id": "on_skill_or_element_hit"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "add_burn_stack",
+"effect_type": "add_burn_stack",
+"max_proc_depth": 2,
+"params": {
+"amount": 1,
+"from_sources": ["skill", "element"],
+"stack_tag": "rune_fire"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "refund_cooldown_on_dot",
+"effect_type": "refund_cooldown_on_dot",
+"max_proc_depth": 2,
+"params": {
+"cooldown_source": "recent_weapon",
+"refund_ratio": 0.04
+}
+}])

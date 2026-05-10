@@ -1,0 +1,105 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_poro_king_bounce"
+display_name = "魄罗王弹跳"
+description = "每 30 秒进入魄罗王弹跳 4 秒：获得高额减伤、无碰撞和移速，不能正常攻击，但连续弹跳伤害并击退敌人。"
+source_augment_name = "魄罗之王的弹跳"
+source_augment_rarity = "魄罗之王的弹跳:棱彩"
+route_id = "snowstep_vanguard"
+route_label = "雪步先锋"
+rarity = "prismatic"
+max_rank = 1
+unique = true
+upgrade_type = "终结器"
+source_trigger = "periodic"
+effect = "每 30 秒进入魄罗王弹跳 4 秒：获得高额减伤、无碰撞和移速，不能正常攻击，但连续弹跳伤害并击退敌人。"
+source_condition = "期间自动选择附近密集点弹跳。"
+value = {
+"source_text": "减伤 75%；每跳 160%"
+}
+synergy_tags = Array[String](["periodic", "bounce", "knockback", "damage_reduction"])
+required_tags = Array[String](["close_range"])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "提供 ARAM 式娱乐强开和混乱团战感。"
+fit = "巨像熔炉、闪光爆破。"
+risk = "期间主武器暂停，远程流收益低。"
+why_close = "直接转译“魄罗之王的弹跳”。"
+implementation_hint = "临时替换 player_state.combat_mode。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/snowstep_vanguard/aug_poro_king_bounce.tres"
+test_owner = "augment_snowstep_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "提供 ARAM 式娱乐强开和混乱团战感。",
+"condition": "期间自动选择附近密集点弹跳。",
+"display_name": "魄罗王弹跳",
+"effect": "每 30 秒进入魄罗王弹跳 4 秒：获得高额减伤、无碰撞和移速，不能正常攻击，但连续弹跳伤害并击退敌人。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "temporary_mode",
+"effect_type": "temporary_mode",
+"max_proc_depth": 2,
+"params": {
+"disable_normal_attack": true,
+"duration": 4.0,
+"effects": ["damage_reduction", "no_collision", "move_speed", "bounce_damage", "knockback"],
+"interval": 30.0,
+"mode": "poro_king_bounce"
+}
+}],
+"excludes_tags": [],
+"fit": "巨像熔炉、闪光爆破。",
+"id": "aug_poro_king_bounce",
+"implementation_hint": "临时替换 player_state.combat_mode。",
+"is_finisher": true,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "prismatic",
+"rarity": "棱彩",
+"required_tags": ["close_range"],
+"resource_path": "data/content/augments/snowstep_vanguard/aug_poro_king_bounce.tres",
+"risk": "期间主武器暂停，远程流收益低。",
+"route_id": "snowstep_vanguard",
+"route_label": "雪步先锋",
+"source_augment_name": "魄罗之王的弹跳",
+"source_augment_rarity": "魄罗之王的弹跳:棱彩",
+"synergy_tags": ["periodic", "bounce", "knockback", "damage_reduction"],
+"test_owner": "augment_snowstep_loop.gd",
+"trigger": "periodic",
+"trigger_spec": "trigger_id=periodic; signals=augment_periodic_tick; required_packet_keys=owner, elapsed_seconds, nearest_enemy, enemy_clusters; synthetic_test=advance scheduler past interval",
+"unique": true,
+"upgrade_type": "终结器",
+"value": "减伤 75%；每跳 160%",
+"why_close": "直接转译“魄罗之王的弹跳”。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "elapsed_seconds", "nearest_enemy", "enemy_clusters"],
+"required_packet_values": {
+
+},
+"signal_names": ["augment_periodic_tick"],
+"synthetic_test": "advance scheduler past interval",
+"trigger_id": "periodic"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "temporary_mode",
+"effect_type": "temporary_mode",
+"max_proc_depth": 2,
+"params": {
+"disable_normal_attack": true,
+"duration": 4.0,
+"effects": ["damage_reduction", "no_collision", "move_speed", "bounce_damage", "knockback"],
+"interval": 30.0,
+"mode": "poro_king_bounce"
+}
+}])

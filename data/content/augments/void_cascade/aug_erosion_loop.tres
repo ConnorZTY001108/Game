@@ -1,0 +1,117 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_erosion_loop"
+display_name = "侵蚀回路"
+description = "你的伤害叠加“侵蚀”，降低目标护甲与魔抗；满层后目标进入“易裂”状态，裂隙连线必定暴击。"
+source_augment_name = "侵蚀"
+source_augment_rarity = "侵蚀:银色"
+route_id = "void_cascade"
+route_label = "虚空裂隙连锁"
+rarity = "silver"
+max_rank = 3
+unique = false
+upgrade_type = "放大器"
+source_trigger = "on_damage"
+effect = "你的伤害叠加“侵蚀”，降低目标护甲与魔抗；满层后目标进入“易裂”状态，裂隙连线必定暴击。"
+source_condition = "最多 8 层，持续 4 秒。"
+value = {
+"source_text": "每层 -2% 抗性；满层 8"
+}
+synergy_tags = Array[String](["resistance_shred", "void", "crit", "vulnerability"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "将持续命中转化为团队式破防与裂隙爆发。"
+fit = "虚空裂隙、魔法飞弹、弹球。"
+risk = "对小怪可能来不及满层。"
+why_close = "来自“侵蚀”的双抗削减。"
+implementation_hint = "Armor/MR debuff 用百分比而非直接改数值。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/void_cascade/aug_erosion_loop.tres"
+test_owner = "augment_void_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "将持续命中转化为团队式破防与裂隙爆发。",
+"condition": "最多 8 层，持续 4 秒。",
+"display_name": "侵蚀回路",
+"effect": "你的伤害叠加“侵蚀”，降低目标护甲与魔抗；满层后目标进入“易裂”状态，裂隙连线必定暴击。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "stack_resistance_shred",
+"effect_type": "stack_resistance_shred",
+"max_proc_depth": 2,
+"params": {
+"stack_tag": "erosion",
+"stats": ["armor", "magic_resist"]
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "apply_state_at_threshold",
+"effect_type": "apply_state_at_threshold",
+"max_proc_depth": 2,
+"params": {
+"effect": "rift_line_guaranteed_crit",
+"state": "fracturable"
+}
+}],
+"excludes_tags": [],
+"fit": "虚空裂隙、魔法飞弹、弹球。",
+"id": "aug_erosion_loop",
+"implementation_hint": "Armor/MR debuff 用百分比而非直接改数值。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 3,
+"normalized_rarity": "silver",
+"rarity": "银色",
+"required_tags": [],
+"resource_path": "data/content/augments/void_cascade/aug_erosion_loop.tres",
+"risk": "对小怪可能来不及满层。",
+"route_id": "void_cascade",
+"route_label": "虚空裂隙连锁",
+"source_augment_name": "侵蚀",
+"source_augment_rarity": "侵蚀:银色",
+"synergy_tags": ["resistance_shred", "void", "crit", "vulnerability"],
+"test_owner": "augment_void_loop.gd",
+"trigger": "on_damage",
+"trigger_spec": "trigger_id=on_damage; signals=damage_applied_packet; required_packet_keys=target, amount, damage_type, tags; synthetic_test=emit generic damage packet",
+"unique": false,
+"upgrade_type": "放大器",
+"value": "每层 -2% 抗性；满层 8",
+"why_close": "来自“侵蚀”的双抗削减。"
+}
+trigger_spec = {
+"required_packet_keys": ["target", "amount", "damage_type", "tags"],
+"required_packet_values": {
+
+},
+"signal_names": ["damage_applied_packet"],
+"synthetic_test": "emit generic damage packet",
+"trigger_id": "on_damage"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "stack_resistance_shred",
+"effect_type": "stack_resistance_shred",
+"max_proc_depth": 2,
+"params": {
+"stack_tag": "erosion",
+"stats": ["armor", "magic_resist"]
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "apply_state_at_threshold",
+"effect_type": "apply_state_at_threshold",
+"max_proc_depth": 2,
+"params": {
+"effect": "rift_line_guaranteed_crit",
+"state": "fracturable"
+}
+}])

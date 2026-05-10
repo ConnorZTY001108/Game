@@ -1,0 +1,101 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_boomerang"
+display_name = "回力OK镖"
+description = "周期性投掷回旋符镖，出去和返回各造成一次伤害；返回命中玩家时缩短下次冷却。"
+source_augment_name = "回力OK镖"
+source_augment_rarity = "回力OK镖:金色"
+route_id = "summon_engine"
+route_label = "自动奇观"
+rarity = "gold"
+max_rank = 2
+unique = false
+upgrade_type = "召唤型/启动器"
+source_trigger = "periodic"
+effect = "周期性投掷回旋符镖，出去和返回各造成一次伤害；返回命中玩家时缩短下次冷却。"
+source_condition = "回收成功需要玩家站位。"
+value = {
+"source_text": "每段 90%；回收返还 30% 冷却"
+}
+synergy_tags = Array[String](["boomerang", "periodic", "positioning"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "让自动武器也有走位收益。"
+fit = "弹球回响、虚空裂隙。"
+risk = "站位差会少一段伤害。"
+why_close = "直接来自“回力OK镖”。"
+implementation_hint = "Projectile has return_phase。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/summon_engine/aug_boomerang.tres"
+test_owner = "augment_summon_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "让自动武器也有走位收益。",
+"condition": "回收成功需要玩家站位。",
+"display_name": "回力OK镖",
+"effect": "周期性投掷回旋符镖，出去和返回各造成一次伤害；返回命中玩家时缩短下次冷却。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "boomerang",
+"effect_type": "periodic_boomerang",
+"max_proc_depth": 2,
+"params": {
+"hits": ["outgoing", "returning"],
+"proc_flag": "boomerang",
+"refund_on_return_hit_player": true
+}
+}],
+"excludes_tags": [],
+"fit": "弹球回响、虚空裂隙。",
+"id": "aug_boomerang",
+"implementation_hint": "Projectile has return_phase。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": true,
+"max_rank": 2,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": [],
+"resource_path": "data/content/augments/summon_engine/aug_boomerang.tres",
+"risk": "站位差会少一段伤害。",
+"route_id": "summon_engine",
+"route_label": "自动奇观",
+"source_augment_name": "回力OK镖",
+"source_augment_rarity": "回力OK镖:金色",
+"synergy_tags": ["boomerang", "periodic", "positioning"],
+"test_owner": "augment_summon_loop.gd",
+"trigger": "periodic",
+"trigger_spec": "trigger_id=periodic; signals=augment_periodic_tick; required_packet_keys=owner, elapsed_seconds, nearest_enemy, enemy_clusters; synthetic_test=advance scheduler past interval",
+"unique": false,
+"upgrade_type": "召唤型/启动器",
+"value": "每段 90%；回收返还 30% 冷却",
+"why_close": "直接来自“回力OK镖”。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "elapsed_seconds", "nearest_enemy", "enemy_clusters"],
+"required_packet_values": {
+
+},
+"signal_names": ["augment_periodic_tick"],
+"synthetic_test": "advance scheduler past interval",
+"trigger_id": "periodic"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "boomerang",
+"effect_type": "periodic_boomerang",
+"max_proc_depth": 2,
+"params": {
+"hits": ["outgoing", "returning"],
+"proc_flag": "boomerang",
+"refund_on_return_hit_player": true
+}
+}])

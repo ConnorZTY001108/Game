@@ -1,0 +1,131 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_flash2"
+display_name = "闪烁备用"
+description = "获得一层备用闪烁：生命低于 25% 或被包围时自动向安全方向闪现；也可由简易主动键释放。"
+source_augment_name = "闪闪现现"
+source_augment_rarity = "闪闪现现:银色"
+route_id = "snowstep_vanguard"
+route_label = "雪步先锋"
+rarity = "silver"
+max_rank = 2
+unique = false
+upgrade_type = "启动器/生存型"
+source_trigger = "on_manual_or_auto_blink"
+effect = "获得一层备用闪烁：生命低于 25% 或被包围时自动向安全方向闪现；也可由简易主动键释放。"
+source_condition = "最多 2 层充能。"
+value = {
+"source_text": "闪现距离 180；充能 12 秒"
+}
+synergy_tags = Array[String](["blink", "survival", "mobility"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "给所有构筑一个低成本机动入口。"
+fit = "闪光弹、暗影疾奔。"
+risk = "自动闪现可能影响走位预期。"
+why_close = "来自“第二个闪现”和召唤师技能急速。"
+implementation_hint = "可配置 allow_manual_active。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/snowstep_vanguard/aug_flash2.tres"
+test_owner = "augment_snowstep_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "给所有构筑一个低成本机动入口。",
+"condition": "最多 2 层充能。",
+"display_name": "闪烁备用",
+"effect": "获得一层备用闪烁：生命低于 25% 或被包围时自动向安全方向闪现；也可由简易主动键释放。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "grant_blink_charge",
+"effect_type": "grant_blink_charge",
+"max_proc_depth": 2,
+"params": {
+"charge_count": 1
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "auto_blink",
+"effect_type": "auto_blink",
+"max_proc_depth": 2,
+"params": {
+"targeting": "safe_direction",
+"triggers": ["low_hp", "surrounded"]
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "manual_blink",
+"effect_type": "manual_blink",
+"max_proc_depth": 2,
+"params": {
+"input_action": "augment_active"
+}
+}],
+"excludes_tags": [],
+"fit": "闪光弹、暗影疾奔。",
+"id": "aug_flash2",
+"implementation_hint": "可配置 allow_manual_active。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": true,
+"max_rank": 2,
+"normalized_rarity": "silver",
+"rarity": "银色",
+"required_tags": [],
+"resource_path": "data/content/augments/snowstep_vanguard/aug_flash2.tres",
+"risk": "自动闪现可能影响走位预期。",
+"route_id": "snowstep_vanguard",
+"route_label": "雪步先锋",
+"source_augment_name": "闪闪现现",
+"source_augment_rarity": "闪闪现现:银色",
+"synergy_tags": ["blink", "survival", "mobility"],
+"test_owner": "augment_snowstep_loop.gd",
+"trigger": "on_manual_or_auto_blink",
+"trigger_spec": "trigger_id=on_manual_or_auto_blink; signals=manual_augment_input, low_hp_entered, surrounded_state_changed; required_packet_keys=owner, safe_direction, charge_count; synthetic_test=trigger manual and auto blink",
+"unique": false,
+"upgrade_type": "启动器/生存型",
+"value": "闪现距离 180；充能 12 秒",
+"why_close": "来自“第二个闪现”和召唤师技能急速。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "safe_direction", "charge_count"],
+"required_packet_values": {
+
+},
+"signal_names": ["manual_augment_input", "low_hp_entered", "surrounded_state_changed"],
+"synthetic_test": "trigger manual and auto blink",
+"trigger_id": "on_manual_or_auto_blink"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "grant_blink_charge",
+"effect_type": "grant_blink_charge",
+"max_proc_depth": 2,
+"params": {
+"charge_count": 1
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "auto_blink",
+"effect_type": "auto_blink",
+"max_proc_depth": 2,
+"params": {
+"targeting": "safe_direction",
+"triggers": ["low_hp", "surrounded"]
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "manual_blink",
+"effect_type": "manual_blink",
+"max_proc_depth": 2,
+"params": {
+"input_action": "augment_active"
+}
+}])

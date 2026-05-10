@@ -115,6 +115,8 @@ Do not use `tools/create_m0_scenes.gd` to regenerate M1+ scenes. `README.md` exp
 - `tests/smoke/augment_summon_loop.gd`
 - `tests/smoke/augment_forge_loop.gd`
 - `tests/smoke/augment_all_content_contract.gd`
+- `docs/qa/augment-system-acceptance.md`
+  Required phase-by-phase QA log and 72-augment coverage table.
 
 ### Modify
 
@@ -192,6 +194,17 @@ Required packet keys:
 
 Compatibility rule: old calls such as `DamageSystem.apply_damage(enemy, damage, tags, payload)` should still work initially by wrapping into this packet. Remove the wrapper only after every call site has migrated.
 
+Required helper API:
+
+```gdscript
+func make_packet(amount: float, tags: Array[String], payload: Dictionary = {}) -> Dictionary
+func normalize_packet(target: Node, packet_or_amount: Variant, tags: Array[String] = [], payload: Dictionary = {}) -> Dictionary
+func validate_packet(packet: Dictionary) -> Array[String]
+func child_proc_packet(parent: Dictionary, effect_family: String, augment_id: String, params: Dictionary = {}) -> Dictionary
+```
+
+`normalize_packet()` is the legacy bridge. `child_proc_packet()` is the only allowed way to create augment-generated projectile, DoT, chain, splash, zone, summon, or delayed-strike damage packets.
+
 ### Proc Safety
 
 - Default `MAX_PROC_DEPTH = 2`.
@@ -201,6 +214,27 @@ Compatibility rule: old calls such as `DamageSystem.apply_damage(enemy, damage, 
 - Every converter needs either `source_cooldown` or `per_target_cooldown`.
 - Boss max-health true damage uses `boss_scalar` between `0.2` and `0.4` unless an augment explicitly overrides it.
 - Summons, zones, and delayed strikes need active-count caps to prevent runaway node counts.
+
+Algorithm contract:
+
+```gdscript
+func can_trigger(effect_family: String, packet: Dictionary, spec: AugmentEffectSpec) -> bool:
+	if int(packet.get("proc_depth", 0)) > spec.max_proc_depth:
+		return false
+	var flags: Array = packet.get("proc_flags", [])
+	if spec.blocks_same_family_recursion and flags.has(effect_family):
+		return false
+	return AugmentSystem.is_effect_cooldown_ready(spec, packet)
+```
+
+Every augment-created packet must:
+
+- inherit or create `proc_chain_id`;
+- set `augment_id` to the owning augment id;
+- set `source_kind` to `augment`, `dot`, `summon`, `zone`, or `delayed_strike`;
+- increment `proc_depth` when it can trigger other effects;
+- append its `effect_family` to `proc_flags`;
+- multiply inherited `on_hit_efficiency` by the spec efficiency rather than resetting it.
 
 ### Event Signals
 
@@ -233,6 +267,16 @@ signal augment_quest_progressed(augment_id: String, amount: int, total: int)
 
 Keep existing signals until all current smoke tests are migrated.
 
+### Trigger Mapping
+
+The canonical trigger mapping lives in `docs/superpowers/plans/2026-05-10-full-augment-system-content-manifest.md`. Each augment entry now has:
+
+- `trigger_spec`: `trigger_id`, subscribed signal names, required packet keys, and synthetic test event.
+- `effect_spec_blueprint`: the executable `effect_type` list and parameter keys to translate into `AugmentEffectSpec`.
+- `test_assertions`: the minimum route-smoke assertions for acquisition, trigger, runtime side effect, proc safety, and route coverage.
+
+`augment_resource_contract.gd` must fail if any `trigger` in content lacks a matching `trigger_spec`, if any `effect_spec_blueprint` is empty, or if an effect uses an unknown `effect_type`.
+
 ---
 
 ## Resource Model
@@ -264,6 +308,7 @@ extends Resource
 @export var synergy_tags: Array[String] = []
 @export var required_tags: Array[String] = []
 @export var excludes_tags: Array[String] = []
+@export var excludes_ids: Array[String] = []
 
 @export_multiline var combo_value: String = ""
 @export_multiline var fit: String = ""
@@ -274,7 +319,32 @@ extends Resource
 @export var weight: float = 1.0
 @export var min_upgrade_index: int = 0
 @export var max_upgrade_index: int = -1
+@export var resource_path: String = ""
+@export var test_owner: String = ""
+@export var checkpoint_priority: int = 0
 ```
+
+Resource contract rules:
+
+- `trigger` must be an `AugmentTriggerSpec`.
+- Every item in `effects` must be an `AugmentEffectSpec`.
+- `condition` must be `null` or an `AugmentConditionSpec`.
+- `resource_path` must match `data/content/augments/<route_id>/<id>.tres`.
+- `test_owner` must point to one route smoke test or a dedicated contract.
+- `checkpoint_priority > 0` is reserved for MVP20 checkpoint augments.
+- Mutually exclusive designs should use `excludes_ids` for exact pairs and `excludes_tags` for broader tags. For example `aug_glass_cannon` and `aug_goliath` should exclude each other by id or share a common exclusive tag such as `exclusive:body_tradeoff`.
+
+`AugmentRegistry` API contract:
+
+```gdscript
+func get_all() -> Array[AugmentData]
+func get_by_id(id: String) -> AugmentData
+func get_by_route(route_id: String) -> Array[AugmentData]
+func query_candidates(context: Dictionary) -> Array[AugmentData]
+func validate_all() -> Array[String]
+```
+
+`query_candidates()` must accept an optional deterministic RNG seed so `augment_pool_selection_loop.gd` can test rarity and route rules repeatably.
 
 Use effect specs instead of adding 72 custom scripts. A single augment can have multiple effects:
 
@@ -381,12 +451,22 @@ Acceptance:
 - Current `weapon_damage_loop.gd` and `rune_trigger_loop.gd` still pass.
 - A generated proc packet at depth 2 cannot trigger another same-family proc.
 
-### Phase 2: Augment Resource and Registry
+### Phase 2A: Augment Schema and Registry
 
 - [ ] Create `AugmentData`, `AugmentEffectSpec`, `AugmentTriggerSpec`, `AugmentConditionSpec`, and `AugmentForgeOption`.
-- [ ] Create `AugmentRegistry` autoload and route/rarity lookup methods.
-- [ ] Convert the 72 Excel rows into `.tres` files under `data/content/augments/<route>/`.
-- [ ] Add `augment_resource_contract.gd` to validate required fields, unique ids, route ids, rarity values, trigger ids, tags, and missing effect specs.
+- [ ] Create `AugmentRegistry` autoload and implement the API contract from the Resource Model section.
+- [ ] Add `augment_resource_contract.gd` to validate required fields, unique ids, route ids, rarity values, trigger ids, tags, executable effect specs, and malformed params.
+
+Acceptance:
+
+- Empty or fixture content can be validated without crashing.
+- Unknown trigger ids, unknown effect types, malformed params, empty `effects`, wrong resource paths, and missing `test_owner` values fail with actionable messages.
+- Registry queries can run with a deterministic RNG seed.
+
+### Phase 2B: Complete 72-Resource Content Generation
+
+- [ ] Convert the 72 manifest entries into `.tres` files under `data/content/augments/<route>/`.
+- [ ] Populate every resource from the manifest source fields plus `trigger_spec`, `effect_spec_blueprint`, `resource_path`, `test_owner`, and `checkpoint_priority`.
 - [ ] Add `augment_all_content_contract.gd` to assert exactly 72 augment resources load.
 
 Acceptance:
@@ -394,20 +474,24 @@ Acceptance:
 - Every id from the workbook exists once.
 - Every route has exactly 8 augments.
 - `MVP20` augments are marked or queryable by priority.
+- No augment resource has an empty `effects` array.
+- No augment resource stores natural-language `effect/value` text without executable `AugmentEffectSpec.params`.
 
 ### Phase 3: Upgrade Pool and UI
 
 - [ ] Update `UpgradeSystem` to generate options from `AugmentRegistry`.
 - [ ] Preserve support for old `UpgradeData` until all old upgrades are replaced or intentionally kept.
 - [ ] Implement rarity schedule, route weighting, starter guarantee, finisher downweighting, cost-augment guardrails, required/excludes filtering, unique/rank tracking.
-- [ ] Update `LevelUpPanel` to show route label, rarity, role, effect summary, fit/risk text, and source.
+- [ ] Update `LevelUpPanel` to support both `UpgradeData` and `AugmentData`.
+- [ ] Update `LevelUpPanel` to show `display_name`, `rarity`, `route_label`, `upgrade_type`, one-line effect summary, condition/fit/risk text, and source.
 - [ ] Add `augment_pool_selection_loop.gd`.
 
 Acceptance:
 
-- Three choices appear unless a special rule such as `质变混沌` temporarily reduces options.
+- Three choices appear unless a special rule such as `aug_transmute_chaos` temporarily reduces options.
 - The first three level-ups cannot leave the player without any starter candidate.
 - Unique picked augments do not reappear.
+- Long Chinese augment text remains readable in the panel and does not collapse to a single clipped line.
 
 ### Phase 4: Shared Effect Runner
 
@@ -415,6 +499,8 @@ Acceptance:
 - [ ] Subscribe `AugmentSystem` to every new event signal.
 - [ ] Implement runtime ledgers: acquired ids, ranks, route counts, stacks, cooldowns, per-target cooldowns, pending next-hit effects, active zones, active summons, quest progress.
 - [ ] Add generic effect execution for stat mods, cooldown refund, projectile spawning, zones, summons, shield/heal, execute, fatal prevention, currency, forge choice, reroll, and random grant.
+- [ ] Route all augment-created scene nodes under stable containers such as `World/AugmentEffects`, `World/Projectiles`, and `World/Pickups`.
+- [ ] Enforce per-effect caps for active zones, summons, delayed strikes, shards, rifts, and reward pickups.
 - [ ] Add debug logging only behind a local debug flag; do not leave noisy prints on by default.
 
 Acceptance:
@@ -422,31 +508,50 @@ Acceptance:
 - Acquiring an augment registers its trigger handlers.
 - Removing/rerolling an augment clears its runtime state safely.
 - Passive effects apply once and do not stack accidentally unless rankable.
+- Run reset clears all augment-created nodes and runtime ledgers.
+- No route smoke leaves noisy debug prints enabled by default.
 
-### Phase 5: Route Implementations
+### Phase 5: MVP20 Checkpoint
 
-Implement routes in this order because each phase reuses earlier effect families.
+Implement the MVP20 checkpoint from the dedicated section below. This is a cross-route validation pass that proves the core effect families. It is not the final delivery scope.
 
-1. `rune_volley` / 符文弹幕链
+Acceptance:
+
+- All 20 checkpoint augments have resources, runtime behavior, UI display, and test assertions.
+- The checkpoint passes without breaking old M1 smoke.
+- Work continues into Phase 6 after this checkpoint.
+
+### Phase 6: Complete Remaining 52 by Route
+
+Complete routes in this order because each phase reuses earlier effect families.
+
+1. `rune_volley` / Rune Volley
    Needs projectile spawning, on-hit efficiency, crit roll, low-HP execute.
-2. `inferno_conduit` / 炼狱导管
+2. `inferno_conduit` / Inferno Conduit
    Needs burn stacks, DoT tick, cooldown refund, dot crit/splash, burn threshold.
-3. `void_cascade` / 虚空裂隙连锁
+3. `void_cascade` / Void Cascade
    Needs skill-hit events, rift manager, chain lines, max-health missiles, collapse zones.
-4. `aegis_transmutation` / 圣盾转化
+4. `aegis_transmutation` / Aegis Transmutation
    Needs shield/heal events, heal-to-damage, shield explosion, faith stacks.
-5. `blood_reaver` / 血契收割
+5. `blood_reaver` / Blood Reaver
    Needs self-cost, omnivamp, low-hp events, fatal prevention, execute/heal.
-6. `snowstep_vanguard` / 雪步先锋
+6. `snowstep_vanguard` / Snowstep Vanguard
    Needs dash/blink controller, movement cooldowns, path execute, auto mark.
-7. `colossus_furnace` / 巨像熔炉
+7. `colossus_furnace` / Colossus Furnace
    Needs control events, aura damage, permanent max-health growth, taunt pulse.
-8. `summon_engine` / 自动奇观
+8. `summon_engine` / Summon Engine
    Needs periodic scheduler, delayed strikes, foxfire, boomerang, poro, soldiers, summon scaling.
-9. `quest_forge` / 海牛锻炉
+9. `quest_forge` / Quest Forge
    Needs forge UI/options, pickup spawn, currency, reroll, random grants, quest completion.
 
-Each route gets one smoke test. Do not wait until all 72 are done to test the first route.
+Each route gets one smoke test. Do not wait until all 72 are done to test the first route. Each route smoke must cover all 8 route augment ids listed in the manifest, not only the most important two or three.
+
+### Phase 7: Final Contract and Acceptance
+
+- [ ] Run the final smoke list from this plan.
+- [ ] Confirm `augment_all_content_contract.gd` reports zero missing runtime ids, zero missing UI ids, zero missing proc-safety ids, and zero missing test-owner ids.
+- [ ] Run at least one short high-density stress segment for projectile proc, DoT splash, rift chain, summon/periodic, and forge/reroll builds.
+- [ ] Fill `docs/qa/augment-system-acceptance.md` using its template.
 
 ---
 
@@ -805,6 +910,13 @@ augment_summon_loop.gd
 augment_forge_loop.gd
 ```
 
+Route smoke coverage standard:
+
+- Every route smoke must declare an explicit `COVERED_AUGMENT_IDS` array containing exactly the 8 ids for that route.
+- Every id in `COVERED_AUGMENT_IDS` must have at least one assertion for acquisition and one assertion for runtime behavior or a dedicated contract behavior.
+- `augment_all_content_contract.gd` must fail if any of these arrays are non-empty: `UNCOVERED_RUNTIME_IDS`, `UNCOVERED_UI_IDS`, `UNCOVERED_PROC_SAFETY_IDS`, `UNCOVERED_TEST_OWNER_IDS`.
+- High-density stress segments must run for projectile proc, DoT splash, rift chain, summon/periodic, and forge/reroll paths. These segments should be short enough for headless smoke, but must assert active node caps and dropped/blocked proc counts.
+
 Manual playtest checklist:
 
 - First three level-ups include at least one starter path.
@@ -845,6 +957,10 @@ Balance rules:
 - Cost augments should show clear feedback before taking HP.
 - Economy augments can be slightly weak in immediate combat because they create future choice power.
 - Boss scaling must be explicit in data, not hidden in one-off code branches.
+- DoT ticks must batch on a fixed tick interval, not run per-frame per-target damage.
+- Rift pairing must use a capped nearest-neighbor search, not unbounded O(n^2) scans every frame.
+- Augment-created nodes must be counted by family and capped before instantiation.
+- Debug telemetry may track active zones, summons, projectiles, dropped proc events, and route weights, but it must be disabled by default in release play.
 
 ---
 

@@ -1,0 +1,113 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_speed_demon"
+display_name = "速度恶魔"
+description = "技能命中给短暂衰减移速；你比目标越快，对其伤害越高。"
+source_augment_name = "速度恶魔、唯快不破"
+source_augment_rarity = "速度恶魔:银色；唯快不破:银色"
+route_id = "snowstep_vanguard"
+route_label = "雪步先锋"
+rarity = "silver"
+max_rank = 2
+unique = false
+upgrade_type = "放大器"
+source_trigger = "on_skill_hit_and_damage_calc"
+effect = "技能命中给短暂衰减移速；你比目标越快，对其伤害越高。"
+source_condition = "速度差增伤有上限。"
+value = {
+"source_text": "移速 +35% 衰减；最高 +18% 伤害"
+}
+synergy_tags = Array[String](["speed", "damage", "skill_hit", "mobility"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "把幸存者走位速度变成输出属性。"
+fit = "暗影疾奔、练腿日、急急小子。"
+risk = "被减速时输出下降。"
+why_close = "融合“速度恶魔”和“唯快不破”。"
+implementation_hint = "DamageCalc 读取 relative_speed_bonus。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/snowstep_vanguard/aug_speed_demon.tres"
+test_owner = "augment_snowstep_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "把幸存者走位速度变成输出属性。",
+"condition": "速度差增伤有上限。",
+"display_name": "速度恶魔",
+"effect": "技能命中给短暂衰减移速；你比目标越快，对其伤害越高。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "skill_hit_speed_buff",
+"effect_type": "skill_hit_speed_buff",
+"max_proc_depth": 2,
+"params": {
+"decays": true
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "damage_scale_by_speed_delta",
+"effect_type": "damage_scale_by_speed_delta",
+"max_proc_depth": 2,
+"params": {
+"owner_speed_vs_target": true
+}
+}],
+"excludes_tags": [],
+"fit": "暗影疾奔、练腿日、急急小子。",
+"id": "aug_speed_demon",
+"implementation_hint": "DamageCalc 读取 relative_speed_bonus。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 2,
+"normalized_rarity": "silver",
+"rarity": "银色",
+"required_tags": [],
+"resource_path": "data/content/augments/snowstep_vanguard/aug_speed_demon.tres",
+"risk": "被减速时输出下降。",
+"route_id": "snowstep_vanguard",
+"route_label": "雪步先锋",
+"source_augment_name": "速度恶魔、唯快不破",
+"source_augment_rarity": "速度恶魔:银色；唯快不破:银色",
+"synergy_tags": ["speed", "damage", "skill_hit", "mobility"],
+"test_owner": "augment_snowstep_loop.gd",
+"trigger": "on_skill_hit_and_damage_calc",
+"trigger_spec": "trigger_id=on_skill_hit_and_damage_calc; signals=damage_roll_requested, damage_applied_packet; required_packet_keys=owner_speed, target_speed, source_kind=skill; synthetic_test=skill hit with speed delta",
+"unique": false,
+"upgrade_type": "放大器",
+"value": "移速 +35% 衰减；最高 +18% 伤害",
+"why_close": "融合“速度恶魔”和“唯快不破”。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner_speed", "target_speed", "source_kind"],
+"required_packet_values": {
+"source_kind": "skill"
+},
+"signal_names": ["damage_roll_requested", "damage_applied_packet"],
+"synthetic_test": "skill hit with speed delta",
+"trigger_id": "on_skill_hit_and_damage_calc"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "skill_hit_speed_buff",
+"effect_type": "skill_hit_speed_buff",
+"max_proc_depth": 2,
+"params": {
+"decays": true
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "damage_scale_by_speed_delta",
+"effect_type": "damage_scale_by_speed_delta",
+"max_proc_depth": 2,
+"params": {
+"owner_speed_vs_target": true
+}
+}])

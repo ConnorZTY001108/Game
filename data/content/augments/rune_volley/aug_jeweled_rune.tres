@@ -1,0 +1,123 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_jeweled_rune"
+display_name = "珠光符文"
+description = "技能伤害、元素爆发、持续伤害和装备/遗物伤害都可以暴击；暴击会给目标叠 1 层“裂纹”。"
+source_augment_name = "珠光护手、易损"
+source_augment_rarity = "珠光护手:棱彩；易损:金色"
+route_id = "rune_volley"
+route_label = "符文弹幕链"
+rarity = "prismatic"
+max_rank = 1
+unique = true
+upgrade_type = "转换器"
+source_trigger = "on_damage_roll"
+effect = "技能伤害、元素爆发、持续伤害和装备/遗物伤害都可以暴击；暴击会给目标叠 1 层“裂纹”。"
+source_condition = "暴击率至少 10% 时出现；裂纹 5 层时下次伤害额外 +30%。"
+value = {
+"source_text": "+20% 暴击率；技能暴击倍率 160%"
+}
+synergy_tags = Array[String](["crit", "skill", "element", "dot", "converter"])
+required_tags = Array[String](["crit_chance"])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "让暴击路线和元素/DoT/法术路线互通。"
+fit = "暴击弹幕、炼狱、虚空。"
+risk = "暴击不足时偏弱。"
+why_close = "高度转译“珠光护手”与“易损”的技能/DoT 暴击爽感。"
+implementation_hint = "DamagePacket 增加 can_crit 与 crit_source。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/rune_volley/aug_jeweled_rune.tres"
+test_owner = "augment_rune_volley_loop.gd"
+checkpoint_priority = 9
+manifest_fields = {
+"checkpoint_priority": 9,
+"combo_value": "让暴击路线和元素/DoT/法术路线互通。",
+"condition": "暴击率至少 10% 时出现；裂纹 5 层时下次伤害额外 +30%。",
+"display_name": "珠光符文",
+"effect": "技能伤害、元素爆发、持续伤害和装备/遗物伤害都可以暴击；暴击会给目标叠 1 层“裂纹”。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "enable_crit_sources",
+"effect_type": "enable_crit_sources",
+"max_proc_depth": 2,
+"params": {
+"crit_chance_add": 0.2,
+"skill_crit_multiplier": 1.6,
+"sources": ["skill", "element", "dot", "relic"]
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "add_stack_on_crit",
+"effect_type": "add_stack_on_crit",
+"max_proc_depth": 2,
+"params": {
+"next_damage_bonus": 0.3,
+"stack_tag": "crack",
+"stacks": 1,
+"threshold": 5
+}
+}],
+"excludes_tags": [],
+"fit": "暴击弹幕、炼狱、虚空。",
+"id": "aug_jeweled_rune",
+"implementation_hint": "DamagePacket 增加 can_crit 与 crit_source。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "prismatic",
+"rarity": "棱彩",
+"required_tags": ["crit_chance"],
+"resource_path": "data/content/augments/rune_volley/aug_jeweled_rune.tres",
+"risk": "暴击不足时偏弱。",
+"route_id": "rune_volley",
+"route_label": "符文弹幕链",
+"source_augment_name": "珠光护手、易损",
+"source_augment_rarity": "珠光护手:棱彩；易损:金色",
+"synergy_tags": ["crit", "skill", "element", "dot", "converter"],
+"test_owner": "augment_rune_volley_loop.gd",
+"trigger": "on_damage_roll",
+"trigger_spec": "trigger_id=on_damage_roll; signals=damage_roll_requested; required_packet_keys=amount, source_kind, tags, can_crit, crit_chance, crit_multiplier; synthetic_test=normalize packet then request roll",
+"unique": true,
+"upgrade_type": "转换器",
+"value": "+20% 暴击率；技能暴击倍率 160%",
+"why_close": "高度转译“珠光护手”与“易损”的技能/DoT 暴击爽感。"
+}
+trigger_spec = {
+"required_packet_keys": ["amount", "source_kind", "tags", "can_crit", "crit_chance", "crit_multiplier"],
+"required_packet_values": {
+
+},
+"signal_names": ["damage_roll_requested"],
+"synthetic_test": "normalize packet then request roll",
+"trigger_id": "on_damage_roll"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "enable_crit_sources",
+"effect_type": "enable_crit_sources",
+"max_proc_depth": 2,
+"params": {
+"crit_chance_add": 0.2,
+"skill_crit_multiplier": 1.6,
+"sources": ["skill", "element", "dot", "relic"]
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "add_stack_on_crit",
+"effect_type": "add_stack_on_crit",
+"max_proc_depth": 2,
+"params": {
+"next_damage_bonus": 0.3,
+"stack_tag": "crack",
+"stacks": 1,
+"threshold": 5
+}
+}])

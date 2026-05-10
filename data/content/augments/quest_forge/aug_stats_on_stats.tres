@@ -1,0 +1,113 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_stats_on_stats"
+display_name = "属性叠属性"
+description = "获得 4 个属性锻造器；下一次三选一每个栏位额外刷新一次。"
+source_augment_name = "属性叠属性！、属性叠属性叠属性！"
+source_augment_rarity = "属性叠属性！:金色；属性叠属性叠属性！:棱彩"
+route_id = "quest_forge"
+route_label = "海牛锻炉"
+rarity = "gold"
+max_rank = 1
+unique = true
+upgrade_type = "经济型/通用型"
+source_trigger = "on_pick"
+effect = "获得 4 个属性锻造器；下一次三选一每个栏位额外刷新一次。"
+source_condition = "棱彩版可提高高稀有锻造器概率。"
+value = {
+"source_text": "4 锻造器；下次每栏 +1 reroll"
+}
+synergy_tags = Array[String](["forge", "reroll", "economy", "choice"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "提高路线成型和补关键属性能力。"
+fit = "所有构筑，尤其赌高上限局。"
+risk = "直接战力延迟。"
+why_close = "来自两档“属性叠属性”。"
+implementation_hint = "UpgradeSystem 标记 next_offer_bonus_reroll。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/quest_forge/aug_stats_on_stats.tres"
+test_owner = "augment_forge_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "提高路线成型和补关键属性能力。",
+"condition": "棱彩版可提高高稀有锻造器概率。",
+"display_name": "属性叠属性",
+"effect": "获得 4 个属性锻造器；下一次三选一每个栏位额外刷新一次。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "grant_forge_choice",
+"effect_type": "grant_forge_choice",
+"max_proc_depth": 2,
+"params": {
+"choice_count": 4
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "grant_next_choice_refresh",
+"effect_type": "grant_next_choice_refresh",
+"max_proc_depth": 2,
+"params": {
+"refresh_per_slot": 1
+}
+}],
+"excludes_tags": [],
+"fit": "所有构筑，尤其赌高上限局。",
+"id": "aug_stats_on_stats",
+"implementation_hint": "UpgradeSystem 标记 next_offer_bonus_reroll。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": [],
+"resource_path": "data/content/augments/quest_forge/aug_stats_on_stats.tres",
+"risk": "直接战力延迟。",
+"route_id": "quest_forge",
+"route_label": "海牛锻炉",
+"source_augment_name": "属性叠属性！、属性叠属性叠属性！",
+"source_augment_rarity": "属性叠属性！:金色；属性叠属性叠属性！:棱彩",
+"synergy_tags": ["forge", "reroll", "economy", "choice"],
+"test_owner": "augment_forge_loop.gd",
+"trigger": "on_pick",
+"trigger_spec": "trigger_id=on_pick; signals=augment_acquired; required_packet_keys=owner, augment_id, selection_state; synthetic_test=select augment directly",
+"unique": true,
+"upgrade_type": "经济型/通用型",
+"value": "4 锻造器；下次每栏 +1 reroll",
+"why_close": "来自两档“属性叠属性”。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "augment_id", "selection_state"],
+"required_packet_values": {
+
+},
+"signal_names": ["augment_acquired"],
+"synthetic_test": "select augment directly",
+"trigger_id": "on_pick"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "grant_forge_choice",
+"effect_type": "grant_forge_choice",
+"max_proc_depth": 2,
+"params": {
+"choice_count": 4
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "grant_next_choice_refresh",
+"effect_type": "grant_next_choice_refresh",
+"max_proc_depth": 2,
+"params": {
+"refresh_per_slot": 1
+}
+}])

@@ -1,0 +1,137 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_glass_cannon"
+display_name = "玻璃大炮"
+description = "最大生命降低，但所有直接伤害提高，并附加少量真实伤害。"
+source_augment_name = "玻璃大炮"
+source_augment_rarity = "玻璃大炮:棱彩"
+route_id = "blood_reaver"
+route_label = "血契收割"
+rarity = "prismatic"
+max_rank = 1
+unique = true
+upgrade_type = "代价型"
+source_trigger = "passive"
+effect = "最大生命降低，但所有直接伤害提高，并附加少量真实伤害。"
+source_condition = "不能与歌利亚巨人同时出现。"
+value = {
+"source_text": "最大生命 -30%；伤害 +20%；附加 5% 真伤"
+}
+synergy_tags = Array[String](["risk", "damage", "true_damage"])
+required_tags = Array[String](["damage_build"])
+excludes_tags = Array[String](["glass_cannon"])
+excludes_ids = Array[String]([])
+combo_value = "为长手或高吸血构筑提供高上限代价件。"
+fit = "珠光符文、虚空、吸血习性。"
+risk = "容错显著降低。"
+why_close = "直接来自“玻璃大炮”。"
+implementation_hint = "excludes_tags 阻止与大型坦克路线共存。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/blood_reaver/aug_glass_cannon.tres"
+test_owner = "augment_blood_loop.gd"
+checkpoint_priority = 18
+manifest_fields = {
+"checkpoint_priority": 18,
+"combo_value": "为长手或高吸血构筑提供高上限代价件。",
+"condition": "不能与歌利亚巨人同时出现。",
+"display_name": "玻璃大炮",
+"effect": "最大生命降低，但所有直接伤害提高，并附加少量真实伤害。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "modify_max_health",
+"effect_type": "modify_max_health",
+"max_proc_depth": 2,
+"params": {
+"op": "multiply",
+"value": "reduced"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "modify_damage",
+"effect_type": "modify_damage",
+"max_proc_depth": 2,
+"params": {
+"op": "add_percent",
+"scope": "all_direct",
+"value": "increased"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "add_true_damage",
+"effect_type": "add_true_damage",
+"max_proc_depth": 2,
+"params": {
+"scope": "direct_damage",
+"value": "small"
+}
+}],
+"excludes_tags": ["glass_cannon"],
+"fit": "珠光符文、虚空、吸血习性。",
+"id": "aug_glass_cannon",
+"implementation_hint": "excludes_tags 阻止与大型坦克路线共存。",
+"is_finisher": false,
+"is_high_risk": true,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "prismatic",
+"rarity": "棱彩",
+"required_tags": ["damage_build"],
+"resource_path": "data/content/augments/blood_reaver/aug_glass_cannon.tres",
+"risk": "容错显著降低。",
+"route_id": "blood_reaver",
+"route_label": "血契收割",
+"source_augment_name": "玻璃大炮",
+"source_augment_rarity": "玻璃大炮:棱彩",
+"synergy_tags": ["risk", "damage", "true_damage"],
+"test_owner": "augment_blood_loop.gd",
+"trigger": "passive",
+"trigger_spec": "trigger_id=passive; signals=augment_acquired, stat_recalculated; required_packet_keys=owner, augment_id, stat_snapshot; synthetic_test=acquire augment",
+"unique": true,
+"upgrade_type": "代价型",
+"value": "最大生命 -30%；伤害 +20%；附加 5% 真伤",
+"why_close": "直接来自“玻璃大炮”。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "augment_id", "stat_snapshot"],
+"required_packet_values": {
+
+},
+"signal_names": ["augment_acquired", "stat_recalculated"],
+"synthetic_test": "acquire augment",
+"trigger_id": "passive"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "modify_max_health",
+"effect_type": "modify_max_health",
+"max_proc_depth": 2,
+"params": {
+"op": "multiply",
+"value": "reduced"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "modify_damage",
+"effect_type": "modify_damage",
+"max_proc_depth": 2,
+"params": {
+"op": "add_percent",
+"scope": "all_direct",
+"value": "increased"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "add_true_damage",
+"effect_type": "add_true_damage",
+"max_proc_depth": 2,
+"params": {
+"scope": "direct_damage",
+"value": "small"
+}
+}])

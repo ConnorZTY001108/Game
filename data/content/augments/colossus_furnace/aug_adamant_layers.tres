@@ -1,0 +1,101 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_adamant_layers"
+display_name = "坚若磐石"
+description = "每次控制敌人叠加护甲或魔抗，持续 10 秒，最多 10 层。"
+source_augment_name = "坚若磐石"
+source_augment_rarity = "坚若磐石:银色"
+route_id = "colossus_furnace"
+route_label = "巨像熔炉"
+rarity = "silver"
+max_rank = 3
+unique = false
+upgrade_type = "放大器"
+source_trigger = "on_control"
+effect = "每次控制敌人叠加护甲或魔抗，持续 10 秒，最多 10 层。"
+source_condition = "根据最近受到的伤害类型优先给对应抗性。"
+value = {
+"source_text": "每层 +3 双抗"
+}
+synergy_tags = Array[String](["control", "resist", "stack", "tank"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "让频繁控制带来持续坦度。"
+fit = "巨像勇气、不动如山。"
+risk = "后排输出流收益低。"
+why_close = "直接来自“坚若磐石”。"
+implementation_hint = "StackBuff duration_refresh。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/colossus_furnace/aug_adamant_layers.tres"
+test_owner = "augment_colossus_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "让频繁控制带来持续坦度。",
+"condition": "根据最近受到的伤害类型优先给对应抗性。",
+"display_name": "坚若磐石",
+"effect": "每次控制敌人叠加护甲或魔抗，持续 10 秒，最多 10 层。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "control_stack_resists",
+"effect_type": "control_stack_resists",
+"max_proc_depth": 2,
+"params": {
+"duration": 10.0,
+"max_stacks": 10,
+"stats": ["armor", "magic_resist"]
+}
+}],
+"excludes_tags": [],
+"fit": "巨像勇气、不动如山。",
+"id": "aug_adamant_layers",
+"implementation_hint": "StackBuff duration_refresh。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 3,
+"normalized_rarity": "silver",
+"rarity": "银色",
+"required_tags": [],
+"resource_path": "data/content/augments/colossus_furnace/aug_adamant_layers.tres",
+"risk": "后排输出流收益低。",
+"route_id": "colossus_furnace",
+"route_label": "巨像熔炉",
+"source_augment_name": "坚若磐石",
+"source_augment_rarity": "坚若磐石:银色",
+"synergy_tags": ["control", "resist", "stack", "tank"],
+"test_owner": "augment_colossus_loop.gd",
+"trigger": "on_control",
+"trigger_spec": "trigger_id=on_control; signals=control_applied; required_packet_keys=target, control_tag, owner, hit_position; synthetic_test=apply knockback/slow control fixture",
+"unique": false,
+"upgrade_type": "放大器",
+"value": "每层 +3 双抗",
+"why_close": "直接来自“坚若磐石”。"
+}
+trigger_spec = {
+"required_packet_keys": ["target", "control_tag", "owner", "hit_position"],
+"required_packet_values": {
+
+},
+"signal_names": ["control_applied"],
+"synthetic_test": "apply knockback/slow control fixture",
+"trigger_id": "on_control"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "control_stack_resists",
+"effect_type": "control_stack_resists",
+"max_proc_depth": 2,
+"params": {
+"duration": 10.0,
+"max_stacks": 10,
+"stats": ["armor", "magic_resist"]
+}
+}])

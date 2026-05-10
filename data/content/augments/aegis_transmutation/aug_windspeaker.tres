@@ -1,0 +1,115 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_windspeaker"
+display_name = "风语祝福"
+description = "获得治疗或护盾后，3 秒内护甲和魔抗提高；若护盾未被打破，结束时返还一部分为经验吸引范围。"
+source_augment_name = "风语者的祝福"
+source_augment_rarity = "风语者的祝福:棱彩"
+route_id = "aegis_transmutation"
+route_label = "圣盾转化"
+rarity = "gold"
+max_rank = 2
+unique = false
+upgrade_type = "生存型"
+source_trigger = "on_heal_or_shield"
+effect = "获得治疗或护盾后，3 秒内护甲和魔抗提高；若护盾未被打破，结束时返还一部分为经验吸引范围。"
+source_condition = "抗性效果可刷新不可叠加。"
+value = {
+"source_text": "+18 护甲/魔抗；拾取半径 +15%"
+}
+synergy_tags = Array[String](["shield", "heal", "resist", "pickup"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "提高防御路线的稳定性，并顺便改善幸存者拾取手感。"
+fit = "护盾爆蛋、死亡之环。"
+risk = "偏生存，直接输出较少。"
+why_close = "转译“风语者的祝福”的治疗/护盾给双抗。"
+implementation_hint = "Buff 刷新持续时间，不叠层。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/aegis_transmutation/aug_windspeaker.tres"
+test_owner = "augment_aegis_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "提高防御路线的稳定性，并顺便改善幸存者拾取手感。",
+"condition": "抗性效果可刷新不可叠加。",
+"display_name": "风语祝福",
+"effect": "获得治疗或护盾后，3 秒内护甲和魔抗提高；若护盾未被打破，结束时返还一部分为经验吸引范围。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "temporary_resists_on_protection",
+"effect_type": "temporary_resists_on_protection",
+"max_proc_depth": 2,
+"params": {
+"duration": 3.0,
+"sources": ["heal", "shield"]
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "convert_unbroken_shield_to_pickup_radius",
+"effect_type": "convert_unbroken_shield_to_pickup_radius",
+"max_proc_depth": 2,
+"params": {
+"on_expire_unbroken": true
+}
+}],
+"excludes_tags": [],
+"fit": "护盾爆蛋、死亡之环。",
+"id": "aug_windspeaker",
+"implementation_hint": "Buff 刷新持续时间，不叠层。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 2,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": [],
+"resource_path": "data/content/augments/aegis_transmutation/aug_windspeaker.tres",
+"risk": "偏生存，直接输出较少。",
+"route_id": "aegis_transmutation",
+"route_label": "圣盾转化",
+"source_augment_name": "风语者的祝福",
+"source_augment_rarity": "风语者的祝福:棱彩",
+"synergy_tags": ["shield", "heal", "resist", "pickup"],
+"test_owner": "augment_aegis_loop.gd",
+"trigger": "on_heal_or_shield",
+"trigger_spec": "trigger_id=on_heal_or_shield; signals=heal_received, shield_gained; required_packet_keys=owner, amount, source_kind; synthetic_test=emit heal/shield event",
+"unique": false,
+"upgrade_type": "生存型",
+"value": "+18 护甲/魔抗；拾取半径 +15%",
+"why_close": "转译“风语者的祝福”的治疗/护盾给双抗。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "amount", "source_kind"],
+"required_packet_values": {
+
+},
+"signal_names": ["heal_received", "shield_gained"],
+"synthetic_test": "emit heal/shield event",
+"trigger_id": "on_heal_or_shield"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "temporary_resists_on_protection",
+"effect_type": "temporary_resists_on_protection",
+"max_proc_depth": 2,
+"params": {
+"duration": 3.0,
+"sources": ["heal", "shield"]
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "convert_unbroken_shield_to_pickup_radius",
+"effect_type": "convert_unbroken_shield_to_pickup_radius",
+"max_proc_depth": 2,
+"params": {
+"on_expire_unbroken": true
+}
+}])

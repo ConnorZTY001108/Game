@@ -1,0 +1,121 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_vulnerable_flame"
+display_name = "易燃暴击"
+description = "符火和其它 DoT 可以暴击；DoT 暴击时向附近 2 个敌人溅射 50% 跳伤。"
+source_augment_name = "易损、珠光护手"
+source_augment_rarity = "易损:金色；珠光护手:棱彩"
+route_id = "inferno_conduit"
+route_label = "炼狱导管"
+rarity = "gold"
+max_rank = 1
+unique = true
+upgrade_type = "转换器/放大器"
+source_trigger = "on_dot_tick"
+effect = "符火和其它 DoT 可以暴击；DoT 暴击时向附近 2 个敌人溅射 50% 跳伤。"
+source_condition = "需要暴击率；同一跳伤只溅射一次。"
+value = {
+"source_text": "+15% 暴击率；溅射 50%"
+}
+synergy_tags = Array[String](["burn", "dot", "crit", "splash"])
+required_tags = Array[String](["crit_chance"])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "把火焰从稳定 DoT 变成爆发连锁。"
+fit = "珠光符文、暴击飞晶。"
+risk = "暴击过高时清屏过强。"
+why_close = "来自“易损”的 DoT/装备效果暴击。"
+implementation_hint = "DamagePacket.dot_can_crit，splash 不继承 splash。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/inferno_conduit/aug_vulnerable_flame.tres"
+test_owner = "augment_inferno_loop.gd"
+checkpoint_priority = 7
+manifest_fields = {
+"checkpoint_priority": 7,
+"combo_value": "把火焰从稳定 DoT 变成爆发连锁。",
+"condition": "需要暴击率；同一跳伤只溅射一次。",
+"display_name": "易燃暴击",
+"effect": "符火和其它 DoT 可以暴击；DoT 暴击时向附近 2 个敌人溅射 50% 跳伤。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "enable_dot_crit",
+"effect_type": "enable_dot_crit",
+"max_proc_depth": 2,
+"params": {
+"crit_enabled": true,
+"dot_tags": ["rune_fire", "dot"]
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "dot_splash",
+"effect_type": "dot_splash",
+"max_proc_depth": 2,
+"params": {
+"damage_multiplier": 0.5,
+"per_target_cooldown": 0.25,
+"proc_flag": "dot_splash",
+"target_count": 2
+}
+}],
+"excludes_tags": [],
+"fit": "珠光符文、暴击飞晶。",
+"id": "aug_vulnerable_flame",
+"implementation_hint": "DamagePacket.dot_can_crit，splash 不继承 splash。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": ["crit_chance"],
+"resource_path": "data/content/augments/inferno_conduit/aug_vulnerable_flame.tres",
+"risk": "暴击过高时清屏过强。",
+"route_id": "inferno_conduit",
+"route_label": "炼狱导管",
+"source_augment_name": "易损、珠光护手",
+"source_augment_rarity": "易损:金色；珠光护手:棱彩",
+"synergy_tags": ["burn", "dot", "crit", "splash"],
+"test_owner": "augment_inferno_loop.gd",
+"trigger": "on_dot_tick",
+"trigger_spec": "trigger_id=on_dot_tick; signals=dot_tick; required_packet_keys=target, amount, dot_tag, proc_chain_id, proc_flags; synthetic_test=emit dot tick packet",
+"unique": true,
+"upgrade_type": "转换器/放大器",
+"value": "+15% 暴击率；溅射 50%",
+"why_close": "来自“易损”的 DoT/装备效果暴击。"
+}
+trigger_spec = {
+"required_packet_keys": ["target", "amount", "dot_tag", "proc_chain_id", "proc_flags"],
+"required_packet_values": {
+
+},
+"signal_names": ["dot_tick"],
+"synthetic_test": "emit dot tick packet",
+"trigger_id": "on_dot_tick"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "enable_dot_crit",
+"effect_type": "enable_dot_crit",
+"max_proc_depth": 2,
+"params": {
+"crit_enabled": true,
+"dot_tags": ["rune_fire", "dot"]
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "dot_splash",
+"effect_type": "dot_splash",
+"max_proc_depth": 2,
+"params": {
+"damage_multiplier": 0.5,
+"per_target_cooldown": 0.25,
+"proc_flag": "dot_splash",
+"target_count": 2
+}
+}])

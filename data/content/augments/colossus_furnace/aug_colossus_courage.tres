@@ -1,0 +1,99 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_colossus_courage"
+display_name = "巨像勇气"
+description = "定身、击退、冻结或强减速敌人后获得最大生命值相关护盾。"
+source_augment_name = "巨像的勇气"
+source_augment_rarity = "巨像的勇气:棱彩"
+route_id = "colossus_furnace"
+route_label = "巨像熔炉"
+rarity = "prismatic"
+max_rank = 1
+unique = true
+upgrade_type = "启动器/生存型"
+source_trigger = "on_control"
+effect = "定身、击退、冻结或强减速敌人后获得最大生命值相关护盾。"
+source_condition = "每 1 秒最多触发一次。"
+value = {
+"source_text": "护盾 = 5% 最大生命 + 40"
+}
+synergy_tags = Array[String](["control", "shield", "tank"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "控制越多越能站住，开启坦克控场路线。"
+fit = "残忍彗星、护盾爆蛋。"
+risk = "无控制武器不适合。"
+why_close = "直接来自“巨像的勇气”。"
+implementation_hint = "ControlEvent → ShieldGrant。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/colossus_furnace/aug_colossus_courage.tres"
+test_owner = "augment_colossus_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "控制越多越能站住，开启坦克控场路线。",
+"condition": "每 1 秒最多触发一次。",
+"display_name": "巨像勇气",
+"effect": "定身、击退、冻结或强减速敌人后获得最大生命值相关护盾。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "control_grants_shield",
+"effect_type": "control_grants_shield",
+"max_proc_depth": 2,
+"params": {
+"control_tags": ["root", "knockback", "slow_strong", "freeze"],
+"shield_scales_with": "max_health"
+}
+}],
+"excludes_tags": [],
+"fit": "残忍彗星、护盾爆蛋。",
+"id": "aug_colossus_courage",
+"implementation_hint": "ControlEvent → ShieldGrant。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": true,
+"max_rank": 1,
+"normalized_rarity": "prismatic",
+"rarity": "棱彩",
+"required_tags": [],
+"resource_path": "data/content/augments/colossus_furnace/aug_colossus_courage.tres",
+"risk": "无控制武器不适合。",
+"route_id": "colossus_furnace",
+"route_label": "巨像熔炉",
+"source_augment_name": "巨像的勇气",
+"source_augment_rarity": "巨像的勇气:棱彩",
+"synergy_tags": ["control", "shield", "tank"],
+"test_owner": "augment_colossus_loop.gd",
+"trigger": "on_control",
+"trigger_spec": "trigger_id=on_control; signals=control_applied; required_packet_keys=target, control_tag, owner, hit_position; synthetic_test=apply knockback/slow control fixture",
+"unique": true,
+"upgrade_type": "启动器/生存型",
+"value": "护盾 = 5% 最大生命 + 40",
+"why_close": "直接来自“巨像的勇气”。"
+}
+trigger_spec = {
+"required_packet_keys": ["target", "control_tag", "owner", "hit_position"],
+"required_packet_values": {
+
+},
+"signal_names": ["control_applied"],
+"synthetic_test": "apply knockback/slow control fixture",
+"trigger_id": "on_control"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "control_grants_shield",
+"effect_type": "control_grants_shield",
+"max_proc_depth": 2,
+"params": {
+"control_tags": ["root", "knockback", "slow_strong", "freeze"],
+"shield_scales_with": "max_health"
+}
+}])

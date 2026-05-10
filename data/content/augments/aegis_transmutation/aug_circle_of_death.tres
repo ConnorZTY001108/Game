@@ -1,0 +1,103 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_circle_of_death"
+display_name = "死亡之环"
+description = "你获得的治疗和生命回复会按比例转化为对最近敌人的魔法伤害。"
+source_augment_name = "死亡之环"
+source_augment_rarity = "死亡之环:棱彩"
+route_id = "aegis_transmutation"
+route_label = "圣盾转化"
+rarity = "prismatic"
+max_rank = 1
+unique = true
+upgrade_type = "转换器"
+source_trigger = "on_heal_or_regen_tick"
+effect = "你获得的治疗和生命回复会按比例转化为对最近敌人的魔法伤害。"
+source_condition = "治疗本身不减少；同一帧治疗合并。"
+value = {
+"source_text": "转化伤害 = 45% 治疗量"
+}
+synergy_tags = Array[String](["heal", "regen", "damage", "converter"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "把续航型构筑变成稳定自动输出。"
+fit = "辣椒油污、吸血习性、海洋龙魂。"
+risk = "站位会自动选最近敌，可能打不到精英。"
+why_close = "直接转译“死亡之环”。"
+implementation_hint = "HealEvent 批处理，nearest_enemy 查询。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/aegis_transmutation/aug_circle_of_death.tres"
+test_owner = "augment_aegis_loop.gd"
+checkpoint_priority = 11
+manifest_fields = {
+"checkpoint_priority": 11,
+"combo_value": "把续航型构筑变成稳定自动输出。",
+"condition": "治疗本身不减少；同一帧治疗合并。",
+"display_name": "死亡之环",
+"effect": "你获得的治疗和生命回复会按比例转化为对最近敌人的魔法伤害。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "convert_heal_to_damage",
+"effect_type": "convert_heal_to_damage",
+"max_proc_depth": 2,
+"params": {
+"damage_type": "magic",
+"source_cooldown": 0.25,
+"sources": ["heal", "regen_tick"],
+"targeting": "nearest_enemy"
+}
+}],
+"excludes_tags": [],
+"fit": "辣椒油污、吸血习性、海洋龙魂。",
+"id": "aug_circle_of_death",
+"implementation_hint": "HealEvent 批处理，nearest_enemy 查询。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "prismatic",
+"rarity": "棱彩",
+"required_tags": [],
+"resource_path": "data/content/augments/aegis_transmutation/aug_circle_of_death.tres",
+"risk": "站位会自动选最近敌，可能打不到精英。",
+"route_id": "aegis_transmutation",
+"route_label": "圣盾转化",
+"source_augment_name": "死亡之环",
+"source_augment_rarity": "死亡之环:棱彩",
+"synergy_tags": ["heal", "regen", "damage", "converter"],
+"test_owner": "augment_aegis_loop.gd",
+"trigger": "on_heal_or_regen_tick",
+"trigger_spec": "trigger_id=on_heal_or_regen_tick; signals=heal_received, regen_tick; required_packet_keys=owner, amount, source_kind; synthetic_test=emit heal and regen tick",
+"unique": true,
+"upgrade_type": "转换器",
+"value": "转化伤害 = 45% 治疗量",
+"why_close": "直接转译“死亡之环”。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "amount", "source_kind"],
+"required_packet_values": {
+
+},
+"signal_names": ["heal_received", "regen_tick"],
+"synthetic_test": "emit heal and regen tick",
+"trigger_id": "on_heal_or_regen_tick"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "convert_heal_to_damage",
+"effect_type": "convert_heal_to_damage",
+"max_proc_depth": 2,
+"params": {
+"damage_type": "magic",
+"source_cooldown": 0.25,
+"sources": ["heal", "regen_tick"],
+"targeting": "nearest_enemy"
+}
+}])

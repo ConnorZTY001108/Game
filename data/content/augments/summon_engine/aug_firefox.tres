@@ -1,0 +1,105 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_firefox"
+display_name = "狐火飞弹"
+description = "每 5 秒生成 3 枚狐火，自动追踪附近敌人；释放时获得短暂移速。"
+source_augment_name = "火狐"
+source_augment_rarity = "火狐:银色"
+route_id = "summon_engine"
+route_label = "自动奇观"
+rarity = "silver"
+max_rank = 3
+unique = false
+upgrade_type = "启动器/召唤型"
+source_trigger = "periodic"
+effect = "每 5 秒生成 3 枚狐火，自动追踪附近敌人；释放时获得短暂移速。"
+source_condition = "狐火优先未被命中的目标。"
+value = {
+"source_text": "3 枚；每枚 55%；移速 +20% 1 秒"
+}
+synergy_tags = Array[String](["missile", "periodic", "speed", "auto"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "提供低门槛自动输出和机动。"
+fit = "速度恶魔、暴击飞晶。"
+risk = "单体输出一般。"
+why_close = "直接来自“火狐”。"
+implementation_hint = "简单 HomingMissile。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/summon_engine/aug_firefox.tres"
+test_owner = "augment_summon_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "提供低门槛自动输出和机动。",
+"condition": "狐火优先未被命中的目标。",
+"display_name": "狐火飞弹",
+"effect": "每 5 秒生成 3 枚狐火，自动追踪附近敌人；释放时获得短暂移速。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "periodic_homing_projectiles",
+"effect_type": "periodic_homing_projectiles",
+"max_proc_depth": 2,
+"params": {
+"count": 3,
+"grant_move_speed": true,
+"interval": 5.0,
+"max_active": 12,
+"projectile_role": "foxfire"
+}
+}],
+"excludes_tags": [],
+"fit": "速度恶魔、暴击飞晶。",
+"id": "aug_firefox",
+"implementation_hint": "简单 HomingMissile。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": true,
+"max_rank": 3,
+"normalized_rarity": "silver",
+"rarity": "银色",
+"required_tags": [],
+"resource_path": "data/content/augments/summon_engine/aug_firefox.tres",
+"risk": "单体输出一般。",
+"route_id": "summon_engine",
+"route_label": "自动奇观",
+"source_augment_name": "火狐",
+"source_augment_rarity": "火狐:银色",
+"synergy_tags": ["missile", "periodic", "speed", "auto"],
+"test_owner": "augment_summon_loop.gd",
+"trigger": "periodic",
+"trigger_spec": "trigger_id=periodic; signals=augment_periodic_tick; required_packet_keys=owner, elapsed_seconds, nearest_enemy, enemy_clusters; synthetic_test=advance scheduler past interval",
+"unique": false,
+"upgrade_type": "启动器/召唤型",
+"value": "3 枚；每枚 55%；移速 +20% 1 秒",
+"why_close": "直接来自“火狐”。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "elapsed_seconds", "nearest_enemy", "enemy_clusters"],
+"required_packet_values": {
+
+},
+"signal_names": ["augment_periodic_tick"],
+"synthetic_test": "advance scheduler past interval",
+"trigger_id": "periodic"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "periodic_homing_projectiles",
+"effect_type": "periodic_homing_projectiles",
+"max_proc_depth": 2,
+"params": {
+"count": 3,
+"grant_move_speed": true,
+"interval": 5.0,
+"max_active": 12,
+"projectile_role": "foxfire"
+}
+}])

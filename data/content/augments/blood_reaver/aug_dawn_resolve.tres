@@ -1,0 +1,117 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_dawn_resolve"
+display_name = "黎明坚决"
+description = "生命首次低于 50% 时，3 秒内回复大量最大生命，并短暂提高治疗转伤效率。"
+source_augment_name = "黎明使者的坚决"
+source_augment_rarity = "黎明使者的坚决:金色"
+route_id = "blood_reaver"
+route_label = "血契收割"
+rarity = "gold"
+max_rank = 1
+unique = true
+upgrade_type = "生存型"
+source_trigger = "on_below_half_hp"
+effect = "生命首次低于 50% 时，3 秒内回复大量最大生命，并短暂提高治疗转伤效率。"
+source_condition = "45 秒冷却。"
+value = {
+"source_text": "回复 24% 最大生命；死亡之环效率 +20%"
+}
+synergy_tags = Array[String](["low_hp", "regen", "heal", "survival"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "让低血构筑能扛过第一波爆发。"
+fit = "死亡之环、吸血习性。"
+risk = "爆发过高时可能来不及回复。"
+why_close = "来自“黎明使者的坚决”的半血回复。"
+implementation_hint = "HoT 可被治疗强度放大。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/blood_reaver/aug_dawn_resolve.tres"
+test_owner = "augment_blood_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "让低血构筑能扛过第一波爆发。",
+"condition": "45 秒冷却。",
+"display_name": "黎明坚决",
+"effect": "生命首次低于 50% 时，3 秒内回复大量最大生命，并短暂提高治疗转伤效率。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "below_half_regen",
+"effect_type": "below_half_regen",
+"max_proc_depth": 2,
+"params": {
+"duration": 3.0,
+"once_per_cooldown": true,
+"threshold": 0.5
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "boost_heal_conversion",
+"effect_type": "boost_heal_conversion",
+"max_proc_depth": 2,
+"params": {
+"duration": 3.0
+}
+}],
+"excludes_tags": [],
+"fit": "死亡之环、吸血习性。",
+"id": "aug_dawn_resolve",
+"implementation_hint": "HoT 可被治疗强度放大。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": [],
+"resource_path": "data/content/augments/blood_reaver/aug_dawn_resolve.tres",
+"risk": "爆发过高时可能来不及回复。",
+"route_id": "blood_reaver",
+"route_label": "血契收割",
+"source_augment_name": "黎明使者的坚决",
+"source_augment_rarity": "黎明使者的坚决:金色",
+"synergy_tags": ["low_hp", "regen", "heal", "survival"],
+"test_owner": "augment_blood_loop.gd",
+"trigger": "on_below_half_hp",
+"trigger_spec": "trigger_id=on_below_half_hp; signals=low_hp_entered, health_changed; required_packet_keys=owner, ratio, once_per_run_state; synthetic_test=cross 50 percent health",
+"unique": true,
+"upgrade_type": "生存型",
+"value": "回复 24% 最大生命；死亡之环效率 +20%",
+"why_close": "来自“黎明使者的坚决”的半血回复。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "ratio", "once_per_run_state"],
+"required_packet_values": {
+
+},
+"signal_names": ["low_hp_entered", "health_changed"],
+"synthetic_test": "cross 50 percent health",
+"trigger_id": "on_below_half_hp"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "below_half_regen",
+"effect_type": "below_half_regen",
+"max_proc_depth": 2,
+"params": {
+"duration": 3.0,
+"once_per_cooldown": true,
+"threshold": 0.5
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "boost_heal_conversion",
+"effect_type": "boost_heal_conversion",
+"max_proc_depth": 2,
+"params": {
+"duration": 3.0
+}
+}])

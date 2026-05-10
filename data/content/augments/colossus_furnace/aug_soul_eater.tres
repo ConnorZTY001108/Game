@@ -1,0 +1,113 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_soul_eater"
+display_name = "吞噬灵魂"
+description = "控制精英、Boss 或大型敌人时永久增加最大生命；控制普通敌人积累进度，满进度也增加生命。"
+source_augment_name = "吞噬灵魂"
+source_augment_rarity = "吞噬灵魂:金色"
+route_id = "colossus_furnace"
+route_label = "巨像熔炉"
+rarity = "gold"
+max_rank = 1
+unique = true
+upgrade_type = "叠层成长"
+source_trigger = "on_control_elite_or_boss"
+effect = "控制精英、Boss 或大型敌人时永久增加最大生命；控制普通敌人积累进度，满进度也增加生命。"
+source_condition = "越早拿越强。"
+value = {
+"source_text": "精英 +8 生命；普通 20 次 +8"
+}
+synergy_tags = Array[String](["control", "permanent_hp", "growth", "tank"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "提供无限成长和后期巨像感。"
+fit = "巨像勇气、歌利亚。"
+risk = "过晚拿成长不足。"
+why_close = "直接转译“吞噬灵魂”。"
+implementation_hint = "保存 run_stat.permanent_hp_bonus。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/colossus_furnace/aug_soul_eater.tres"
+test_owner = "augment_colossus_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "提供无限成长和后期巨像感。",
+"condition": "越早拿越强。",
+"display_name": "吞噬灵魂",
+"effect": "控制精英、Boss 或大型敌人时永久增加最大生命；控制普通敌人积累进度，满进度也增加生命。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "permanent_max_health_on_control",
+"effect_type": "permanent_max_health_on_control",
+"max_proc_depth": 2,
+"params": {
+"target_classes": ["elite", "boss", "large"]
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "progress_on_control_normal",
+"effect_type": "progress_on_control_normal",
+"max_proc_depth": 2,
+"params": {
+"reward": "max_health_at_full_progress"
+}
+}],
+"excludes_tags": [],
+"fit": "巨像勇气、歌利亚。",
+"id": "aug_soul_eater",
+"implementation_hint": "保存 run_stat.permanent_hp_bonus。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": [],
+"resource_path": "data/content/augments/colossus_furnace/aug_soul_eater.tres",
+"risk": "过晚拿成长不足。",
+"route_id": "colossus_furnace",
+"route_label": "巨像熔炉",
+"source_augment_name": "吞噬灵魂",
+"source_augment_rarity": "吞噬灵魂:金色",
+"synergy_tags": ["control", "permanent_hp", "growth", "tank"],
+"test_owner": "augment_colossus_loop.gd",
+"trigger": "on_control_elite_or_boss",
+"trigger_spec": "trigger_id=on_control_elite_or_boss; signals=control_applied; required_packet_keys=target_class, target, owner, progress_state; synthetic_test=control elite and multiple normal targets",
+"unique": true,
+"upgrade_type": "叠层成长",
+"value": "精英 +8 生命；普通 20 次 +8",
+"why_close": "直接转译“吞噬灵魂”。"
+}
+trigger_spec = {
+"required_packet_keys": ["target_class", "target", "owner", "progress_state"],
+"required_packet_values": {
+
+},
+"signal_names": ["control_applied"],
+"synthetic_test": "control elite and multiple normal targets",
+"trigger_id": "on_control_elite_or_boss"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "permanent_max_health_on_control",
+"effect_type": "permanent_max_health_on_control",
+"max_proc_depth": 2,
+"params": {
+"target_classes": ["elite", "boss", "large"]
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "progress_on_control_normal",
+"effect_type": "progress_on_control_normal",
+"max_proc_depth": 2,
+"params": {
+"reward": "max_health_at_full_progress"
+}
+}])

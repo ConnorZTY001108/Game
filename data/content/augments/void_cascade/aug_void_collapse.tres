@@ -1,0 +1,125 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_void_collapse"
+display_name = "虚空坍缩"
+description = "3 秒内同一区域触发 3 次裂隙连线后，延迟 0.8 秒落下虚空坍缩，对范围内敌人造成最大生命值真实伤害。"
+source_augment_name = "轨道镭射、卡皮巴拉空投"
+source_augment_rarity = "轨道镭射:棱彩；卡皮巴拉空投:棱彩"
+route_id = "void_cascade"
+route_label = "虚空裂隙连锁"
+rarity = "prismatic"
+max_rank = 1
+unique = true
+upgrade_type = "终结器"
+source_trigger = "on_rift_chain_count"
+effect = "3 秒内同一区域触发 3 次裂隙连线后，延迟 0.8 秒落下虚空坍缩，对范围内敌人造成最大生命值真实伤害。"
+source_condition = "Boss 缩放，屏幕最多同时 2 个坍缩。"
+value = {
+"source_text": "小怪 6% 最大生命；Boss 1.2%"
+}
+synergy_tags = Array[String](["void", "true_damage", "area", "finisher"])
+required_tags = Array[String](["void", "rifts"])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "把裂隙连锁推向清屏级终局。"
+fit = "虚空裂隙、弹球回响、侵蚀。"
+risk = "延迟标记要给玩家读屏。"
+why_close = "融合“轨道镭射”的延迟区域与“卡皮巴拉空投”的最大生命真伤。"
+implementation_hint = "生成 telegraph 圆形预警后结算。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/void_cascade/aug_void_collapse.tres"
+test_owner = "augment_void_loop.gd"
+checkpoint_priority = 14
+manifest_fields = {
+"checkpoint_priority": 14,
+"combo_value": "把裂隙连锁推向清屏级终局。",
+"condition": "Boss 缩放，屏幕最多同时 2 个坍缩。",
+"display_name": "虚空坍缩",
+"effect": "3 秒内同一区域触发 3 次裂隙连线后，延迟 0.8 秒落下虚空坍缩，对范围内敌人造成最大生命值真实伤害。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "regional_counter",
+"effect_type": "regional_counter",
+"max_proc_depth": 2,
+"params": {
+"event": "rift_chain_triggered",
+"threshold": 3,
+"window_seconds": 3.0
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "spawn_delayed_strike",
+"effect_type": "spawn_delayed_strike",
+"max_proc_depth": 2,
+"params": {
+"boss_scalar": 0.3,
+"damage_type": "true",
+"delay": 0.8,
+"max_hp_ratio_source": true,
+"strike_role": "void_collapse"
+}
+}],
+"excludes_tags": [],
+"fit": "虚空裂隙、弹球回响、侵蚀。",
+"id": "aug_void_collapse",
+"implementation_hint": "生成 telegraph 圆形预警后结算。",
+"is_finisher": true,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "prismatic",
+"rarity": "棱彩",
+"required_tags": ["void", "rifts"],
+"resource_path": "data/content/augments/void_cascade/aug_void_collapse.tres",
+"risk": "延迟标记要给玩家读屏。",
+"route_id": "void_cascade",
+"route_label": "虚空裂隙连锁",
+"source_augment_name": "轨道镭射、卡皮巴拉空投",
+"source_augment_rarity": "轨道镭射:棱彩；卡皮巴拉空投:棱彩",
+"synergy_tags": ["void", "true_damage", "area", "finisher"],
+"test_owner": "augment_void_loop.gd",
+"trigger": "on_rift_chain_count",
+"trigger_spec": "trigger_id=on_rift_chain_count; signals=rift_chain_triggered; required_packet_keys=region_id, chain_count, hit_position; synthetic_test=simulate three rift chains",
+"unique": true,
+"upgrade_type": "终结器",
+"value": "小怪 6% 最大生命；Boss 1.2%",
+"why_close": "融合“轨道镭射”的延迟区域与“卡皮巴拉空投”的最大生命真伤。"
+}
+trigger_spec = {
+"required_packet_keys": ["region_id", "chain_count", "hit_position"],
+"required_packet_values": {
+
+},
+"signal_names": ["rift_chain_triggered"],
+"synthetic_test": "simulate three rift chains",
+"trigger_id": "on_rift_chain_count"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "regional_counter",
+"effect_type": "regional_counter",
+"max_proc_depth": 2,
+"params": {
+"event": "rift_chain_triggered",
+"threshold": 3,
+"window_seconds": 3.0
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "spawn_delayed_strike",
+"effect_type": "spawn_delayed_strike",
+"max_proc_depth": 2,
+"params": {
+"boss_scalar": 0.3,
+"damage_type": "true",
+"delay": 0.8,
+"max_hp_ratio_source": true,
+"strike_role": "void_collapse"
+}
+}])

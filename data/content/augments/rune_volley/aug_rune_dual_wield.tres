@@ -1,0 +1,129 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_rune_dual_wield"
+display_name = "符文双持"
+description = "主 projectile 每次发射时附带一枚副手符文弹；副手弹造成 45% 伤害，并以 40% 效率触发 on_hit。"
+source_augment_name = "双刀流"
+source_augment_rarity = "双刀流:棱彩"
+route_id = "rune_volley"
+route_label = "符文弹幕链"
+rarity = "prismatic"
+max_rank = 1
+unique = true
+upgrade_type = "启动器/放大器"
+source_trigger = "on_attack_fire"
+effect = "主 projectile 每次发射时附带一枚副手符文弹；副手弹造成 45% 伤害，并以 40% 效率触发 on_hit。"
+source_condition = "仅 projectile 武器；副手弹不再次生成副手弹。"
+value = {
+"source_text": "+25% 总攻击速度；副手 45% 伤害"
+}
+synergy_tags = Array[String](["projectile", "on_hit", "multishot", "attack_speed"])
+required_tags = Array[String](["weapon:projectile"])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "给所有 on_hit、元素叠层、暴击飞弹提供额外触发体。"
+fit = "符文弹、散射弹、高频射手流。"
+risk = "单发高伤技能流收益低。"
+why_close = "保留“双刀流”的额外攻击和特效复制体验。"
+implementation_hint = "为 WeaponFireEvent 增加 secondary_projectile 标记，防递归。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/rune_volley/aug_rune_dual_wield.tres"
+test_owner = "augment_rune_volley_loop.gd"
+checkpoint_priority = 1
+manifest_fields = {
+"checkpoint_priority": 1,
+"combo_value": "给所有 on_hit、元素叠层、暴击飞弹提供额外触发体。",
+"condition": "仅 projectile 武器；副手弹不再次生成副手弹。",
+"display_name": "符文双持",
+"effect": "主 projectile 每次发射时附带一枚副手符文弹；副手弹造成 45% 伤害，并以 40% 效率触发 on_hit。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "spawn_projectile",
+"effect_type": "spawn_projectile",
+"max_proc_depth": 1,
+"params": {
+"add_proc_flag": "secondary_projectile",
+"block_if_proc_flag_exists": "secondary_projectile",
+"damage_multiplier": 0.45,
+"inherit_weapon_tags": true,
+"max_proc_depth": 1,
+"on_hit_efficiency": 0.4,
+"projectile_role": "secondary_projectile"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "modify_stat",
+"effect_type": "modify_stat",
+"max_proc_depth": 2,
+"params": {
+"op": "add_percent",
+"stat": "attack_speed_multiplier",
+"value": 0.25
+}
+}],
+"excludes_tags": [],
+"fit": "符文弹、散射弹、高频射手流。",
+"id": "aug_rune_dual_wield",
+"implementation_hint": "为 WeaponFireEvent 增加 secondary_projectile 标记，防递归。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": true,
+"max_rank": 1,
+"normalized_rarity": "prismatic",
+"rarity": "棱彩",
+"required_tags": ["weapon:projectile"],
+"resource_path": "data/content/augments/rune_volley/aug_rune_dual_wield.tres",
+"risk": "单发高伤技能流收益低。",
+"route_id": "rune_volley",
+"route_label": "符文弹幕链",
+"source_augment_name": "双刀流",
+"source_augment_rarity": "双刀流:棱彩",
+"synergy_tags": ["projectile", "on_hit", "multishot", "attack_speed"],
+"test_owner": "augment_rune_volley_loop.gd",
+"trigger": "on_attack_fire",
+"trigger_spec": "trigger_id=on_attack_fire; signals=weapon_fired; required_packet_keys=owner, weapon_id, weapon_tags, cooldown_source_id, proc_flags; synthetic_test=emit weapon_fired with projectile weapon",
+"unique": true,
+"upgrade_type": "启动器/放大器",
+"value": "+25% 总攻击速度；副手 45% 伤害",
+"why_close": "保留“双刀流”的额外攻击和特效复制体验。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "weapon_id", "weapon_tags", "cooldown_source_id", "proc_flags"],
+"required_packet_values": {
+
+},
+"signal_names": ["weapon_fired"],
+"synthetic_test": "emit weapon_fired with projectile weapon",
+"trigger_id": "on_attack_fire"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "spawn_projectile",
+"effect_type": "spawn_projectile",
+"max_proc_depth": 1,
+"params": {
+"add_proc_flag": "secondary_projectile",
+"block_if_proc_flag_exists": "secondary_projectile",
+"damage_multiplier": 0.45,
+"inherit_weapon_tags": true,
+"max_proc_depth": 1,
+"on_hit_efficiency": 0.4,
+"projectile_role": "secondary_projectile"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "modify_stat",
+"effect_type": "modify_stat",
+"max_proc_depth": 2,
+"params": {
+"op": "add_percent",
+"stat": "attack_speed_multiplier",
+"value": 0.25
+}
+}])

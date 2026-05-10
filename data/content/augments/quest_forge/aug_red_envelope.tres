@@ -1,0 +1,101 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_red_envelope"
+display_name = "红包祭品"
+description = "地图周期性生成红包/小蛋糕；拾取获得金币、随机属性或治疗，并短暂扩大拾取半径。"
+source_augment_name = "红包、当心小蛋糕！"
+source_augment_rarity = "红包:棱彩；当心小蛋糕！:棱彩"
+route_id = "quest_forge"
+route_label = "海牛锻炉"
+rarity = "gold"
+max_rank = 2
+unique = false
+upgrade_type = "经济型/生存型"
+source_trigger = "periodic_pickup_spawn"
+effect = "地图周期性生成红包/小蛋糕；拾取获得金币、随机属性或治疗，并短暂扩大拾取半径。"
+source_condition = "生成点偏向玩家前进方向。"
+value = {
+"source_text": "每 25 秒 1 个；持续 18 秒"
+}
+synergy_tags = Array[String](["pickup", "gold", "heal", "random", "economy"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "把经济、续航和走位目标结合。"
+fit = "夺金、属性锻造器。"
+risk = "玩家可能为捡红包冒险。"
+why_close = "融合“红包”和“小蛋糕”的地图奖励。"
+implementation_hint = "SpawnDirector 避免生成在危险墙体内。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/quest_forge/aug_red_envelope.tres"
+test_owner = "augment_forge_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "把经济、续航和走位目标结合。",
+"condition": "生成点偏向玩家前进方向。",
+"display_name": "红包祭品",
+"effect": "地图周期性生成红包/小蛋糕；拾取获得金币、随机属性或治疗，并短暂扩大拾取半径。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "periodic_pickup_spawn",
+"effect_type": "periodic_pickup_spawn",
+"max_proc_depth": 2,
+"params": {
+"pickup_roles": ["red_envelope", "cupcake"],
+"rewards": ["currency", "random_stat", "heal"],
+"temporary_pickup_radius": true
+}
+}],
+"excludes_tags": [],
+"fit": "夺金、属性锻造器。",
+"id": "aug_red_envelope",
+"implementation_hint": "SpawnDirector 避免生成在危险墙体内。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 2,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": [],
+"resource_path": "data/content/augments/quest_forge/aug_red_envelope.tres",
+"risk": "玩家可能为捡红包冒险。",
+"route_id": "quest_forge",
+"route_label": "海牛锻炉",
+"source_augment_name": "红包、当心小蛋糕！",
+"source_augment_rarity": "红包:棱彩；当心小蛋糕！:棱彩",
+"synergy_tags": ["pickup", "gold", "heal", "random", "economy"],
+"test_owner": "augment_forge_loop.gd",
+"trigger": "periodic_pickup_spawn",
+"trigger_spec": "trigger_id=periodic_pickup_spawn; signals=augment_periodic_tick; required_packet_keys=owner, spawn_position, pickup_cap; synthetic_test=advance scheduler and count pickups",
+"unique": false,
+"upgrade_type": "经济型/生存型",
+"value": "每 25 秒 1 个；持续 18 秒",
+"why_close": "融合“红包”和“小蛋糕”的地图奖励。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "spawn_position", "pickup_cap"],
+"required_packet_values": {
+
+},
+"signal_names": ["augment_periodic_tick"],
+"synthetic_test": "advance scheduler and count pickups",
+"trigger_id": "periodic_pickup_spawn"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "periodic_pickup_spawn",
+"effect_type": "periodic_pickup_spawn",
+"max_proc_depth": 2,
+"params": {
+"pickup_roles": ["red_envelope", "cupcake"],
+"rewards": ["currency", "random_stat", "heal"],
+"temporary_pickup_radius": true
+}
+}])

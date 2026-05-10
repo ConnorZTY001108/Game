@@ -1,0 +1,115 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_ominous_pact"
+display_name = "不祥契约"
+description = "每次武器施放消耗 1.5% 当前生命；根据已损生命获得符文强度、移速和全能吸血。"
+source_augment_name = "不祥契约"
+source_augment_rarity = "不祥契约:棱彩"
+route_id = "blood_reaver"
+route_label = "血契收割"
+rarity = "prismatic"
+max_rank = 1
+unique = true
+upgrade_type = "代价型/启动器"
+source_trigger = "on_cast"
+effect = "每次武器施放消耗 1.5% 当前生命；根据已损生命获得符文强度、移速和全能吸血。"
+source_condition = "生命低于 10% 时不再自损。"
+value = {
+"source_text": "每 10% 已损生命：+5% 伤害/+4% 移速/+2% 吸血"
+}
+synergy_tags = Array[String](["self_damage", "missing_hp", "lifesteal", "risk"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "构成低血高输出和吸血回拉的核心启动器。"
+fit = "吸血习性、逃跑计划、血债处决。"
+risk = "没有吸血或护盾时危险。"
+why_close = "直接来自“不祥契约”。"
+implementation_hint = "SelfDamageEvent 不触发受伤掉落逻辑。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/blood_reaver/aug_ominous_pact.tres"
+test_owner = "augment_blood_loop.gd"
+checkpoint_priority = 17
+manifest_fields = {
+"checkpoint_priority": 17,
+"combo_value": "构成低血高输出和吸血回拉的核心启动器。",
+"condition": "生命低于 10% 时不再自损。",
+"display_name": "不祥契约",
+"effect": "每次武器施放消耗 1.5% 当前生命；根据已损生命获得符文强度、移速和全能吸血。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "self_damage_on_cast",
+"effect_type": "self_damage_on_cast",
+"max_proc_depth": 2,
+"params": {
+"cannot_kill": true,
+"current_health_percent_cost": 0.015
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "missing_hp_scaling",
+"effect_type": "missing_hp_scaling",
+"max_proc_depth": 2,
+"params": {
+"stats": ["rune_power", "move_speed", "omnivamp"]
+}
+}],
+"excludes_tags": [],
+"fit": "吸血习性、逃跑计划、血债处决。",
+"id": "aug_ominous_pact",
+"implementation_hint": "SelfDamageEvent 不触发受伤掉落逻辑。",
+"is_finisher": false,
+"is_high_risk": true,
+"is_starter": true,
+"max_rank": 1,
+"normalized_rarity": "prismatic",
+"rarity": "棱彩",
+"required_tags": [],
+"resource_path": "data/content/augments/blood_reaver/aug_ominous_pact.tres",
+"risk": "没有吸血或护盾时危险。",
+"route_id": "blood_reaver",
+"route_label": "血契收割",
+"source_augment_name": "不祥契约",
+"source_augment_rarity": "不祥契约:棱彩",
+"synergy_tags": ["self_damage", "missing_hp", "lifesteal", "risk"],
+"test_owner": "augment_blood_loop.gd",
+"trigger": "on_cast",
+"trigger_spec": "trigger_id=on_cast; signals=weapon_fired; required_packet_keys=owner, weapon_id, cooldown_source_id, current_health; synthetic_test=emit weapon cast",
+"unique": true,
+"upgrade_type": "代价型/启动器",
+"value": "每 10% 已损生命：+5% 伤害/+4% 移速/+2% 吸血",
+"why_close": "直接来自“不祥契约”。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "weapon_id", "cooldown_source_id", "current_health"],
+"required_packet_values": {
+
+},
+"signal_names": ["weapon_fired"],
+"synthetic_test": "emit weapon cast",
+"trigger_id": "on_cast"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "self_damage_on_cast",
+"effect_type": "self_damage_on_cast",
+"max_proc_depth": 2,
+"params": {
+"cannot_kill": true,
+"current_health_percent_cost": 0.015
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "missing_hp_scaling",
+"effect_type": "missing_hp_scaling",
+"max_proc_depth": 2,
+"params": {
+"stats": ["rune_power", "move_speed", "omnivamp"]
+}
+}])

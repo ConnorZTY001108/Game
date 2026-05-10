@@ -1,0 +1,115 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_critical_healing"
+display_name = "会心治疗"
+description = "治疗和护盾可以暴击；暴击保护额外生成一圈小治疗波。"
+source_augment_name = "会心治疗"
+source_augment_rarity = "会心治疗:金色"
+route_id = "aegis_transmutation"
+route_label = "圣盾转化"
+rarity = "gold"
+max_rank = 1
+unique = true
+upgrade_type = "放大器"
+source_trigger = "on_heal_or_shield"
+effect = "治疗和护盾可以暴击；暴击保护额外生成一圈小治疗波。"
+source_condition = "需要暴击率；治疗波不再暴击。"
+value = {
+"source_text": "+15% 暴击率；暴击保护 180%"
+}
+synergy_tags = Array[String](["heal", "shield", "crit", "pulse"])
+required_tags = Array[String](["crit_chance"])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "让暴击不只服务输出，也服务保护与转伤。"
+fit = "珠光符文、死亡之环、护盾爆蛋。"
+risk = "暴击率低时波动大。"
+why_close = "来自“会心治疗”。"
+implementation_hint = "ProtectionPacket 添加 can_crit。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/aegis_transmutation/aug_critical_healing.tres"
+test_owner = "augment_aegis_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "让暴击不只服务输出，也服务保护与转伤。",
+"condition": "需要暴击率；治疗波不再暴击。",
+"display_name": "会心治疗",
+"effect": "治疗和护盾可以暴击；暴击保护额外生成一圈小治疗波。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "enable_heal_shield_crit",
+"effect_type": "enable_heal_shield_crit",
+"max_proc_depth": 2,
+"params": {
+"sources": ["heal", "shield"]
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "spawn_healing_wave_on_crit",
+"effect_type": "spawn_healing_wave_on_crit",
+"max_proc_depth": 2,
+"params": {
+"radius": 180,
+"source_cooldown": 0.5
+}
+}],
+"excludes_tags": [],
+"fit": "珠光符文、死亡之环、护盾爆蛋。",
+"id": "aug_critical_healing",
+"implementation_hint": "ProtectionPacket 添加 can_crit。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": ["crit_chance"],
+"resource_path": "data/content/augments/aegis_transmutation/aug_critical_healing.tres",
+"risk": "暴击率低时波动大。",
+"route_id": "aegis_transmutation",
+"route_label": "圣盾转化",
+"source_augment_name": "会心治疗",
+"source_augment_rarity": "会心治疗:金色",
+"synergy_tags": ["heal", "shield", "crit", "pulse"],
+"test_owner": "augment_aegis_loop.gd",
+"trigger": "on_heal_or_shield",
+"trigger_spec": "trigger_id=on_heal_or_shield; signals=heal_received, shield_gained; required_packet_keys=owner, amount, source_kind; synthetic_test=emit heal/shield event",
+"unique": true,
+"upgrade_type": "放大器",
+"value": "+15% 暴击率；暴击保护 180%",
+"why_close": "来自“会心治疗”。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "amount", "source_kind"],
+"required_packet_values": {
+
+},
+"signal_names": ["heal_received", "shield_gained"],
+"synthetic_test": "emit heal/shield event",
+"trigger_id": "on_heal_or_shield"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "enable_heal_shield_crit",
+"effect_type": "enable_heal_shield_crit",
+"max_proc_depth": 2,
+"params": {
+"sources": ["heal", "shield"]
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "spawn_healing_wave_on_crit",
+"effect_type": "spawn_healing_wave_on_crit",
+"max_proc_depth": 2,
+"params": {
+"radius": 180,
+"source_cooldown": 0.5
+}
+}])

@@ -1,0 +1,105 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_hextech_chain"
+display_name = "海克斯链魂"
+description = "每 4 秒，你的下一次伤害触发链状闪电，弹跳 4 个敌人并减速。"
+source_augment_name = "海克斯科技龙魂"
+source_augment_rarity = "海克斯科技龙魂:银色"
+route_id = "void_cascade"
+route_label = "虚空裂隙连锁"
+rarity = "silver"
+max_rank = 2
+unique = false
+upgrade_type = "启动器"
+source_trigger = "periodic_next_hit"
+effect = "每 4 秒，你的下一次伤害触发链状闪电，弹跳 4 个敌人并减速。"
+source_condition = "链状闪电可以生成 1 个裂隙，但不触发其它链状闪电。"
+value = {
+"source_text": "4 跳；60% 符文强度；30% 减速"
+}
+synergy_tags = Array[String](["chain_lightning", "slow", "void"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "给所有武器一个稳定连锁入口。"
+fit = "虚空裂隙、侵蚀。"
+risk = "不能让链电自我递归。"
+why_close = "来自“海克斯科技龙魂”。"
+implementation_hint = "ChainContext 设置 no_chain_retrigger。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/void_cascade/aug_hextech_chain.tres"
+test_owner = "augment_void_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "给所有武器一个稳定连锁入口。",
+"condition": "链状闪电可以生成 1 个裂隙，但不触发其它链状闪电。",
+"display_name": "海克斯链魂",
+"effect": "每 4 秒，你的下一次伤害触发链状闪电，弹跳 4 个敌人并减速。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "chain_lightning",
+"effect_type": "set_pending_next_hit",
+"max_proc_depth": 2,
+"params": {
+"applies_slow": true,
+"bounce_count": 4,
+"effect_type": "chain_lightning",
+"interval": 4.0,
+"proc_flag": "chain_lightning"
+}
+}],
+"excludes_tags": [],
+"fit": "虚空裂隙、侵蚀。",
+"id": "aug_hextech_chain",
+"implementation_hint": "ChainContext 设置 no_chain_retrigger。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": true,
+"max_rank": 2,
+"normalized_rarity": "silver",
+"rarity": "银色",
+"required_tags": [],
+"resource_path": "data/content/augments/void_cascade/aug_hextech_chain.tres",
+"risk": "不能让链电自我递归。",
+"route_id": "void_cascade",
+"route_label": "虚空裂隙连锁",
+"source_augment_name": "海克斯科技龙魂",
+"source_augment_rarity": "海克斯科技龙魂:银色",
+"synergy_tags": ["chain_lightning", "slow", "void"],
+"test_owner": "augment_void_loop.gd",
+"trigger": "periodic_next_hit",
+"trigger_spec": "trigger_id=periodic_next_hit; signals=augment_periodic_tick, damage_applied_packet; required_packet_keys=pending_next_hit_state, target, owner; synthetic_test=tick then apply next damage",
+"unique": false,
+"upgrade_type": "启动器",
+"value": "4 跳；60% 符文强度；30% 减速",
+"why_close": "来自“海克斯科技龙魂”。"
+}
+trigger_spec = {
+"required_packet_keys": ["pending_next_hit_state", "target", "owner"],
+"required_packet_values": {
+
+},
+"signal_names": ["augment_periodic_tick", "damage_applied_packet"],
+"synthetic_test": "tick then apply next damage",
+"trigger_id": "periodic_next_hit"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "chain_lightning",
+"effect_type": "set_pending_next_hit",
+"max_proc_depth": 2,
+"params": {
+"applies_slow": true,
+"bounce_count": 4,
+"effect_type": "chain_lightning",
+"interval": 4.0,
+"proc_flag": "chain_lightning"
+}
+}])

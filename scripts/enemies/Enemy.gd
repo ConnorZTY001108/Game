@@ -66,6 +66,18 @@ func apply_damage(amount: float, tags: Array[String]) -> void:
 	GameEvents.damage_applied.emit(self, amount, tags)
 	GameEvents.damage_number_requested.emit(amount, global_position, tags)
 
+func get_enemy_class() -> String:
+	if enemy_data == null:
+		return "normal"
+	var enemy_id := enemy_data.id.to_lower()
+	if enemy_id.contains("boss"):
+		return "boss"
+	if enemy_id.contains("elite") or enemy_data.experience_value >= 5:
+		return "elite"
+	if enemy_data.max_health >= 60.0:
+		return "large"
+	return "normal"
+
 func is_hit_flash_active() -> bool:
 	return _hit_flash_remaining > 0.0
 
@@ -78,6 +90,17 @@ func _on_died() -> void:
 	GameEvents.feedback_requested.emit("kill", "KILL +%d XP" % enemy_data.experience_value, global_position, {
 		"experience_value": enemy_data.experience_value
 	})
+	var enemy_class := get_enemy_class()
+	if enemy_class == "elite" or enemy_class == "boss":
+		var tags: Array[String] = ["kill"]
+		var packet := DamageSystem.make_packet(0.0, tags, {
+			"target": self,
+			"target_class": enemy_class,
+			"source_kind": "kill",
+			"source_id": "enemy_death",
+			"hit_position": global_position
+		})
+		GameEvents.elite_killed.emit(self, packet)
 	GameEvents.enemy_died.emit(self, enemy_data.experience_value)
 	queue_free()
 

@@ -1,0 +1,101 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_quantum_slash"
+display_name = "量子斩击"
+description = "每 10 秒自动向玩家前方或最近精英方向释放巨型斩击，减速、造成最大生命伤害并治疗你。"
+source_augment_name = "量子计算"
+source_augment_rarity = "量子计算:棱彩"
+route_id = "summon_engine"
+route_label = "自动奇观"
+rarity = "prismatic"
+max_rank = 1
+unique = true
+upgrade_type = "终结器"
+source_trigger = "periodic"
+effect = "每 10 秒自动向玩家前方或最近精英方向释放巨型斩击，减速、造成最大生命伤害并治疗你。"
+source_condition = "近中距离收益最高。"
+value = {
+"source_text": "220% + 2% 最大生命；治疗 3% 最大生命"
+}
+synergy_tags = Array[String](["periodic", "slash", "heal", "max_hp"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "自动大招兼顾输出和续航。"
+fit = "死亡之环、血契。"
+risk = "方向可能不符合玩家预期。"
+why_close = "直接来自“量子计算”。"
+implementation_hint = "选择 aim_direction: elite 或 velocity。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/summon_engine/aug_quantum_slash.tres"
+test_owner = "augment_summon_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "自动大招兼顾输出和续航。",
+"condition": "近中距离收益最高。",
+"display_name": "量子斩击",
+"effect": "每 10 秒自动向玩家前方或最近精英方向释放巨型斩击，减速、造成最大生命伤害并治疗你。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "periodic_slash",
+"effect_type": "periodic_slash",
+"max_proc_depth": 2,
+"params": {
+"effects": ["slow", "max_hp_damage", "heal_player"],
+"interval": 10.0,
+"targeting": "forward_or_nearest_elite"
+}
+}],
+"excludes_tags": [],
+"fit": "死亡之环、血契。",
+"id": "aug_quantum_slash",
+"implementation_hint": "选择 aim_direction: elite 或 velocity。",
+"is_finisher": true,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "prismatic",
+"rarity": "棱彩",
+"required_tags": [],
+"resource_path": "data/content/augments/summon_engine/aug_quantum_slash.tres",
+"risk": "方向可能不符合玩家预期。",
+"route_id": "summon_engine",
+"route_label": "自动奇观",
+"source_augment_name": "量子计算",
+"source_augment_rarity": "量子计算:棱彩",
+"synergy_tags": ["periodic", "slash", "heal", "max_hp"],
+"test_owner": "augment_summon_loop.gd",
+"trigger": "periodic",
+"trigger_spec": "trigger_id=periodic; signals=augment_periodic_tick; required_packet_keys=owner, elapsed_seconds, nearest_enemy, enemy_clusters; synthetic_test=advance scheduler past interval",
+"unique": true,
+"upgrade_type": "终结器",
+"value": "220% + 2% 最大生命；治疗 3% 最大生命",
+"why_close": "直接来自“量子计算”。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "elapsed_seconds", "nearest_enemy", "enemy_clusters"],
+"required_packet_values": {
+
+},
+"signal_names": ["augment_periodic_tick"],
+"synthetic_test": "advance scheduler past interval",
+"trigger_id": "periodic"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "periodic_slash",
+"effect_type": "periodic_slash",
+"max_proc_depth": 2,
+"params": {
+"effects": ["slow", "max_hp_damage", "heal_player"],
+"interval": 10.0,
+"targeting": "forward_or_nearest_elite"
+}
+}])

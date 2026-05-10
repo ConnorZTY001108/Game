@@ -1,0 +1,115 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_holy_snowmark"
+display_name = "神圣雪印"
+description = "每 7 秒向最近精英或高密度敌群投掷雪印；命中后你下一次朝该方向移动会自动短冲，并获得 0.5 秒免伤。"
+source_augment_name = "神圣雪球、史上最大雪球"
+source_augment_rarity = "神圣雪球:棱彩；史上最大雪球:棱彩"
+route_id = "snowstep_vanguard"
+route_label = "雪步先锋"
+rarity = "prismatic"
+max_rank = 1
+unique = true
+upgrade_type = "启动器"
+source_trigger = "periodic_auto_mark"
+effect = "每 7 秒向最近精英或高密度敌群投掷雪印；命中后你下一次朝该方向移动会自动短冲，并获得 0.5 秒免伤。"
+source_condition = "不强制改变玩家方向；无目标时保留充能。"
+value = {
+"source_text": "雪印伤害 180%；免伤 0.5 秒"
+}
+synergy_tags = Array[String](["dash", "snowball", "invulnerable", "mark"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "把 ARAM 雪球进场转译成低操作的自动标记+短冲。"
+fit = "闪光弹、全凭身法、血债飞踢。"
+risk = "误冲进危险区域。"
+why_close = "融合“史上最大雪球/神圣雪球”的强化雪球和二段免伤。"
+implementation_hint = "检测玩家输入方向与 mark 向量夹角。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/snowstep_vanguard/aug_holy_snowmark.tres"
+test_owner = "augment_snowstep_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "把 ARAM 雪球进场转译成低操作的自动标记+短冲。",
+"condition": "不强制改变玩家方向；无目标时保留充能。",
+"display_name": "神圣雪印",
+"effect": "每 7 秒向最近精英或高密度敌群投掷雪印；命中后你下一次朝该方向移动会自动短冲，并获得 0.5 秒免伤。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "periodic_auto_mark",
+"effect_type": "periodic_auto_mark",
+"max_proc_depth": 2,
+"params": {
+"interval": 7.0,
+"targeting": "elite_or_cluster"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "dash_toward_mark_on_movement",
+"effect_type": "dash_toward_mark_on_movement",
+"max_proc_depth": 2,
+"params": {
+"invulnerability_seconds": 0.5
+}
+}],
+"excludes_tags": [],
+"fit": "闪光弹、全凭身法、血债飞踢。",
+"id": "aug_holy_snowmark",
+"implementation_hint": "检测玩家输入方向与 mark 向量夹角。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": true,
+"max_rank": 1,
+"normalized_rarity": "prismatic",
+"rarity": "棱彩",
+"required_tags": [],
+"resource_path": "data/content/augments/snowstep_vanguard/aug_holy_snowmark.tres",
+"risk": "误冲进危险区域。",
+"route_id": "snowstep_vanguard",
+"route_label": "雪步先锋",
+"source_augment_name": "神圣雪球、史上最大雪球",
+"source_augment_rarity": "神圣雪球:棱彩；史上最大雪球:棱彩",
+"synergy_tags": ["dash", "snowball", "invulnerable", "mark"],
+"test_owner": "augment_snowstep_loop.gd",
+"trigger": "periodic_auto_mark",
+"trigger_spec": "trigger_id=periodic_auto_mark; signals=augment_periodic_tick, movement_input_changed; required_packet_keys=owner, target_direction, marked_target; synthetic_test=tick mark then move toward mark",
+"unique": true,
+"upgrade_type": "启动器",
+"value": "雪印伤害 180%；免伤 0.5 秒",
+"why_close": "融合“史上最大雪球/神圣雪球”的强化雪球和二段免伤。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "target_direction", "marked_target"],
+"required_packet_values": {
+
+},
+"signal_names": ["augment_periodic_tick", "movement_input_changed"],
+"synthetic_test": "tick mark then move toward mark",
+"trigger_id": "periodic_auto_mark"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "periodic_auto_mark",
+"effect_type": "periodic_auto_mark",
+"max_proc_depth": 2,
+"params": {
+"interval": 7.0,
+"targeting": "elite_or_cluster"
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "dash_toward_mark_on_movement",
+"effect_type": "dash_toward_mark_on_movement",
+"max_proc_depth": 2,
+"params": {
+"invulnerability_seconds": 0.5
+}
+}])

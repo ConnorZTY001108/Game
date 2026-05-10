@@ -1,0 +1,97 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+[ext_resource type="Script" path="res://data/resources/augment_trigger_spec.gd" id="2_trigger"]
+[ext_resource type="Script" path="res://data/resources/augment_effect_spec.gd" id="3_effect"]
+[ext_resource type="Script" path="res://data/resources/augment_condition_spec.gd" id="4_condition"]
+
+[sub_resource type="Resource" id="Resource_trigger"]
+script = ExtResource("2_trigger")
+trigger_id = "on_attack_fire"
+signal_names = Array[String](["weapon_fired"])
+required_packet_keys = Array[String](["owner", "weapon_id", "weapon_tags", "cooldown_source_id", "proc_flags"])
+synthetic_test = "emit weapon_fired with projectile weapon"
+
+[sub_resource type="Resource" id="Resource_effect"]
+script = ExtResource("3_effect")
+effect_type = "spawn_projectile"
+effect_family = "spawn_projectile"
+params = {
+"add_proc_flag": "secondary_projectile",
+"block_if_proc_flag_exists": "secondary_projectile",
+"damage_multiplier": 0.45,
+"inherit_weapon_tags": true,
+"on_hit_efficiency": 0.4,
+"projectile_role": "secondary_projectile"
+}
+tags = Array[String](["projectile", "on_hit"])
+max_proc_depth = 1
+
+[sub_resource type="Resource" id="Resource_condition"]
+script = ExtResource("4_condition")
+required_tags = Array[String](["weapon:projectile"])
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_contract_fixture"
+display_name = "Contract Fixture"
+description = "Minimal fixture for AugmentData and AugmentRegistry smoke coverage."
+source_augment_name = "Fixture"
+source_augment_rarity = "Fixture:gold"
+route_id = "contract_fixture"
+route_label = "Contract Fixture"
+rarity = "gold"
+max_rank = 1
+unique = true
+upgrade_type = "starter/amplifier"
+source_trigger = "on_attack_fire"
+effect = "Spawn a secondary projectile with reduced damage."
+source_condition = "Projectile weapons only."
+value = {
+"damage_multiplier": 0.45,
+"on_hit_efficiency": 0.4
+}
+trigger = SubResource("Resource_trigger")
+effects = Array[Resource]([SubResource("Resource_effect")])
+condition = SubResource("Resource_condition")
+synergy_tags = Array[String](["projectile", "on_hit", "multishot"])
+required_tags = Array[String](["weapon:projectile"])
+excludes_tags = Array[String](["exclusive:test_block"])
+excludes_ids = Array[String](["aug_contract_excluded"])
+combo_value = "Provides an additional on-hit body for contract tests."
+fit = "Projectile builds."
+risk = "Fixture only."
+why_close = "Preserves the manifest-style source fields while exposing runtime specs."
+implementation_hint = "Do not execute runtime effects in this phase."
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "tests/fixtures/augments/contract_fixture/aug_contract_fixture.tres"
+test_owner = "augment_resource_contract.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"condition": "Projectile weapons only.",
+"effect": "Spawn a secondary projectile with reduced damage.",
+"resource_path": "tests/fixtures/augments/contract_fixture/aug_contract_fixture.tres",
+"trigger": "on_attack_fire"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "weapon_id", "weapon_tags", "cooldown_source_id", "proc_flags"],
+"signal_names": ["weapon_fired"],
+"synthetic_test": "emit weapon_fired with projectile weapon",
+"trigger_id": "on_attack_fire"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "spawn_projectile",
+"effect_type": "spawn_projectile",
+"max_proc_depth": 1,
+"params": {
+"add_proc_flag": "secondary_projectile",
+"block_if_proc_flag_exists": "secondary_projectile",
+"damage_multiplier": 0.45,
+"inherit_weapon_tags": true,
+"on_hit_efficiency": 0.4,
+"projectile_role": "secondary_projectile"
+}
+}])

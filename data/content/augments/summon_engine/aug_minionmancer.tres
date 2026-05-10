@@ -1,0 +1,99 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_minionmancer"
+display_name = "仆从大师"
+description = "召唤物、炮塔、魄罗、狐火、回旋镖和 orbit 召唤单位的体型、生命、持续时间和伤害提高。"
+source_augment_name = "仆从大师"
+source_augment_rarity = "仆从大师:金色"
+route_id = "summon_engine"
+route_label = "自动奇观"
+rarity = "gold"
+max_rank = 1
+unique = true
+upgrade_type = "放大器"
+source_trigger = "passive_summon_scaler"
+effect = "召唤物、炮塔、魄罗、狐火、回旋镖和 orbit 召唤单位的体型、生命、持续时间和伤害提高。"
+source_condition = "不增强轨道镭射等纯环境伤害。"
+value = {
+"source_text": "+35% 召唤伤害；+25% 持续时间/生命"
+}
+synergy_tags = Array[String](["summon", "pet", "orbit", "scaler"])
+required_tags = Array[String](["summon_tag"])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "把零散自动单位合成召唤流核心。"
+fit = "魄罗爆破手、狐火、男爵之手。"
+risk = "没有召唤物时是空件。"
+why_close = "来自“仆从大师”的召唤物全面增强。"
+implementation_hint = "source entity 添加 summon_tag。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/summon_engine/aug_minionmancer.tres"
+test_owner = "augment_summon_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "把零散自动单位合成召唤流核心。",
+"condition": "不增强轨道镭射等纯环境伤害。",
+"display_name": "仆从大师",
+"effect": "召唤物、炮塔、魄罗、狐火、回旋镖和 orbit 召唤单位的体型、生命、持续时间和伤害提高。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "scale_summons",
+"effect_type": "scale_summons",
+"max_proc_depth": 2,
+"params": {
+"affected_tags": ["summon", "poro", "foxfire", "boomerang", "orbit"],
+"stats": ["size", "health", "duration", "damage"]
+}
+}],
+"excludes_tags": [],
+"fit": "魄罗爆破手、狐火、男爵之手。",
+"id": "aug_minionmancer",
+"implementation_hint": "source entity 添加 summon_tag。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": ["summon_tag"],
+"resource_path": "data/content/augments/summon_engine/aug_minionmancer.tres",
+"risk": "没有召唤物时是空件。",
+"route_id": "summon_engine",
+"route_label": "自动奇观",
+"source_augment_name": "仆从大师",
+"source_augment_rarity": "仆从大师:金色",
+"synergy_tags": ["summon", "pet", "orbit", "scaler"],
+"test_owner": "augment_summon_loop.gd",
+"trigger": "passive_summon_scaler",
+"trigger_spec": "trigger_id=passive_summon_scaler; signals=augment_acquired, summon_spawned; required_packet_keys=summon_tags, summon_stats, owner; synthetic_test=spawn summon before/after acquisition",
+"unique": true,
+"upgrade_type": "放大器",
+"value": "+35% 召唤伤害；+25% 持续时间/生命",
+"why_close": "来自“仆从大师”的召唤物全面增强。"
+}
+trigger_spec = {
+"required_packet_keys": ["summon_tags", "summon_stats", "owner"],
+"required_packet_values": {
+
+},
+"signal_names": ["augment_acquired", "summon_spawned"],
+"synthetic_test": "spawn summon before/after acquisition",
+"trigger_id": "passive_summon_scaler"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "scale_summons",
+"effect_type": "scale_summons",
+"max_proc_depth": 2,
+"params": {
+"affected_tags": ["summon", "poro", "foxfire", "boomerang", "orbit"],
+"stats": ["size", "health", "duration", "damage"]
+}
+}])

@@ -1,0 +1,107 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_magic_missile"
+display_name = "魔法飞弹"
+description = "技能命中会发射一枚虚空飞弹，对目标造成基于最大生命值的真实伤害。"
+source_augment_name = "魔法飞弹"
+source_augment_rarity = "魔法飞弹:金色"
+route_id = "void_cascade"
+route_label = "虚空裂隙连锁"
+rarity = "gold"
+max_rank = 2
+unique = false
+upgrade_type = "放大器"
+source_trigger = "on_skill_hit"
+effect = "技能命中会发射一枚虚空飞弹，对目标造成基于最大生命值的真实伤害。"
+source_condition = "同一敌人每 1 秒最多触发一次。"
+value = {
+"source_text": "1.2% 最大生命真伤；Boss 0.45%"
+}
+synergy_tags = Array[String](["missile", "true_damage", "max_hp", "skill"])
+required_tags = Array[String](["skill_hit"])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "补足技能流对精英和 Boss 的穿透伤害。"
+fit = "虚空裂隙、精准奇才。"
+risk = "过强会让 Boss 失去压迫感。"
+why_close = "来自“魔法飞弹”的技能命中最大生命值真伤。"
+implementation_hint = "BossDamageScalar 单独配置。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/void_cascade/aug_magic_missile.tres"
+test_owner = "augment_void_loop.gd"
+checkpoint_priority = 8
+manifest_fields = {
+"checkpoint_priority": 8,
+"combo_value": "补足技能流对精英和 Boss 的穿透伤害。",
+"condition": "同一敌人每 1 秒最多触发一次。",
+"display_name": "魔法飞弹",
+"effect": "技能命中会发射一枚虚空飞弹，对目标造成基于最大生命值的真实伤害。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "magic_missile",
+"effect_type": "spawn_projectile",
+"max_proc_depth": 2,
+"params": {
+"boss_scalar": 0.3,
+"damage_type": "true",
+"homing": true,
+"max_hp_ratio_source": true,
+"proc_flag": "magic_missile",
+"projectile_role": "void_missile"
+}
+}],
+"excludes_tags": [],
+"fit": "虚空裂隙、精准奇才。",
+"id": "aug_magic_missile",
+"implementation_hint": "BossDamageScalar 单独配置。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 2,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": ["skill_hit"],
+"resource_path": "data/content/augments/void_cascade/aug_magic_missile.tres",
+"risk": "过强会让 Boss 失去压迫感。",
+"route_id": "void_cascade",
+"route_label": "虚空裂隙连锁",
+"source_augment_name": "魔法飞弹",
+"source_augment_rarity": "魔法飞弹:金色",
+"synergy_tags": ["missile", "true_damage", "max_hp", "skill"],
+"test_owner": "augment_void_loop.gd",
+"trigger": "on_skill_hit",
+"trigger_spec": "trigger_id=on_skill_hit; signals=damage_applied_packet; required_packet_keys=source_kind=skill|rune|zone|orbit, target, hit_position, tags; synthetic_test=emit skill hit packet",
+"unique": false,
+"upgrade_type": "放大器",
+"value": "1.2% 最大生命真伤；Boss 0.45%",
+"why_close": "来自“魔法飞弹”的技能命中最大生命值真伤。"
+}
+trigger_spec = {
+"required_packet_keys": ["source_kind", "target", "hit_position", "tags"],
+"required_packet_values": {
+"source_kind": "skill|rune|zone|orbit"
+},
+"signal_names": ["damage_applied_packet"],
+"synthetic_test": "emit skill hit packet",
+"trigger_id": "on_skill_hit"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "magic_missile",
+"effect_type": "spawn_projectile",
+"max_proc_depth": 2,
+"params": {
+"boss_scalar": 0.3,
+"damage_type": "true",
+"homing": true,
+"max_hp_ratio_source": true,
+"proc_flag": "magic_missile",
+"projectile_role": "void_missile"
+}
+}])

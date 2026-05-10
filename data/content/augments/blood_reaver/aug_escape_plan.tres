@@ -1,0 +1,101 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_escape_plan"
+display_name = "逃跑计划"
+description = "生命低于 35% 时获得衰减护盾和移速，并击退周围敌人。"
+source_augment_name = "逃跑计划、退敌力场"
+source_augment_rarity = "逃跑计划:银色；退敌力场:银色"
+route_id = "blood_reaver"
+route_label = "血契收割"
+rarity = "silver"
+max_rank = 2
+unique = false
+upgrade_type = "生存型"
+source_trigger = "on_low_hp"
+effect = "生命低于 35% 时获得衰减护盾和移速，并击退周围敌人。"
+source_condition = "30 秒冷却。"
+value = {
+"source_text": "护盾 20% 最大生命；移速 +60% 衰减"
+}
+synergy_tags = Array[String](["low_hp", "shield", "knockback", "speed"])
+required_tags = Array[String]([])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "给高风险低血流一次拉开距离的机会。"
+fit = "不祥契约、玻璃大炮。"
+risk = "冷却中依旧很危险。"
+why_close = "结合“逃跑计划”和“退敌力场”。"
+implementation_hint = "HealthThresholdTrigger + cooldown。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/blood_reaver/aug_escape_plan.tres"
+test_owner = "augment_blood_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "给高风险低血流一次拉开距离的机会。",
+"condition": "30 秒冷却。",
+"display_name": "逃跑计划",
+"effect": "生命低于 35% 时获得衰减护盾和移速，并击退周围敌人。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "low_hp_defense_burst",
+"effect_type": "low_hp_defense_burst",
+"max_proc_depth": 2,
+"params": {
+"cooldown_scope": "owner",
+"effects": ["shield", "move_speed", "knockback"],
+"threshold": 0.35
+}
+}],
+"excludes_tags": [],
+"fit": "不祥契约、玻璃大炮。",
+"id": "aug_escape_plan",
+"implementation_hint": "HealthThresholdTrigger + cooldown。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 2,
+"normalized_rarity": "silver",
+"rarity": "银色",
+"required_tags": [],
+"resource_path": "data/content/augments/blood_reaver/aug_escape_plan.tres",
+"risk": "冷却中依旧很危险。",
+"route_id": "blood_reaver",
+"route_label": "血契收割",
+"source_augment_name": "逃跑计划、退敌力场",
+"source_augment_rarity": "逃跑计划:银色；退敌力场:银色",
+"synergy_tags": ["low_hp", "shield", "knockback", "speed"],
+"test_owner": "augment_blood_loop.gd",
+"trigger": "on_low_hp",
+"trigger_spec": "trigger_id=on_low_hp; signals=low_hp_entered; required_packet_keys=owner, ratio, nearby_enemies; synthetic_test=set player below threshold",
+"unique": false,
+"upgrade_type": "生存型",
+"value": "护盾 20% 最大生命；移速 +60% 衰减",
+"why_close": "结合“逃跑计划”和“退敌力场”。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "ratio", "nearby_enemies"],
+"required_packet_values": {
+
+},
+"signal_names": ["low_hp_entered"],
+"synthetic_test": "set player below threshold",
+"trigger_id": "on_low_hp"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "low_hp_defense_burst",
+"effect_type": "low_hp_defense_burst",
+"max_proc_depth": 2,
+"params": {
+"cooldown_scope": "owner",
+"effects": ["shield", "move_speed", "knockback"],
+"threshold": 0.35
+}
+}])

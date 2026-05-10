@@ -1,0 +1,107 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_typhoon_split"
+display_name = "台风分裂"
+description = "符文弹命中时向 2 个附近敌人发射分裂箭，造成 35% 伤害并以 50% 效率触发 on_hit。"
+source_augment_name = "台风"
+source_augment_rarity = "台风:银色"
+route_id = "rune_volley"
+route_label = "符文弹幕链"
+rarity = "silver"
+max_rank = 2
+unique = false
+upgrade_type = "启动器"
+source_trigger = "on_projectile_hit"
+effect = "符文弹命中时向 2 个附近敌人发射分裂箭，造成 35% 伤害并以 50% 效率触发 on_hit。"
+source_condition = "每个主弹最多触发一次；优先未命中目标。"
+value = {
+"source_text": "2 分裂箭；35% 伤害"
+}
+synergy_tags = Array[String](["projectile", "on_hit", "chain", "aoe"])
+required_tags = Array[String](["weapon:projectile"])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "把单体武器变成清群武器，并让 on_hit 扩散。"
+fit = "所有弹体武器。"
+risk = "密度低时收益下降。"
+why_close = "来自“台风”的分裂箭和攻击特效扩散。"
+implementation_hint = "hit_context.parent_id 去重，避免同一目标无限弹。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/rune_volley/aug_typhoon_split.tres"
+test_owner = "augment_rune_volley_loop.gd"
+checkpoint_priority = 5
+manifest_fields = {
+"checkpoint_priority": 5,
+"combo_value": "把单体武器变成清群武器，并让 on_hit 扩散。",
+"condition": "每个主弹最多触发一次；优先未命中目标。",
+"display_name": "台风分裂",
+"effect": "符文弹命中时向 2 个附近敌人发射分裂箭，造成 35% 伤害并以 50% 效率触发 on_hit。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "split_projectile",
+"effect_type": "split_projectile",
+"max_proc_depth": 2,
+"params": {
+"damage_multiplier": 0.35,
+"on_hit_efficiency": 0.5,
+"once_per_parent": true,
+"prefer_unhit_targets": true,
+"proc_flag": "split_projectile",
+"target_count": 2
+}
+}],
+"excludes_tags": [],
+"fit": "所有弹体武器。",
+"id": "aug_typhoon_split",
+"implementation_hint": "hit_context.parent_id 去重，避免同一目标无限弹。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": true,
+"max_rank": 2,
+"normalized_rarity": "silver",
+"rarity": "银色",
+"required_tags": ["weapon:projectile"],
+"resource_path": "data/content/augments/rune_volley/aug_typhoon_split.tres",
+"risk": "密度低时收益下降。",
+"route_id": "rune_volley",
+"route_label": "符文弹幕链",
+"source_augment_name": "台风",
+"source_augment_rarity": "台风:银色",
+"synergy_tags": ["projectile", "on_hit", "chain", "aoe"],
+"test_owner": "augment_rune_volley_loop.gd",
+"trigger": "on_projectile_hit",
+"trigger_spec": "trigger_id=on_projectile_hit; signals=projectile_hit, damage_applied_packet; required_packet_keys=target, hit_position, parent_event_id, proc_chain_id, proc_flags; synthetic_test=spawn mock projectile and hit mock enemy",
+"unique": false,
+"upgrade_type": "启动器",
+"value": "2 分裂箭；35% 伤害",
+"why_close": "来自“台风”的分裂箭和攻击特效扩散。"
+}
+trigger_spec = {
+"required_packet_keys": ["target", "hit_position", "parent_event_id", "proc_chain_id", "proc_flags"],
+"required_packet_values": {
+
+},
+"signal_names": ["projectile_hit", "damage_applied_packet"],
+"synthetic_test": "spawn mock projectile and hit mock enemy",
+"trigger_id": "on_projectile_hit"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "split_projectile",
+"effect_type": "split_projectile",
+"max_proc_depth": 2,
+"params": {
+"damage_multiplier": 0.35,
+"on_hit_efficiency": 0.5,
+"once_per_parent": true,
+"prefer_unhit_targets": true,
+"proc_flag": "split_projectile",
+"target_count": 2
+}
+}])

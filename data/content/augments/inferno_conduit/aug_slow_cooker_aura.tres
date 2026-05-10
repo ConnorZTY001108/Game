@@ -1,0 +1,121 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_slow_cooker_aura"
+display_name = "慢炖法阵"
+description = "你周围 180 半径内敌人每秒叠 1 层符火；精英和 Boss 额外受到最大生命值魔法伤害。"
+source_augment_name = "慢炖"
+source_augment_rarity = "慢炖:棱彩"
+route_id = "inferno_conduit"
+route_label = "炼狱导管"
+rarity = "prismatic"
+max_rank = 1
+unique = true
+upgrade_type = "放大器"
+source_trigger = "periodic_aura"
+effect = "你周围 180 半径内敌人每秒叠 1 层符火；精英和 Boss 额外受到最大生命值魔法伤害。"
+source_condition = "玩家移动时光环持续；远程风筝收益较低。"
+value = {
+"source_text": "1% 最大生命值/秒，上限受 Boss 缩放"
+}
+synergy_tags = Array[String](["burn", "orbit", "aura", "max_hp"])
+required_tags = Array[String](["close_range"])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "把站怪堆变成稳定火力源。"
+fit = "巨像熔炉、护盾转化、orbit。"
+risk = "贴脸风险高。"
+why_close = "保留“慢炖”的近身最大生命值灼烧。"
+implementation_hint = "Area2D 定时查询，不逐帧伤害。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/inferno_conduit/aug_slow_cooker_aura.tres"
+test_owner = "augment_inferno_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "把站怪堆变成稳定火力源。",
+"condition": "玩家移动时光环持续；远程风筝收益较低。",
+"display_name": "慢炖法阵",
+"effect": "你周围 180 半径内敌人每秒叠 1 层符火；精英和 Boss 额外受到最大生命值魔法伤害。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "periodic_aura",
+"effect_type": "periodic_aura",
+"max_proc_depth": 2,
+"params": {
+"burn_stacks": 1,
+"radius": 180,
+"tick_seconds": 1.0
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "max_hp_damage",
+"effect_type": "max_hp_damage",
+"max_proc_depth": 2,
+"params": {
+"boss_scalar": 0.3,
+"damage_type": "magic",
+"target_classes": ["elite", "boss"]
+}
+}],
+"excludes_tags": [],
+"fit": "巨像熔炉、护盾转化、orbit。",
+"id": "aug_slow_cooker_aura",
+"implementation_hint": "Area2D 定时查询，不逐帧伤害。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 1,
+"normalized_rarity": "prismatic",
+"rarity": "棱彩",
+"required_tags": ["close_range"],
+"resource_path": "data/content/augments/inferno_conduit/aug_slow_cooker_aura.tres",
+"risk": "贴脸风险高。",
+"route_id": "inferno_conduit",
+"route_label": "炼狱导管",
+"source_augment_name": "慢炖",
+"source_augment_rarity": "慢炖:棱彩",
+"synergy_tags": ["burn", "orbit", "aura", "max_hp"],
+"test_owner": "augment_inferno_loop.gd",
+"trigger": "periodic_aura",
+"trigger_spec": "trigger_id=periodic_aura; signals=augment_periodic_tick; required_packet_keys=owner, elapsed_seconds, nearby_enemies; synthetic_test=tick with enemies inside/outside radius",
+"unique": true,
+"upgrade_type": "放大器",
+"value": "1% 最大生命值/秒，上限受 Boss 缩放",
+"why_close": "保留“慢炖”的近身最大生命值灼烧。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "elapsed_seconds", "nearby_enemies"],
+"required_packet_values": {
+
+},
+"signal_names": ["augment_periodic_tick"],
+"synthetic_test": "tick with enemies inside/outside radius",
+"trigger_id": "periodic_aura"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "periodic_aura",
+"effect_type": "periodic_aura",
+"max_proc_depth": 2,
+"params": {
+"burn_stacks": 1,
+"radius": 180,
+"tick_seconds": 1.0
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "max_hp_damage",
+"effect_type": "max_hp_damage",
+"max_proc_depth": 2,
+"params": {
+"boss_scalar": 0.3,
+"damage_type": "magic",
+"target_classes": ["elite", "boss"]
+}
+}])

@@ -28,7 +28,7 @@ func add_experience(amount: int) -> void:
 func complete_level_up_selection() -> void:
 	if pending_level_ups > 0:
 		pending_level_ups -= 1
-		GameEvents.level_up_requested.emit(UpgradeSystem.generate_options())
+		GameEvents.level_up_requested.emit(UpgradeSystem.generate_level_up_options({"level": level}))
 		return
 	GameRuntime.resume_from_level_up()
 
@@ -40,4 +40,4 @@ func _request_next_level_up() -> void:
 	pending_level_ups -= 1
 	GameRuntime.enter_level_up()
 	if GameRuntime.state == GameRuntime.RunState.LEVEL_UP:
-		GameEvents.level_up_requested.emit(UpgradeSystem.generate_options())
+		GameEvents.level_up_requested.emit(UpgradeSystem.generate_level_up_options({"level": level}))

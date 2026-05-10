@@ -1,0 +1,115 @@
+[gd_resource type="Resource" script_class="AugmentData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/resources/augment_data.gd" id="1_aug_data"]
+
+[resource]
+script = ExtResource("1_aug_data")
+id = "aug_big_brain_barrier"
+display_name = "巨脑法盾"
+description = "根据法术强度/符文强度获得可刷新的预存护盾；护盾存在时技能伤害 +8%。"
+source_augment_name = "超强大脑"
+source_augment_rarity = "超强大脑:金色"
+route_id = "aegis_transmutation"
+route_label = "圣盾转化"
+rarity = "gold"
+max_rank = 2
+unique = false
+upgrade_type = "生存型"
+source_trigger = "on_level_up_or_wave_start"
+effect = "根据法术强度/符文强度获得可刷新的预存护盾；护盾存在时技能伤害 +8%。"
+source_condition = "护盾每波刷新，不能无限叠。"
+value = {
+"source_text": "护盾 = 符文强度*3；伤害 +8%"
+}
+synergy_tags = Array[String](["ap", "shield", "skill", "survival"])
+required_tags = Array[String](["rune_power"])
+excludes_tags = Array[String]([])
+excludes_ids = Array[String]([])
+combo_value = "给法系构筑可靠保护，并喂给护盾爆蛋。"
+fit = "护盾爆蛋、会心治疗。"
+risk = "低符文强度收益有限。"
+why_close = "来自“超强大脑”的 AP 转护盾。"
+implementation_hint = "WaveManager on_wave_start 发放 ShieldInstance。"
+weight = 1.0
+min_upgrade_index = 0
+max_upgrade_index = -1
+manifest_resource_path = "data/content/augments/aegis_transmutation/aug_big_brain_barrier.tres"
+test_owner = "augment_aegis_loop.gd"
+checkpoint_priority = 0
+manifest_fields = {
+"checkpoint_priority": 0,
+"combo_value": "给法系构筑可靠保护，并喂给护盾爆蛋。",
+"condition": "护盾每波刷新，不能无限叠。",
+"display_name": "巨脑法盾",
+"effect": "根据法术强度/符文强度获得可刷新的预存护盾；护盾存在时技能伤害 +8%。",
+"effect_spec_blueprint": [{
+"blocks_same_family_recursion": true,
+"effect_family": "grant_stored_shield",
+"effect_type": "grant_stored_shield",
+"max_proc_depth": 2,
+"params": {
+"scales_with": "rune_power",
+"sources": ["level_up", "wave_start"]
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "modify_damage_while_shielded",
+"effect_type": "modify_damage_while_shielded",
+"max_proc_depth": 2,
+"params": {
+"damage_bonus": 0.08
+}
+}],
+"excludes_tags": [],
+"fit": "护盾爆蛋、会心治疗。",
+"id": "aug_big_brain_barrier",
+"implementation_hint": "WaveManager on_wave_start 发放 ShieldInstance。",
+"is_finisher": false,
+"is_high_risk": false,
+"is_starter": false,
+"max_rank": 2,
+"normalized_rarity": "gold",
+"rarity": "金色",
+"required_tags": ["rune_power"],
+"resource_path": "data/content/augments/aegis_transmutation/aug_big_brain_barrier.tres",
+"risk": "低符文强度收益有限。",
+"route_id": "aegis_transmutation",
+"route_label": "圣盾转化",
+"source_augment_name": "超强大脑",
+"source_augment_rarity": "超强大脑:金色",
+"synergy_tags": ["ap", "shield", "skill", "survival"],
+"test_owner": "augment_aegis_loop.gd",
+"trigger": "on_level_up_or_wave_start",
+"trigger_spec": "trigger_id=on_level_up_or_wave_start; signals=level_changed, wave_phase_started; required_packet_keys=owner, level, wave_phase_id; synthetic_test=emit level-up and wave start",
+"unique": false,
+"upgrade_type": "生存型",
+"value": "护盾 = 符文强度*3；伤害 +8%",
+"why_close": "来自“超强大脑”的 AP 转护盾。"
+}
+trigger_spec = {
+"required_packet_keys": ["owner", "level", "wave_phase_id"],
+"required_packet_values": {
+
+},
+"signal_names": ["level_changed", "wave_phase_started"],
+"synthetic_test": "emit level-up and wave start",
+"trigger_id": "on_level_up_or_wave_start"
+}
+effect_spec_blueprint = Array[Dictionary]([{
+"blocks_same_family_recursion": true,
+"effect_family": "grant_stored_shield",
+"effect_type": "grant_stored_shield",
+"max_proc_depth": 2,
+"params": {
+"scales_with": "rune_power",
+"sources": ["level_up", "wave_start"]
+}
+}, {
+"blocks_same_family_recursion": true,
+"effect_family": "modify_damage_while_shielded",
+"effect_type": "modify_damage_while_shielded",
+"max_proc_depth": 2,
+"params": {
+"damage_bonus": 0.08
+}
+}])
