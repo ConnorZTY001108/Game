@@ -50,13 +50,30 @@ func _event_connections() -> Array[Dictionary]:
 		{"signal_name": "weapon_fired", "callable": _on_weapon_fired},
 		{"signal_name": "projectile_spawned", "callable": _on_projectile_spawned},
 		{"signal_name": "projectile_hit", "callable": _on_projectile_hit},
+		{"signal_name": "damage_roll_requested", "callable": _on_damage_roll_requested},
 		{"signal_name": "damage_applied_packet", "callable": _on_damage_applied_packet},
+		{"signal_name": "dot_tick", "callable": _on_dot_tick},
 		{"signal_name": "burn_stack_applied", "callable": _on_burn_stack_applied},
+		{"signal_name": "burn_stack_threshold", "callable": _on_burn_stack_threshold},
 		{"signal_name": "rift_chain_triggered", "callable": _on_rift_chain_triggered},
 		{"signal_name": "shield_gained", "callable": _on_shield_gained},
+		{"signal_name": "shield_broken", "callable": _on_shield_broken},
 		{"signal_name": "heal_received", "callable": _on_heal_received},
+		{"signal_name": "regen_tick", "callable": _on_regen_tick},
+		{"signal_name": "control_applied", "callable": _on_control_applied},
 		{"signal_name": "dash_started", "callable": _on_dash_started},
+		{"signal_name": "dash_finished", "callable": _on_dash_finished},
+		{"signal_name": "blink_used", "callable": _on_blink_used},
+		{"signal_name": "low_hp_entered", "callable": _on_low_hp_entered},
+		{"signal_name": "fatal_damage_received", "callable": _on_fatal_damage_received},
+		{"signal_name": "pickup_collected", "callable": _on_pickup_collected},
+		{"signal_name": "elite_killed", "callable": _on_elite_killed},
+		{"signal_name": "boss_damaged", "callable": _on_boss_damaged},
 		{"signal_name": "augment_periodic_tick", "callable": _on_augment_periodic_tick},
+		{"signal_name": "enemy_died", "callable": _on_enemy_died},
+		{"signal_name": "level_changed", "callable": _on_level_changed},
+		{"signal_name": "wave_phase_started", "callable": _on_wave_phase_started},
+		{"signal_name": "rune_triggered", "callable": _on_rune_triggered},
 	]
 
 func _on_augment_acquired(augment_id: String, augment: Resource, owner: Node, _snapshot: Dictionary) -> void:
@@ -79,11 +96,20 @@ func _on_projectile_spawned(projectile: Node, packet: Dictionary) -> void:
 func _on_projectile_hit(target: Node, packet: Dictionary) -> void:
 	_spawn_for_runtime_event("projectile_hit", _node_position(target), packet)
 
+func _on_damage_roll_requested(packet: Dictionary) -> void:
+	_spawn_for_runtime_event("damage_roll_requested", _position_from_packet(packet), packet)
+
 func _on_damage_applied_packet(target: Node, packet: Dictionary) -> void:
 	_spawn_for_runtime_event("damage_applied_packet", _node_position(target), packet)
 
+func _on_dot_tick(target: Node, packet: Dictionary) -> void:
+	_spawn_for_runtime_event("dot_tick", _node_position(target), packet)
+
 func _on_burn_stack_applied(target: Node, _stacks_added: int, _total_stacks: int, packet: Dictionary) -> void:
 	_spawn_for_runtime_event("burn_stack_applied", _node_position(target), packet)
+
+func _on_burn_stack_threshold(target: Node, _stacks: int, packet: Dictionary) -> void:
+	_spawn_for_runtime_event("burn_stack_threshold", _node_position(target), packet)
 
 func _on_rift_chain_triggered(_region_id: String, _chain_count: int, packet: Dictionary) -> void:
 	_spawn_for_runtime_event("rift_chain_triggered", _position_from_packet(packet), packet)
@@ -91,14 +117,59 @@ func _on_rift_chain_triggered(_region_id: String, _chain_count: int, packet: Dic
 func _on_shield_gained(target: Node, _amount: float, packet: Dictionary) -> void:
 	_spawn_for_runtime_event("shield_gained", _node_position(target), packet)
 
+func _on_shield_broken(target: Node, _amount: float, packet: Dictionary) -> void:
+	_spawn_for_runtime_event("shield_broken", _node_position(target), packet)
+
 func _on_heal_received(target: Node, _amount: float, packet: Dictionary) -> void:
 	_spawn_for_runtime_event("heal_received", _node_position(target), packet)
+
+func _on_regen_tick(target: Node, _amount: float, packet: Dictionary) -> void:
+	_spawn_for_runtime_event("regen_tick", _node_position(target), packet)
+
+func _on_control_applied(target: Node, _control_tag: String, packet: Dictionary) -> void:
+	_spawn_for_runtime_event("control_applied", _node_position(target), packet)
 
 func _on_dash_started(player: Node, packet: Dictionary) -> void:
 	_spawn_for_runtime_event("dash_started", _node_position(player), packet)
 
+func _on_dash_finished(player: Node, packet: Dictionary) -> void:
+	_spawn_for_runtime_event("dash_finished", _node_position(player), packet)
+
+func _on_blink_used(player: Node, packet: Dictionary) -> void:
+	_spawn_for_runtime_event("blink_used", _node_position(player), packet)
+
+func _on_low_hp_entered(player: Node, _ratio: float, packet: Dictionary) -> void:
+	_spawn_for_runtime_event("low_hp_entered", _node_position(player), packet)
+
+func _on_fatal_damage_received(player: Node, packet: Dictionary) -> void:
+	_spawn_for_runtime_event("fatal_damage_received", _node_position(player), packet)
+
+func _on_pickup_collected(pickup: Node, player: Node, packet: Dictionary) -> void:
+	var position := _node_position(pickup)
+	if position == Vector2.ZERO:
+		position = _node_position(player)
+	_spawn_for_runtime_event("pickup_collected", position, packet)
+
+func _on_elite_killed(enemy: Node, packet: Dictionary) -> void:
+	_spawn_for_runtime_event("elite_killed", _node_position(enemy), packet)
+
+func _on_boss_damaged(enemy: Node, packet: Dictionary) -> void:
+	_spawn_for_runtime_event("boss_damaged", _node_position(enemy), packet)
+
 func _on_augment_periodic_tick(_elapsed_seconds: float) -> void:
 	_spawn_for_runtime_event("augment_periodic_tick", Vector2.ZERO, {})
+
+func _on_enemy_died(enemy: Node, _experience_value: int) -> void:
+	_spawn_for_runtime_event("enemy_died", _node_position(enemy), {})
+
+func _on_level_changed(_level: int) -> void:
+	_spawn_for_runtime_event("level_changed", Vector2.ZERO, {})
+
+func _on_wave_phase_started(_wave_phase_id: String, _level: int, packet: Dictionary) -> void:
+	_spawn_for_runtime_event("wave_phase_started", _position_from_packet(packet), packet)
+
+func _on_rune_triggered(_rune_id: String, target: Node, payload: Dictionary) -> void:
+	_spawn_for_runtime_event("rune_triggered", _node_position(target), payload)
 
 func _spawn_for_runtime_event(trigger_event: String, world_position: Vector2, packet: Dictionary) -> void:
 	var explicit_ids := _augment_ids_from_packet(packet)

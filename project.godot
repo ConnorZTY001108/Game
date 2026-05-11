@@ -19,6 +19,7 @@ UpgradeSystem="*res://autoload/UpgradeSystem.gd"
 AugmentRegistry="*res://autoload/AugmentRegistry.gd"
 AugmentEffectRunner="*res://autoload/AugmentEffectRunner.gd"
 AugmentSystem="*res://autoload/AugmentSystem.gd"
+AugmentVisualDirector="*res://autoload/AugmentVisualDirector.gd"
 
 [display]
 window/size/viewport_width=1280

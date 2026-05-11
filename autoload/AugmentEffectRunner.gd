@@ -138,6 +138,19 @@ func _execute_by_type(augment_id: String, effect_type: String, effect_family: St
 	return false
 
 func _execute_stat_effect(augment_id: String, effect_type: String, params: Dictionary, runtime_state: Variant) -> void:
+	if effect_type.begins_with("convert_"):
+		var from_stat := str(params.get("from_stat", params.get("from", "")))
+		var to_stat := str(params.get("to_stat", params.get("to", effect_type)))
+		var ratio := _numeric_param(params, ["ratio", "value", "damage_bonus", "conversion_ratio"], 1.0)
+		if runtime_state.has_method("add_stat_rule"):
+			runtime_state.add_stat_rule("%s:%s:%s:%s" % [augment_id, effect_type, from_stat, to_stat], {
+				"effect_type": effect_type,
+				"from_stat": from_stat,
+				"to_stat": to_stat,
+				"ratio": ratio,
+				"params": params.duplicate(true)
+			})
+		return
 	var stat := str(params.get("stat", params.get("to_stat", params.get("from_stat", effect_type))))
 	var op := str(params.get("op", "add_percent"))
 	var value := _numeric_param(params, ["value", "ratio", "crit_chance_add", "vulnerability_percent"], 0.0)
@@ -169,6 +182,18 @@ func _execute_damage_modifier(augment_id: String, effect_type: String, effect_fa
 func _execute_shield_heal(augment_id: String, effect_type: String, params: Dictionary, event_context: Dictionary, packet: Dictionary, runtime_state: Variant) -> void:
 	var amount := _numeric_param(params, ["amount", "shield", "heal_amount"], 1.0)
 	var owner_key := _owner_key(event_context, packet)
+	if effect_type == "grant_stored_shield":
+		runtime_state.shields[owner_key] = float(runtime_state.shields.get(owner_key, 0.0)) + amount
+		if runtime_state.has_method("add_stat_rule"):
+			runtime_state.add_stat_rule("%s:%s:%s" % [augment_id, effect_type, owner_key], {
+				"effect_type": effect_type,
+				"owner_key": owner_key,
+				"stored_shield": amount,
+				"scales_with": str(params.get("scales_with", params.get("from_stat", ""))),
+				"ratio": _numeric_param(params, ["ratio", "shield_per_level", "value"], 1.0),
+				"params": params.duplicate(true)
+			})
+		return
 	if effect_type == "low_hp_defense_burst":
 		runtime_state.shields[owner_key] = float(runtime_state.shields.get(owner_key, 0.0)) + amount
 		runtime_state.mobility[owner_key] = int(runtime_state.mobility.get(owner_key, 0)) + 1
@@ -202,6 +227,10 @@ func _execute_choice_effect(augment_id: String, effect_type: String, params: Dic
 			UpgradeSystem.set_next_choice_refresh_per_slot(refresh)
 	elif effect_type == "modify_next_option_count":
 		runtime_state.add_choice_count("next_option_count_delta", int(params.get("delta", 0)))
+	elif effect_type in ["grant_random_augment", "grant_random_augments"]:
+		var amount := int(params.get("count", params.get("amount", 1)))
+		runtime_state.add_choice_count("random_augments_pending", amount)
+		runtime_state.add_reward(effect_type, amount)
 	elif effect_type.contains("currency") or effect_type.contains("pickup") or effect_type == "open_gold_window_on_elite_boss_hit":
 		runtime_state.add_reward(effect_type, int(params.get("count", params.get("amount", 1))))
 	else:
@@ -341,6 +370,8 @@ func _numeric_param(params: Dictionary, keys: Array[String], fallback: float) ->
 	return fallback
 
 func _effect_category(effect_type: String) -> String:
+	if effect_type == "periodic_taunt_pulse":
+		return "control_mobility"
 	if _is_cooldown_effect(effect_type):
 		return "cooldown"
 	if effect_type == "set_pending_next_hit" or effect_type == "apply_on_hit_package":
@@ -359,20 +390,20 @@ func _effect_category(effect_type: String) -> String:
 		return "delayed"
 	if _is_summon_effect(effect_type):
 		return "summon"
-	if _is_damage_effect(effect_type):
-		return "damage"
+	if _is_mode_effect(effect_type):
+		return "mode"
 	if _is_shield_heal_effect(effect_type):
 		return "shield_heal"
+	if _is_safe_state_effect(effect_type):
+		return "safe_state"
+	if _is_damage_effect(effect_type):
+		return "damage"
 	if _is_control_mobility_effect(effect_type):
 		return "control_mobility"
 	if _is_choice_effect(effect_type):
 		return "choice"
 	if _is_quest_effect(effect_type):
 		return "quest"
-	if _is_mode_effect(effect_type):
-		return "mode"
-	if _is_safe_state_effect(effect_type):
-		return "safe_state"
 	return ""
 
 func _is_stat_effect(effect_type: String) -> bool:
@@ -400,7 +431,7 @@ func _is_shield_heal_effect(effect_type: String) -> bool:
 	return effect_type.contains("shield") or effect_type.contains("heal") or effect_type.contains("regen") or effect_type == "prevent_fatal_damage" or effect_type == "enter_stasis" or effect_type == "low_hp_defense_burst"
 
 func _is_control_mobility_effect(effect_type: String) -> bool:
-	return effect_type.contains("control") or effect_type.contains("dash") or effect_type.contains("blink") or effect_type.contains("slow") or effect_type.contains("stasis") or effect_type.contains("taunt")
+	return effect_type.contains("control") or effect_type.contains("dash") or effect_type.contains("blink") or effect_type.contains("slow") or effect_type.contains("stasis") or effect_type.contains("taunt") or effect_type == "periodic_taunt_pulse"
 
 func _is_choice_effect(effect_type: String) -> bool:
 	return effect_type.contains("forge") or effect_type.contains("choice") or effect_type.contains("reroll") or effect_type.contains("random_augment") or effect_type.contains("option_count") or effect_type.contains("currency") or effect_type.contains("pickup") or effect_type == "open_gold_window_on_elite_boss_hit"
@@ -415,7 +446,7 @@ func _is_counter_effect(effect_type: String) -> bool:
 	return effect_type.contains("stack") or effect_type.contains("counter") or effect_type.contains("charge") or effect_type == "dual_stack" or effect_type == "regional_counter" or effect_type == "add_stack_on_crit" or effect_type == "periodic_auto_mark"
 
 func _is_mode_effect(effect_type: String) -> bool:
-	return effect_type.contains("temporary") or effect_type.contains("mode") or effect_type.contains("invulnerable") or effect_type == "elite_kill_stealth" or effect_type == "contact_effect_while_invulnerable"
+	return effect_type.contains("temporary") or effect_type.contains("mode") or effect_type.contains("invulnerable") or effect_type == "elite_kill_stealth" or effect_type == "contact_effect_while_invulnerable" or effect_type == "temporary_damage_reduction"
 
 func _is_safe_state_effect(effect_type: String) -> bool:
 	return effect_type in ["apply_state_at_threshold", "cleanse_control", "control_grants_resists", "control_grants_shield", "grant_stored_shield", "permanent_max_health_on_control", "prevent_fatal_damage", "protection_pulse", "temporary_resists_on_protection"]

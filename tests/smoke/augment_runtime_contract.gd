@@ -38,10 +38,12 @@ func _run() -> void:
 	_assert_active_cap_release_and_expiry(augment_system, failures)
 	_assert_all_production_effects_are_handled(registry, effect_runner, failures)
 	_assert_previously_unhandled_effects(augment_system, failures)
+	_assert_observable_special_effects(augment_system, failures)
 	_assert_low_hp_defense_burst_observable(registry, augment_system, failures)
 	_assert_remaining_production_triggers_reachable(registry, augment_system, failures)
 	_assert_invalid_resource_gating(augment_system, upgrade_system, failures)
 	_assert_production_event_bridges(registry, augment_system, failures)
+	_assert_rune_trigger_bridge(registry, augment_system, failures)
 	_assert_upgrade_system_bridge(registry, upgrade_system, augment_system, failures)
 	_assert_legacy_upgrade_still_applies(upgrade_system, failures)
 
@@ -316,6 +318,47 @@ func _assert_previously_unhandled_effects(augment_system: Node, failures: Array[
 	owner.free()
 	target.free()
 
+func _assert_observable_special_effects(augment_system: Node, failures: Array[String]) -> void:
+	augment_system.call("reset")
+	var owner := Node.new()
+	var target := Node2D.new()
+	root.add_child(owner)
+	root.add_child(target)
+	var synthetic := _make_observable_special_effect_augment()
+	if not bool(augment_system.call("acquire_augment", synthetic, owner)):
+		failures.append("failed to acquire observable special effect augment")
+		owner.free()
+		target.free()
+		return
+	var tags: Array[String] = ["skill", "element"]
+	var packet: Dictionary = root.get_node("DamageSystem").call("make_packet", 8.0, tags, {
+		"owner": owner,
+		"target": target,
+		"source_kind": "skill",
+		"source_id": "observable_special",
+		"cooldown_source_id": "observable_special",
+		"hit_position": Vector2(2.0, 2.0)
+	})
+	augment_system.call("emit_synthetic_event", "on_hit", packet, {"signal_name": "damage_applied_packet", "owner": owner, "target": target})
+	var snapshot: Dictionary = augment_system.call("get_runtime_snapshot")
+	for effect_type in ["convert_stat", "convert_overflow_stat", "grant_stored_shield", "grant_random_augments", "temporary_damage_reduction", "periodic_taunt_pulse"]:
+		if int((snapshot.get("effect_counts", {}) as Dictionary).get(effect_type, 0)) < 1:
+			failures.append("observable special effect did not execute: %s" % effect_type)
+	if (snapshot.get("derived_stat_rules", {}) as Dictionary).size() < 3:
+		failures.append("convert/grant_stored_shield effects did not create derived_stat_rules")
+	if (snapshot.get("shields", {}) as Dictionary).is_empty():
+		failures.append("grant_stored_shield did not create observable shield state")
+	if int((snapshot.get("rewards", {}) as Dictionary).get("grant_random_augments", 0)) < 2:
+		failures.append("grant_random_augments did not create observable reward state")
+	if int((snapshot.get("choice_state", {}) as Dictionary).get("random_augments_pending", 0)) < 2:
+		failures.append("grant_random_augments did not create observable choice state")
+	if (snapshot.get("modes", {}) as Dictionary).is_empty():
+		failures.append("temporary_damage_reduction did not create mode state")
+	if int((snapshot.get("controls", {}) as Dictionary).get("taunt", 0)) < 1:
+		failures.append("periodic_taunt_pulse did not create control state")
+	owner.free()
+	target.free()
+
 func _assert_low_hp_defense_burst_observable(registry: Node, augment_system: Node, failures: Array[String]) -> void:
 	augment_system.call("reset")
 	var owner := Node.new()
@@ -499,6 +542,38 @@ func _assert_production_event_bridges(registry: Node, augment_system: Node, fail
 	if is_instance_valid(boss):
 		boss.free()
 
+func _assert_rune_trigger_bridge(registry: Node, augment_system: Node, failures: Array[String]) -> void:
+	var damage_system := root.get_node("DamageSystem")
+	var game_events := root.get_node("GameEvents")
+	var owner := Node.new()
+	var target := Node2D.new()
+	root.add_child(owner)
+	root.add_child(target)
+	augment_system.call("reset")
+	var infernal := registry.call("get_by_id", "aug_infernal_conduit") as Resource
+	if infernal == null:
+		failures.append("missing aug_infernal_conduit for rune_triggered bridge")
+	else:
+		augment_system.call("acquire_augment", infernal, owner)
+		var tags: Array[String] = ["rune", "element", "fire"]
+		var packet: Dictionary = damage_system.call("make_packet", 6.0, tags, {
+			"owner": owner,
+			"target": target,
+			"source_kind": "rune",
+			"source_id": "contract_fire_rune",
+			"element_tags": ["fire"],
+			"cooldown_source_id": "contract_fire_rune",
+			"hit_position": Vector2(4.0, 4.0)
+		})
+		game_events.rune_triggered.emit("contract_fire_rune", target, packet)
+		var snapshot: Dictionary = augment_system.call("get_runtime_snapshot")
+		if int((snapshot.get("effect_counts", {}) as Dictionary).get("add_burn_stack", 0)) < 1:
+			failures.append("rune_triggered did not reach aug_infernal_conduit add_burn_stack")
+		if (snapshot.get("counters", {}) as Dictionary).is_empty() and (snapshot.get("cooldown_refunds", {}) as Dictionary).is_empty():
+			failures.append("rune_triggered infernal conduit did not create observable counter or cooldown state")
+	owner.free()
+	target.free()
+
 func _assert_upgrade_system_bridge(registry: Node, upgrade_system: Node, augment_system: Node, failures: Array[String]) -> void:
 	augment_system.call("reset")
 	upgrade_system.call("reset")
@@ -600,6 +675,72 @@ func _make_specific_effect_augment(effect_types: Array[String]) -> Resource:
 			"max_proc_depth": 2,
 			"blocks_same_family_recursion": true
 		})
+	augment.effect_spec_blueprint = blueprints
+	augment.ensure_runtime_specs_from_blueprint()
+	return augment
+
+func _make_observable_special_effect_augment() -> Resource:
+	var augment = AugmentDataScript.new()
+	augment.id = "aug_observable_special_runtime"
+	augment.display_name = "Observable Special Runtime"
+	augment.route_id = "contract"
+	augment.route_label = "Contract"
+	augment.rarity = "gold"
+	augment.max_rank = 1
+	augment.unique = true
+	augment.upgrade_type = "starter"
+	augment.manifest_resource_path = "tests/fixtures/augments/contract/aug_observable_special_runtime.tres"
+	augment.test_owner = "augment_runtime_contract.gd"
+	augment.trigger_spec = {
+		"trigger_id": "on_hit",
+		"signal_names": ["damage_applied_packet"],
+		"required_packet_keys": ["owner", "target"],
+		"synthetic_test": "observable special runtime event"
+	}
+	var blueprints: Array[Dictionary] = [
+		{
+			"effect_type": "convert_stat",
+			"effect_family": "convert_stat",
+			"params": {"from_stat": "crit_chance", "to_stat": "cooldown_reduction", "ratio": 0.25},
+			"max_proc_depth": 2,
+			"blocks_same_family_recursion": true
+		},
+		{
+			"effect_type": "convert_overflow_stat",
+			"effect_family": "convert_overflow_stat",
+			"params": {"from_stat": "crit_chance", "to_stat": "damage", "ratio": 0.50},
+			"max_proc_depth": 2,
+			"blocks_same_family_recursion": true
+		},
+		{
+			"effect_type": "grant_stored_shield",
+			"effect_family": "grant_stored_shield",
+			"params": {"amount": 3.0, "scales_with": "level", "ratio": 1.5},
+			"max_proc_depth": 2,
+			"blocks_same_family_recursion": true
+		},
+		{
+			"effect_type": "grant_random_augments",
+			"effect_family": "grant_random_augments",
+			"params": {"count": 2},
+			"max_proc_depth": 2,
+			"blocks_same_family_recursion": true
+		},
+		{
+			"effect_type": "temporary_damage_reduction",
+			"effect_family": "temporary_damage_reduction",
+			"params": {"mode": "damage_reduction", "amount": 0.30, "duration": 2.0},
+			"max_proc_depth": 2,
+			"blocks_same_family_recursion": true
+		},
+		{
+			"effect_type": "periodic_taunt_pulse",
+			"effect_family": "periodic_taunt_pulse",
+			"params": {"control_tag": "taunt", "amount": 1.0},
+			"max_proc_depth": 2,
+			"blocks_same_family_recursion": true
+		},
+	]
 	augment.effect_spec_blueprint = blueprints
 	augment.ensure_runtime_specs_from_blueprint()
 	return augment

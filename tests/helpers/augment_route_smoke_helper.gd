@@ -426,6 +426,8 @@ static func _dictionary_score(value: Dictionary) -> int:
 	return score
 
 static func _artifact_keys_for_effect(effect_type: String) -> Array[String]:
+	if effect_type == "periodic_taunt_pulse":
+		return ["controls", "mobility", "safe_states"]
 	if effect_type.contains("cooldown") or effect_type.begins_with("refund_"):
 		if effect_type == "activate_cooldown_mode":
 			return ["modes", "cooldown_refunds"]
@@ -434,6 +436,8 @@ static func _artifact_keys_for_effect(effect_type: String) -> Array[String]:
 		return ["pending_effects"]
 	if _is_counter_effect(effect_type):
 		return ["counters"]
+	if effect_type.begins_with("convert_"):
+		return ["derived_stat_rules"]
 	if _is_stat_effect(effect_type):
 		return ["stat_modifiers"]
 	if _is_projectile_effect(effect_type):
@@ -446,20 +450,22 @@ static func _artifact_keys_for_effect(effect_type: String) -> Array[String]:
 		return ["generated_packets", "active_counts"]
 	if _is_summon_effect(effect_type):
 		return ["generated_packets", "active_counts"]
+	if _is_mode_effect(effect_type):
+		return ["modes", "safe_states"]
+	if _is_shield_heal_effect(effect_type):
+		if effect_type == "grant_stored_shield":
+			return ["shields", "derived_stat_rules"]
+		return ["shields", "heals", "safe_states", "mobility", "controls"]
+	if _is_safe_state_effect(effect_type):
+		return ["safe_states", "shields", "controls"]
 	if _is_damage_effect(effect_type):
 		return ["generated_packets"]
-	if _is_shield_heal_effect(effect_type):
-		return ["shields", "heals", "safe_states", "mobility", "controls"]
 	if _is_control_mobility_effect(effect_type):
 		return ["controls", "mobility", "safe_states"]
 	if _is_choice_effect(effect_type):
 		return ["choice_state", "rewards"]
 	if _is_quest_effect(effect_type):
 		return ["quest_progress"]
-	if _is_mode_effect(effect_type):
-		return ["modes", "safe_states"]
-	if _is_safe_state_effect(effect_type):
-		return ["safe_states", "shields", "controls"]
 	return []
 
 static func _route_has_packet_effects(route_augments: Array) -> bool:
@@ -489,6 +495,8 @@ static func _is_dot_effect(effect_type: String) -> bool:
 	return effect_type.contains("dot") or effect_type.contains("burn") or effect_type.contains("aura") or effect_type == "periodic_self_drain"
 
 static func _is_zone_effect(effect_type: String) -> bool:
+	if effect_type == "periodic_taunt_pulse":
+		return false
 	return effect_type.contains("zone") or effect_type.contains("rift") or effect_type.contains("laser") or effect_type.contains("shockwave") or effect_type.contains("pulse")
 
 static func _is_delayed_effect(effect_type: String) -> bool:
@@ -504,7 +512,7 @@ static func _is_shield_heal_effect(effect_type: String) -> bool:
 	return effect_type.contains("shield") or effect_type.contains("heal") or effect_type.contains("regen") or effect_type == "prevent_fatal_damage" or effect_type == "enter_stasis" or effect_type == "low_hp_defense_burst"
 
 static func _is_control_mobility_effect(effect_type: String) -> bool:
-	return effect_type.contains("control") or effect_type.contains("dash") or effect_type.contains("blink") or effect_type.contains("slow") or effect_type.contains("stasis") or effect_type.contains("taunt")
+	return effect_type.contains("control") or effect_type.contains("dash") or effect_type.contains("blink") or effect_type.contains("slow") or effect_type.contains("stasis") or effect_type.contains("taunt") or effect_type == "periodic_taunt_pulse"
 
 static func _is_choice_effect(effect_type: String) -> bool:
 	return effect_type.contains("forge") or effect_type.contains("choice") or effect_type.contains("reroll") or effect_type.contains("random_augment") or effect_type.contains("option_count") or effect_type.contains("currency") or effect_type.contains("pickup") or effect_type == "open_gold_window_on_elite_boss_hit"
@@ -516,7 +524,7 @@ static func _is_counter_effect(effect_type: String) -> bool:
 	return effect_type.contains("stack") or effect_type.contains("counter") or effect_type.contains("charge") or effect_type == "dual_stack" or effect_type == "regional_counter" or effect_type == "add_stack_on_crit" or effect_type == "periodic_auto_mark"
 
 static func _is_mode_effect(effect_type: String) -> bool:
-	return effect_type.contains("temporary") or effect_type.contains("mode") or effect_type.contains("invulnerable") or effect_type == "elite_kill_stealth" or effect_type == "contact_effect_while_invulnerable"
+	return effect_type.contains("temporary") or effect_type.contains("mode") or effect_type.contains("invulnerable") or effect_type == "elite_kill_stealth" or effect_type == "contact_effect_while_invulnerable" or effect_type == "temporary_damage_reduction"
 
 static func _is_safe_state_effect(effect_type: String) -> bool:
 	return effect_type in ["apply_state_at_threshold", "cleanse_control", "control_grants_resists", "control_grants_shield", "grant_stored_shield", "permanent_max_health_on_control", "prevent_fatal_damage", "protection_pulse", "temporary_resists_on_protection"]

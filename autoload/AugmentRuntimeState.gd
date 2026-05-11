@@ -20,6 +20,7 @@ var last_effect_type_by_augment: Dictionary = {}
 var last_world_position_by_augment: Dictionary = {}
 var blocked_counts: Dictionary = {}
 var stat_modifiers: Dictionary = {}
+var derived_stat_rules: Dictionary = {}
 var choice_state: Dictionary = {}
 var quest_progress: Dictionary = {}
 var shields: Dictionary = {}
@@ -32,6 +33,7 @@ var modes: Dictionary = {}
 var counters: Dictionary = {}
 var rewards: Dictionary = {}
 var safe_states: Dictionary = {}
+var visual_events: Array[Dictionary] = []
 var runtime_log: Array[Dictionary] = []
 
 func reset() -> void:
@@ -54,6 +56,7 @@ func reset() -> void:
 	last_world_position_by_augment.clear()
 	blocked_counts.clear()
 	stat_modifiers.clear()
+	derived_stat_rules.clear()
 	choice_state.clear()
 	quest_progress.clear()
 	shields.clear()
@@ -66,6 +69,7 @@ func reset() -> void:
 	counters.clear()
 	rewards.clear()
 	safe_states.clear()
+	visual_events.clear()
 	runtime_log.clear()
 
 func record_acquired(augment: Resource, owner: Node) -> void:
@@ -193,6 +197,11 @@ func add_stat_modifier(stat: String, value: float, op: String, augment_id: Strin
 	entry["sources"] = sources
 	stat_modifiers[stat] = entry
 
+func add_stat_rule(key: String, payload: Dictionary) -> void:
+	if key == "":
+		return
+	derived_stat_rules[key] = payload.duplicate(true)
+
 func add_choice_count(key: String, amount: int) -> void:
 	choice_state[key] = int(choice_state.get(key, 0)) + amount
 
@@ -230,6 +239,11 @@ func add_reward(key: String, amount: int = 1) -> void:
 func add_safe_state(key: String, payload: Dictionary) -> void:
 	safe_states[key] = payload.duplicate(true)
 
+func record_visual_event(payload: Dictionary) -> void:
+	visual_events.append(payload.duplicate(true))
+	if visual_events.size() > 64:
+		visual_events.pop_front()
+
 func get_snapshot() -> Dictionary:
 	return {
 		"ranks": ranks.duplicate(true),
@@ -248,6 +262,7 @@ func get_snapshot() -> Dictionary:
 		"last_world_position_by_augment": last_world_position_by_augment.duplicate(true),
 		"blocked_counts": blocked_counts.duplicate(true),
 		"stat_modifiers": stat_modifiers.duplicate(true),
+		"derived_stat_rules": derived_stat_rules.duplicate(true),
 		"choice_state": choice_state.duplicate(true),
 		"quest_progress": quest_progress.duplicate(true),
 		"shields": shields.duplicate(true),
@@ -260,6 +275,7 @@ func get_snapshot() -> Dictionary:
 		"counters": counters.duplicate(true),
 		"rewards": rewards.duplicate(true),
 		"safe_states": safe_states.duplicate(true),
+		"visual_events": visual_events.duplicate(true),
 		"runtime_log": runtime_log.duplicate(true)
 	}
 

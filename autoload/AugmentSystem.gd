@@ -87,6 +87,10 @@ func cleanup_active_effects(now_seconds: float = -1.0) -> void:
 func release_active_effect(kind: String, augment_id: String, count: int = 1) -> void:
 	_state.release_active(kind, augment_id, count)
 
+func record_visual_event(payload: Dictionary) -> void:
+	if _state.has_method("record_visual_event"):
+		_state.record_visual_event(payload)
+
 func is_augment_runtime_valid(augment: Resource) -> bool:
 	if augment == null or not (augment is AugmentDataScript):
 		return false
@@ -144,6 +148,7 @@ func _connect_events() -> void:
 		_connect_signal("enemy_died", _on_enemy_died)
 		_connect_signal("level_changed", _on_level_changed)
 		_connect_signal("wave_phase_started", _on_wave_phase_started)
+		_connect_signal("rune_triggered", _on_rune_triggered)
 
 func _connect_signal(signal_name: String, callable: Callable) -> void:
 	if GameEvents.has_signal(signal_name) and not GameEvents.is_connected(signal_name, callable):
@@ -274,6 +279,21 @@ func _on_wave_phase_started(wave_phase_id: String, level: int, packet: Dictionar
 	})
 	_execute_for_signal("wave_phase_started", _context_from_packet("wave_phase_started", wave_packet, {"level": level, "wave_phase_id": wave_phase_id}))
 
+func _on_rune_triggered(rune_id: String, target: Node, payload: Dictionary) -> void:
+	var rune_packet := _event_packet(payload, ["rune"], {
+		"target": target,
+		"source_kind": "rune",
+		"source_id": rune_id,
+		"cooldown_source_id": rune_id,
+		"hit_position": _node_world_position(target)
+	})
+	if payload.has("element_tags") and not rune_packet.has("element_tags"):
+		rune_packet["element_tags"] = payload.get("element_tags")
+	_execute_for_signal("rune_triggered", _context_from_packet("rune_triggered", rune_packet, {
+		"target": target,
+		"rune_id": rune_id
+	}))
+
 func _context_from_packet(signal_name: String, packet: Dictionary, extras: Dictionary = {}) -> Dictionary:
 	var context := extras.duplicate(true)
 	context["signal_name"] = signal_name
@@ -319,7 +339,11 @@ func _trigger_matches(augment: Resource, signal_name: String, event_context: Dic
 	if trigger != null:
 		signals = _to_string_array(trigger.get("signal_names"))
 	if signals.has(signal_name):
-		return _required_values_match(trigger, event_context)
+		if not _required_values_match(trigger, event_context):
+			return false
+		if trigger_id in ["on_skill_or_element_hit", "on_damage_to_low_hp"]:
+			return _trigger_alias_matches(trigger_id, signal_name, event_context)
+		return true
 	return _trigger_alias_matches(trigger_id, signal_name, event_context)
 
 func _trigger_alias_matches(trigger_id: String, signal_name: String, event_context: Dictionary) -> bool:
@@ -343,6 +367,16 @@ func _trigger_alias_matches(trigger_id: String, signal_name: String, event_conte
 	if trigger_id == "on_skill_hit" and signal_name == "damage_applied_packet":
 		var packet: Dictionary = event_context.get("packet", {})
 		return _to_string_array(packet.get("tags", [])).has("skill") or str(packet.get("source_kind", "")) in ["skill", "rune", "zone", "orbit"]
+	if trigger_id == "on_skill_or_element_hit" and signal_name in ["damage_applied_packet", "rune_triggered"]:
+		var packet: Dictionary = event_context.get("packet", {})
+		var tags := _to_string_array(packet.get("tags", []))
+		var element_tags := _to_string_array(packet.get("element_tags", []))
+		return str(packet.get("source_kind", "")) in ["skill", "element", "rune", "zone", "orbit"] or tags.has("skill") or tags.has("element") or tags.has("fire") or not element_tags.is_empty()
+	if trigger_id == "on_damage_to_low_hp" and signal_name == "damage_applied_packet":
+		var packet: Dictionary = event_context.get("packet", {})
+		if packet.has("target_health_ratio") or packet.has("health_ratio"):
+			return float(packet.get("target_health_ratio", packet.get("health_ratio", 1.0))) <= 0.35
+		return bool(packet.get("is_low_hp", false))
 	if trigger_id == "on_damage_roll" and signal_name == "damage_roll_requested":
 		return true
 	if trigger_id.contains("periodic") and signal_name == "augment_periodic_tick":
@@ -439,3 +473,8 @@ func _to_string_array(value: Variant) -> Array[String]:
 		for part in str(value).split(",", false):
 			result.append(part.strip_edges())
 	return result
+
+func _node_world_position(node: Node) -> Vector2:
+	if node is Node2D:
+		return (node as Node2D).global_position
+	return Vector2.ZERO

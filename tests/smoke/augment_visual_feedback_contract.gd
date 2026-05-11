@@ -21,13 +21,30 @@ const EXPECTED_EVENT_SIGNALS: Array[String] = [
 	"weapon_fired",
 	"projectile_spawned",
 	"projectile_hit",
+	"damage_roll_requested",
 	"damage_applied_packet",
+	"dot_tick",
 	"burn_stack_applied",
+	"burn_stack_threshold",
 	"rift_chain_triggered",
 	"shield_gained",
+	"shield_broken",
 	"heal_received",
+	"regen_tick",
+	"control_applied",
 	"dash_started",
+	"dash_finished",
+	"blink_used",
+	"low_hp_entered",
+	"fatal_damage_received",
+	"pickup_collected",
+	"elite_killed",
+	"boss_damaged",
 	"augment_periodic_tick",
+	"enemy_died",
+	"level_changed",
+	"wave_phase_started",
+	"rune_triggered",
 ]
 
 const CATEGORY_KEYWORDS: Dictionary = {
@@ -274,20 +291,54 @@ func _emit_runtime_event(game_events: Node, event_name: String, owner: Node, tar
 			game_events.emit_signal("projectile_spawned", owner, packet)
 		"projectile_hit":
 			game_events.emit_signal("projectile_hit", target, packet)
+		"damage_roll_requested":
+			game_events.emit_signal("damage_roll_requested", packet)
 		"damage_applied_packet":
 			game_events.emit_signal("damage_applied_packet", target, packet)
+		"dot_tick":
+			game_events.emit_signal("dot_tick", target, packet)
 		"burn_stack_applied":
 			game_events.emit_signal("burn_stack_applied", target, 1, 1, packet)
+		"burn_stack_threshold":
+			game_events.emit_signal("burn_stack_threshold", target, 3, packet)
 		"rift_chain_triggered":
 			game_events.emit_signal("rift_chain_triggered", "visual_contract_region", 1, packet)
 		"shield_gained":
 			game_events.emit_signal("shield_gained", owner, 1.0, packet)
+		"shield_broken":
+			game_events.emit_signal("shield_broken", owner, 1.0, packet)
 		"heal_received":
 			game_events.emit_signal("heal_received", owner, 1.0, packet)
+		"regen_tick":
+			game_events.emit_signal("regen_tick", owner, 1.0, packet)
+		"control_applied":
+			game_events.emit_signal("control_applied", target, "slow", packet)
 		"dash_started":
 			game_events.emit_signal("dash_started", owner, packet)
+		"dash_finished":
+			game_events.emit_signal("dash_finished", owner, packet)
+		"blink_used":
+			game_events.emit_signal("blink_used", owner, packet)
+		"low_hp_entered":
+			game_events.emit_signal("low_hp_entered", owner, 0.25, packet)
+		"fatal_damage_received":
+			game_events.emit_signal("fatal_damage_received", owner, packet)
+		"pickup_collected":
+			game_events.emit_signal("pickup_collected", target, owner, packet)
+		"elite_killed":
+			game_events.emit_signal("elite_killed", target, packet)
+		"boss_damaged":
+			game_events.emit_signal("boss_damaged", target, packet)
 		"augment_periodic_tick":
 			game_events.emit_signal("augment_periodic_tick", 10.0)
+		"enemy_died":
+			game_events.emit_signal("enemy_died", target, 1)
+		"level_changed":
+			game_events.emit_signal("level_changed", 2)
+		"wave_phase_started":
+			game_events.emit_signal("wave_phase_started", "visual_contract_wave", 2, packet)
+		"rune_triggered":
+			game_events.emit_signal("rune_triggered", "visual_contract_rune", target, packet)
 
 func _validate_vfx_cleanup(run_scene: Node, failures: Array[String]) -> void:
 	await create_timer(1.75, true).timeout
