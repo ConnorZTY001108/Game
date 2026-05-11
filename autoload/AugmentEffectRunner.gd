@@ -31,12 +31,18 @@ func execute_effect(augment: Resource, effect: Resource, event_context: Dictiona
 	var executed := _execute_by_type(augment_id, effect_type, effect_family, params, packet, event_context, runtime_state)
 	if executed:
 		_start_cooldowns(augment_id, effect_family, effect, event_context, packet, runtime_state)
-		runtime_state.mark_effect(effect_type, {
+		var effect_payload := {
 			"augment_id": augment_id,
 			"effect_family": effect_family,
 			"trigger_id": str(event_context.get("trigger_id", "")),
-			"signal_name": str(event_context.get("signal_name", ""))
-		})
+			"signal_name": str(event_context.get("signal_name", "")),
+			"effect_type": effect_type,
+			"world_position": _world_position_from_context(event_context, packet)
+		}
+		runtime_state.mark_effect(effect_type, effect_payload)
+		if is_instance_valid(GameEvents):
+			GameEvents.augment_effect_triggered.emit(effect_payload.duplicate(true))
+			GameEvents.augment_state_changed.emit(runtime_state.get_snapshot())
 	return executed
 
 func _passes_proc_guards(effect_family: String, packet: Dictionary, effect: Resource, runtime_state: Variant) -> bool:
@@ -252,6 +258,18 @@ func _packet_from_context(event_context: Dictionary) -> Dictionary:
 func _target_from_context(event_context: Dictionary, packet: Dictionary) -> Node:
 	var target = event_context.get("target", packet.get("target", null))
 	return target as Node
+
+func _world_position_from_context(event_context: Dictionary, packet: Dictionary) -> Vector2:
+	var position = packet.get("hit_position", event_context.get("world_position", Vector2.ZERO))
+	if position is Vector2:
+		return position
+	var target := _target_from_context(event_context, packet)
+	if target is Node2D:
+		return (target as Node2D).global_position
+	var owner = event_context.get("owner", packet.get("owner", null))
+	if owner is Node2D:
+		return (owner as Node2D).global_position
+	return Vector2.ZERO
 
 func _cooldown_key(augment_id: String, effect_family: String, event_context: Dictionary, packet: Dictionary) -> String:
 	var source_id := str(packet.get("cooldown_source_id", packet.get("source_id", event_context.get("signal_name", ""))))

@@ -50,10 +50,26 @@ func _run() -> void:
 func _assert_direct_acquisition_and_pick_effects(registry: Node, augment_system: Node, failures: Array[String]) -> void:
 	var owner := Node.new()
 	root.add_child(owner)
+	var game_events := root.get_node("GameEvents")
+	var recorder := _AugmentSignalRecorder.new()
+	root.add_child(recorder)
+	if not game_events.has_signal("augment_acquired"):
+		failures.append("GameEvents missing augment_acquired signal")
+	if not game_events.has_signal("augment_effect_triggered"):
+		failures.append("GameEvents missing augment_effect_triggered signal")
+	if not game_events.has_signal("augment_state_changed"):
+		failures.append("GameEvents missing augment_state_changed signal")
+	if game_events.has_signal("augment_acquired"):
+		game_events.connect("augment_acquired", recorder._on_acquired)
+	if game_events.has_signal("augment_effect_triggered"):
+		game_events.connect("augment_effect_triggered", recorder._on_effect_triggered)
+	if game_events.has_signal("augment_state_changed"):
+		game_events.connect("augment_state_changed", recorder._on_state_changed)
 	var forge := registry.call("get_by_id", "aug_stats_forge") as Resource
 	if forge == null:
 		failures.append("missing aug_stats_forge")
 		owner.free()
+		recorder.free()
 		return
 	if not bool(augment_system.call("acquire_augment", forge, owner)):
 		failures.append("AugmentSystem did not acquire aug_stats_forge")
@@ -70,7 +86,18 @@ func _assert_direct_acquisition_and_pick_effects(registry: Node, augment_system:
 		failures.append("on_pick grant_forge_choice executed more than once")
 	if int((snapshot.get("effect_counts", {}) as Dictionary).get("grant_forge_choice", 0)) != 1:
 		failures.append("on_pick grant_forge_choice effect count was not single-fire")
+	if int((snapshot.get("augment_proc_counts", {}) as Dictionary).get("aug_stats_forge", 0)) != 1:
+		failures.append("per-Augment proc count was not tracked for aug_stats_forge")
+	if recorder.acquired_count != 1:
+		failures.append("augment_acquired signal was not emitted once, got %d" % recorder.acquired_count)
+	if recorder.effect_triggered_count != 1:
+		failures.append("augment_effect_triggered signal was not emitted once, got %d" % recorder.effect_triggered_count)
+	if recorder.state_changed_count < 1:
+		failures.append("augment_state_changed signal was not emitted after acquisition/effect")
+	if str(recorder.last_effect_payload.get("augment_id", "")) != "aug_stats_forge":
+		failures.append("augment_effect_triggered payload did not include augment id: %s" % recorder.last_effect_payload)
 	owner.free()
+	recorder.free()
 
 func _assert_event_runtime_and_proc_guards(registry: Node, augment_system: Node, failures: Array[String]) -> void:
 	var damage_system := root.get_node("DamageSystem")
@@ -628,6 +655,25 @@ class _SignalRecorder:
 
 	func _on_fatal(_player: Node, _packet: Dictionary) -> void:
 		fatal_count += 1
+
+class _AugmentSignalRecorder:
+	extends Node
+	var acquired_count := 0
+	var effect_triggered_count := 0
+	var state_changed_count := 0
+	var last_effect_payload: Dictionary = {}
+
+	func _on_acquired(_augment_id: String, _augment: Resource, _owner: Node, _snapshot: Dictionary) -> void:
+		acquired_count += 1
+
+	func _on_effect_triggered(payload: Dictionary) -> void:
+		effect_triggered_count += 1
+		last_effect_payload = payload.duplicate(true)
+
+	func _on_state_changed(snapshot: Dictionary) -> void:
+		state_changed_count += 1
+		if not snapshot.has("augment_proc_counts"):
+			push_error("augment_state_changed snapshot missing augment_proc_counts")
 
 class _BossTarget:
 	extends Node2D

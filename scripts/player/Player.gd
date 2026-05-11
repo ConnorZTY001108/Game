@@ -69,6 +69,16 @@ func apply_upgrade_stat(stat_key: String, value: float) -> void:
 	elif stat_key == "pickup_radius":
 		pickup_radius = max(24.0, pickup_radius + value)
 
+func get_stat_snapshot() -> Dictionary:
+	return {
+		"damage_multiplier": damage_multiplier,
+		"cooldown_multiplier": cooldown_multiplier,
+		"pickup_radius": pickup_radius,
+		"health": health_component.current_health if health_component != null else 0.0,
+		"max_health": health_component.max_health if health_component != null else 0.0,
+		"move_speed": character_data.move_speed if character_data != null else 0.0
+	}
+
 func apply_temporary_pickup_radius_bonus(value: float, duration_seconds: float) -> void:
 	_temporary_pickup_radius_bonus_serial += 1
 	var serial := _temporary_pickup_radius_bonus_serial

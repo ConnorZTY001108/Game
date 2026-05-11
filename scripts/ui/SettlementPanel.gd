@@ -3,14 +3,26 @@ extends Control
 
 @onready var title_label: Label = $Panel/Margin/Content/TitleLabel
 @onready var summary_label: Label = $Panel/Margin/Content/SummaryLabel
+@onready var restart_button: Button = $Panel/Margin/Content/Actions/RestartButton
+@onready var return_menu_button: Button = $Panel/Margin/Content/Actions/ReturnMenuButton
+@onready var quit_button: Button = $Panel/Margin/Content/Actions/QuitButton
 
 var last_summary: Dictionary = {}
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	restart_button.process_mode = Node.PROCESS_MODE_ALWAYS
+	return_menu_button.process_mode = Node.PROCESS_MODE_ALWAYS
+	quit_button.process_mode = Node.PROCESS_MODE_ALWAYS
 	visible = false
 	GameEvents.run_started.connect(_on_run_started)
 	GameEvents.settlement_requested.connect(show_summary)
+	if restart_button.pressed.is_connected(_on_restart_button_pressed) == false:
+		restart_button.pressed.connect(_on_restart_button_pressed)
+	if return_menu_button.pressed.is_connected(_on_return_menu_button_pressed) == false:
+		return_menu_button.pressed.connect(_on_return_menu_button_pressed)
+	if quit_button.pressed.is_connected(_on_quit_button_pressed) == false:
+		quit_button.pressed.connect(_on_quit_button_pressed)
 
 func show_summary(summary: Dictionary) -> void:
 	last_summary = summary.duplicate(true)
@@ -27,6 +39,15 @@ func get_summary_text() -> String:
 func _on_run_started() -> void:
 	visible = false
 	last_summary.clear()
+
+func _on_restart_button_pressed() -> void:
+	GameEvents.restart_run_requested.emit()
+
+func _on_return_menu_button_pressed() -> void:
+	GameEvents.return_to_menu_requested.emit()
+
+func _on_quit_button_pressed() -> void:
+	GameEvents.quit_game_requested.emit()
 
 func _format_summary(summary: Dictionary) -> String:
 	var seconds: float = float(summary.get("survival_time", 0.0))

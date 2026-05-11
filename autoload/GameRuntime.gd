@@ -23,6 +23,12 @@ func start_run() -> void:
 	GameEvents.run_started.emit()
 	GameEvents.augment_periodic_tick.emit(elapsed_seconds)
 
+func reset_to_boot() -> void:
+	elapsed_seconds = 0.0
+	state = RunState.BOOT
+	get_tree().paused = false
+	log_state("boot_reset")
+
 func set_paused(is_paused: bool) -> void:
 	if state == RunState.GAME_OVER or state == RunState.VICTORY:
 		return

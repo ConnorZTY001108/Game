@@ -26,6 +26,13 @@ var feedback_sequence: int = 0
 var region_prompt_label: Label
 var objective_label: Label
 var map_prompt_label: Label
+var augment_status_panel: VBoxContainer
+var augment_route_label: Label
+var augment_stat_label: Label
+var augment_owned_label: Label
+var augment_proc_label: Label
+var augment_progress_label: Label
+var bound_player: PlayerScript
 var region_prompt_remaining: float = 0.0
 var map_prompt_remaining: float = 0.0
 
@@ -35,11 +42,16 @@ func _ready() -> void:
 	_ensure_region_prompt_node()
 	_ensure_objective_node()
 	_ensure_map_prompt_node()
+	_ensure_augment_status_panel()
 	GameEvents.enemy_died.connect(_on_enemy_died)
 	GameEvents.level_changed.connect(_on_level_changed)
 	GameEvents.experience_collected.connect(_on_experience_collected)
 	GameEvents.run_started.connect(_on_run_started)
 	GameEvents.run_finished.connect(_on_run_finished)
+	GameEvents.augment_acquired.connect(_on_augment_acquired)
+	GameEvents.augment_effect_triggered.connect(_on_augment_effect_triggered)
+	GameEvents.augment_state_changed.connect(_on_augment_state_changed)
+	GameEvents.upgrade_selected.connect(_on_upgrade_selected)
 	GameEvents.damage_number_requested.connect(_on_damage_number_requested)
 	GameEvents.feedback_requested.connect(_on_feedback_requested)
 	GameEvents.map_region_changed.connect(_on_map_region_changed)
@@ -49,6 +61,7 @@ func _ready() -> void:
 	_on_level_changed(1)
 	_on_experience_collected(0)
 	_on_map_objective_updated(GameEvents.activated_obelisk_count, GameEvents.total_obelisk_count)
+	_refresh_augment_status()
 	_update_timer(0.0)
 	kill_label.text = "击杀: 0"
 
@@ -59,8 +72,10 @@ func _process(delta: float) -> void:
 	_update_map_prompt(delta)
 
 func bind_player(player: PlayerScript) -> void:
+	bound_player = player
 	player.health_component.health_changed.connect(_on_health_changed)
 	_on_health_changed(player.health_component.current_health, player.health_component.max_health)
+	_refresh_augment_status()
 
 func bind_timer(timer: RunTimerSystemScript) -> void:
 	timer.time_changed.connect(_update_timer)
@@ -99,6 +114,7 @@ func _on_run_started() -> void:
 		map_prompt_label.visible = false
 		map_prompt_remaining = 0.0
 	_on_map_objective_updated(0, GameEvents.total_obelisk_count)
+	_refresh_augment_status()
 	_update_timer(0.0)
 
 func _update_timer(seconds: float) -> void:
@@ -120,6 +136,18 @@ func _on_feedback_requested(feedback_type: String, text: String, world_position:
 	_spawn_feedback_label(feedback_type, message, world_position, payload)
 	if feedback_type == "player_damage":
 		_flash(Color(1.0, 0.15, 0.1, 0.34))
+
+func _on_augment_acquired(_augment_id: String, _augment: Resource, _owner: Node, _snapshot: Dictionary) -> void:
+	_refresh_augment_status()
+
+func _on_augment_effect_triggered(_payload: Dictionary) -> void:
+	_refresh_augment_status()
+
+func _on_augment_state_changed(_snapshot: Dictionary) -> void:
+	_refresh_augment_status()
+
+func _on_upgrade_selected(_upgrade: Resource) -> void:
+	_refresh_augment_status()
 
 func _on_map_region_changed(_region_id: String, display_name: String) -> void:
 	if region_prompt_label == null:
@@ -225,6 +253,112 @@ func _ensure_map_prompt_node() -> void:
 	map_prompt_label.offset_right = 260.0
 	map_prompt_label.offset_bottom = 148.0
 	add_child(map_prompt_label)
+
+func _ensure_augment_status_panel() -> void:
+	augment_status_panel = get_node_or_null("AugmentStatusPanel") as VBoxContainer
+	if augment_status_panel == null:
+		augment_status_panel = VBoxContainer.new()
+		augment_status_panel.name = "AugmentStatusPanel"
+		augment_status_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		augment_status_panel.custom_minimum_size = Vector2(360.0, 132.0)
+		augment_status_panel.anchor_left = 1.0
+		augment_status_panel.anchor_right = 1.0
+		augment_status_panel.anchor_top = 0.0
+		augment_status_panel.anchor_bottom = 0.0
+		augment_status_panel.offset_left = -376.0
+		augment_status_panel.offset_top = 16.0
+		augment_status_panel.offset_right = -16.0
+		augment_status_panel.offset_bottom = 148.0
+		augment_status_panel.add_theme_constant_override("separation", 2)
+		add_child(augment_status_panel)
+	augment_route_label = _ensure_augment_label("RouteSummaryLabel")
+	augment_stat_label = _ensure_augment_label("StatDeltaLabel")
+	augment_owned_label = _ensure_augment_label("OwnedAugmentsLabel")
+	augment_proc_label = _ensure_augment_label("ProcCountersLabel")
+	augment_progress_label = _ensure_augment_label("ProgressLabel")
+
+func _ensure_augment_label(label_name: String) -> Label:
+	var label := augment_status_panel.get_node_or_null(label_name) as Label
+	if label != null:
+		return label
+	label = Label.new()
+	label.name = label_name
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.custom_minimum_size = Vector2(360.0, 22.0)
+	augment_status_panel.add_child(label)
+	return label
+
+func _refresh_augment_status() -> void:
+	if augment_status_panel == null:
+		_ensure_augment_status_panel()
+	if not is_instance_valid(AugmentSystem) or not AugmentSystem.has_method("get_hud_snapshot"):
+		return
+	var snapshot: Dictionary = AugmentSystem.call("get_hud_snapshot", bound_player)
+	augment_route_label.text = "路线：%s" % _format_count_dictionary(snapshot.get("route_counts", {}), "无")
+	augment_stat_label.text = "属性：%s" % _format_stat_line(snapshot)
+	augment_owned_label.text = "已拥有：%s" % _format_owned_augments(snapshot.get("owned_augments", []))
+	augment_proc_label.text = "触发：%s" % _format_count_dictionary(snapshot.get("proc_counts", {}), "暂无")
+	augment_progress_label.text = "进度：%s" % _format_progress_line(snapshot)
+
+func _format_owned_augments(value: Variant) -> String:
+	if not value is Array:
+		return "无"
+	var names: Array[String] = []
+	for item in value:
+		if item is Dictionary:
+			var entry := item as Dictionary
+			var augment_id := str(entry.get("id", ""))
+			var rank := int(entry.get("rank", 0))
+			if augment_id != "":
+				names.append("%s x%d" % [augment_id, rank])
+	if names.is_empty():
+		return "无"
+	return ", ".join(names)
+
+func _format_count_dictionary(value: Variant, empty_text: String) -> String:
+	if not value is Dictionary:
+		return empty_text
+	var dictionary := value as Dictionary
+	if dictionary.is_empty():
+		return empty_text
+	var parts: Array[String] = []
+	for key in dictionary.keys():
+		parts.append("%s x%s" % [str(key), str(dictionary[key])])
+	return ", ".join(parts)
+
+func _format_stat_line(snapshot: Dictionary) -> String:
+	var stat_modifiers: Dictionary = snapshot.get("stat_modifiers", {})
+	if not stat_modifiers.is_empty():
+		var parts: Array[String] = []
+		for stat in stat_modifiers.keys():
+			var entry: Dictionary = stat_modifiers.get(stat, {})
+			var total := float(entry.get("flat", 0.0)) + float(entry.get("percent", 0.0))
+			parts.append("%s %+0.2f" % [str(stat), total])
+		return ", ".join(parts)
+	var stats: Dictionary = snapshot.get("stat_snapshot", {})
+	if stats.is_empty():
+		return "暂无变化"
+	return "伤害 %.2f / 冷却 %.2f / 拾取 %.0f / 移速 %.0f" % [
+		float(stats.get("damage_multiplier", 1.0)),
+		float(stats.get("cooldown_multiplier", 1.0)),
+		float(stats.get("pickup_radius", 0.0)),
+		float(stats.get("move_speed", 0.0))
+	]
+
+func _format_progress_line(snapshot: Dictionary) -> String:
+	var parts: Array[String] = []
+	var quest_progress: Dictionary = snapshot.get("quest_progress", {})
+	for key in quest_progress.keys():
+		var entry: Dictionary = quest_progress.get(key, {})
+		parts.append("%s %d/%d" % [str(key), int(entry.get("amount", 0)), int(entry.get("total", 0))])
+	var forge_progress: Dictionary = snapshot.get("forge_progress", {})
+	var choice_state: Dictionary = forge_progress.get("choice_state", {})
+	for key in choice_state.keys():
+		parts.append("%s %s" % [str(key), str(choice_state[key])])
+	if parts.is_empty():
+		return "暂无任务/锻造"
+	return ", ".join(parts)
 
 func _spawn_feedback_label(feedback_type: String, text: String, world_position: Vector2, payload: Dictionary) -> void:
 	if feedback_layer == null:

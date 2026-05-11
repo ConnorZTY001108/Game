@@ -62,7 +62,6 @@ func _format_augment_text(option: Resource) -> String:
 	var route_label := _get_string(option, "route_label", _get_string(option, "route_id", "augment"))
 	var rarity := _rarity_label(_get_string(option, "rarity", ""))
 	var upgrade_type := _get_string(option, "upgrade_type", "")
-	var source := _join_non_empty([_get_string(option, "source_augment_name", ""), _get_string(option, "source_augment_rarity", "")], " / ")
 	var effect := _first_non_empty([
 		_get_string(option, "effect", ""),
 		_get_string(option, "description", ""),
@@ -70,18 +69,15 @@ func _format_augment_text(option: Resource) -> String:
 	])
 	var condition := _get_string(option, "source_condition", "")
 	var fit := _get_string(option, "fit", "")
-	var risk := _get_string(option, "risk", "")
-	var tags := _join_non_empty(_get_string_array(option, "synergy_tags") + _get_string_array(option, "required_tags"), ", ")
-	var cues := "%s (%s) / %s / %s" % [route_label, route_id, rarity, upgrade_type]
-	return "%s\n%s | Tags: %s\nSource: %s\nEffect: %s\nCondition: %s | Fit: %s | Risk: %s" % [
+	var type_route := _join_non_empty([rarity, upgrade_type, "路线：%s (%s)" % [route_label, route_id]], " / ")
+	var trigger_or_fit := condition if condition != "" else fit
+	if trigger_or_fit == "":
+		trigger_or_fit = route_label
+	return "%s\n类型：%s\n效果：%s\n触发：%s" % [
 		display_name,
-		cues,
-		_truncate_text(tags, 80),
-		_truncate_text(source, 88),
-		_truncate_text(effect, 92),
-		_truncate_text(condition, 34),
-		_truncate_text(fit, 28),
-		_truncate_text(risk, 28)
+		_truncate_text(type_route, 96),
+		_truncate_text(effect, 108),
+		_truncate_text(trigger_or_fit, 92)
 	]
 
 func _clear_option_buttons() -> void:

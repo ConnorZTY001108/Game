@@ -198,9 +198,11 @@ func _assert_level_up_panel_support(registry: Node, upgrade_system: Node, failur
 		failures.append("UpgradeSystem did not track active live augment choice ids")
 	else:
 		var live_text := _first_button_text(level_panel)
-		for required in ["Tags:", "Source:", "Effect:", "Condition:", "Fit:", "Risk:"]:
-			if not live_text.contains(required):
-				failures.append("Live augment UI text missing %s cue: %s" % [required, live_text])
+		for forbidden in ["Tags:", "Source:", "Effect:", "Condition:", "Fit:", "Risk:"]:
+			if live_text.contains(forbidden):
+				failures.append("Live augment UI text contains debug field %s: %s" % [forbidden, live_text])
+		if live_text.split("\n", false).size() != 4:
+			failures.append("Live augment UI text should use four player-facing lines: %s" % live_text)
 	if level_panel.current_options.size() > 0:
 		level_panel.call("_select_option", level_panel.current_options[0])
 		await process_frame
@@ -230,9 +232,11 @@ func _assert_level_up_panel_support(registry: Node, upgrade_system: Node, failur
 			failures.append("Augment option text did not include rarity cue: %s" % (augment_button.text if augment_button != null else "<null>"))
 		if augment_button != null and not augment_button.text.contains(str(augment.get("route_id"))):
 			failures.append("Augment option text did not include route cue: %s" % augment_button.text)
-		for required in ["Tags:", "Source:", "Condition:", "Fit:", "Risk:"]:
-			if augment_button != null and not augment_button.text.contains(required):
-				failures.append("Augment option text did not include %s cue: %s" % [required, augment_button.text])
+		for forbidden in ["Tags:", "Source:", "Effect:", "Condition:", "Fit:", "Risk:"]:
+			if augment_button != null and augment_button.text.contains(forbidden):
+				failures.append("Augment option text contains debug field %s: %s" % [forbidden, augment_button.text])
+		if augment_button != null and augment_button.text.split("\n", false).size() != 4:
+			failures.append("Augment option text should use four player-facing lines: %s" % augment_button.text)
 
 	game_runtime.call("enter_level_up")
 	level_panel.call("_select_option", augment)

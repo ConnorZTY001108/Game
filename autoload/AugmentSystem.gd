@@ -24,6 +24,10 @@ func acquire_augment(augment: Resource, owner: Node = null, context: Dictionary 
 	var augment_id := str(augment.get("id"))
 	_state.record_acquired(augment, owner)
 	_owned_augments[augment_id] = augment
+	if is_instance_valid(GameEvents):
+		var snapshot := _state.get_snapshot()
+		GameEvents.augment_acquired.emit(augment_id, augment, owner, snapshot)
+		GameEvents.augment_state_changed.emit(snapshot)
 	_execute_for_signal("augment_acquired", {
 		"signal_name": "augment_acquired",
 		"trigger_id": "on_pick",
@@ -56,6 +60,26 @@ func get_owned_tags() -> Array[String]:
 
 func get_runtime_snapshot() -> Dictionary:
 	return _state.get_snapshot()
+
+func get_hud_snapshot(player: Node = null) -> Dictionary:
+	var runtime_snapshot := _state.get_snapshot()
+	return {
+		"owned_augments": _owned_augment_summaries(),
+		"owned_ids": runtime_snapshot.get("owned_ids", []),
+		"route_counts": runtime_snapshot.get("route_counts", {}),
+		"proc_counts": runtime_snapshot.get("augment_proc_counts", {}),
+		"effect_counts": runtime_snapshot.get("effect_counts", {}),
+		"quest_progress": runtime_snapshot.get("quest_progress", {}),
+		"forge_progress": {
+			"choice_state": runtime_snapshot.get("choice_state", {}),
+			"rewards": runtime_snapshot.get("rewards", {})
+		},
+		"stat_snapshot": player.call("get_stat_snapshot") if player != null and player.has_method("get_stat_snapshot") else {},
+		"stat_modifiers": runtime_snapshot.get("stat_modifiers", {}),
+		"last_triggers": runtime_snapshot.get("last_trigger_by_augment", {}),
+		"last_effect_types": runtime_snapshot.get("last_effect_type_by_augment", {}),
+		"last_world_positions": runtime_snapshot.get("last_world_position_by_augment", {})
+	}
 
 func cleanup_active_effects(now_seconds: float = -1.0) -> void:
 	_state.cleanup_active(now_seconds)
@@ -387,6 +411,21 @@ func _expected_resource_path(augment: Resource) -> String:
 	if route_id != "" and augment_id != "":
 		return "data/content/augments/%s/%s.tres" % [route_id, augment_id]
 	return ""
+
+func _owned_augment_summaries() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for augment_id in _owned_augments.keys():
+		var augment := _owned_augments[augment_id] as Resource
+		if augment == null:
+			continue
+		result.append({
+			"id": str(augment.get("id")),
+			"display_name": str(augment.get("display_name")),
+			"route_id": str(augment.get("route_id")),
+			"route_label": str(augment.get("route_label")),
+			"rank": int(_state.ranks.get(str(augment.get("id")), 0))
+		})
+	return result
 
 func _to_string_array(value: Variant) -> Array[String]:
 	var result: Array[String] = []

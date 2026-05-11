@@ -14,6 +14,10 @@ var active_ledgers: Dictionary = {}
 var _active_ledger_serial: int = 0
 var generated_packets: Array[Dictionary] = []
 var effect_counts: Dictionary = {}
+var augment_proc_counts: Dictionary = {}
+var last_trigger_by_augment: Dictionary = {}
+var last_effect_type_by_augment: Dictionary = {}
+var last_world_position_by_augment: Dictionary = {}
 var blocked_counts: Dictionary = {}
 var stat_modifiers: Dictionary = {}
 var choice_state: Dictionary = {}
@@ -44,6 +48,10 @@ func reset() -> void:
 	_active_ledger_serial = 0
 	generated_packets.clear()
 	effect_counts.clear()
+	augment_proc_counts.clear()
+	last_trigger_by_augment.clear()
+	last_effect_type_by_augment.clear()
+	last_world_position_by_augment.clear()
 	blocked_counts.clear()
 	stat_modifiers.clear()
 	choice_state.clear()
@@ -88,7 +96,16 @@ func can_rank(augment: Resource) -> bool:
 
 func mark_effect(effect_type: String, payload: Dictionary = {}) -> void:
 	effect_counts[effect_type] = int(effect_counts.get(effect_type, 0)) + 1
-	record_log(effect_type, str(payload.get("augment_id", "")), payload)
+	var augment_id := str(payload.get("augment_id", ""))
+	if augment_id != "":
+		augment_proc_counts[augment_id] = int(augment_proc_counts.get(augment_id, 0)) + 1
+		last_trigger_by_augment[augment_id] = {
+			"trigger_id": str(payload.get("trigger_id", "")),
+			"signal_name": str(payload.get("signal_name", ""))
+		}
+		last_effect_type_by_augment[augment_id] = effect_type
+		last_world_position_by_augment[augment_id] = payload.get("world_position", Vector2.ZERO)
+	record_log(effect_type, augment_id, payload)
 
 func mark_block(reason: String) -> void:
 	blocked_counts[reason] = int(blocked_counts.get(reason, 0)) + 1
@@ -225,6 +242,10 @@ func get_snapshot() -> Dictionary:
 		"active_ledgers": active_ledgers.duplicate(true),
 		"generated_packets": generated_packets.duplicate(true),
 		"effect_counts": effect_counts.duplicate(true),
+		"augment_proc_counts": augment_proc_counts.duplicate(true),
+		"last_trigger_by_augment": last_trigger_by_augment.duplicate(true),
+		"last_effect_type_by_augment": last_effect_type_by_augment.duplicate(true),
+		"last_world_position_by_augment": last_world_position_by_augment.duplicate(true),
 		"blocked_counts": blocked_counts.duplicate(true),
 		"stat_modifiers": stat_modifiers.duplicate(true),
 		"choice_state": choice_state.duplicate(true),

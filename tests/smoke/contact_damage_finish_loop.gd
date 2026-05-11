@@ -22,6 +22,7 @@ func _run() -> void:
 	var run_scene := run_scene_packed.instantiate()
 	root.add_child(run_scene)
 	await process_frame
+	run_scene.call("begin_run")
 
 	var game_runtime := root.get_node("GameRuntime")
 	var game_events := root.get_node("GameEvents")

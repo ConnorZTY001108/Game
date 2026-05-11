@@ -13,8 +13,6 @@ const DebugOverlayScript := preload("res://scripts/ui/DebugOverlay.gd")
 @onready var debug_overlay: DebugOverlayScript = $CanvasLayer/DebugOverlay
 
 func _ready() -> void:
-	RuneSystem.reset()
-	ExperienceSystem.reset()
 	_configure_player_camera()
 	hud.bind_player(player)
 	hud.bind_timer(run_timer)
@@ -23,6 +21,10 @@ func _ready() -> void:
 	debug_overlay.pickups_path = ^"../../World/Pickups"
 	if GameEvents.run_finished.is_connected(_on_run_finished) == false:
 		GameEvents.run_finished.connect(_on_run_finished)
+
+func begin_run() -> void:
+	RuneSystem.reset()
+	ExperienceSystem.reset()
 	GameRuntime.start_run()
 
 func _configure_player_camera() -> void:

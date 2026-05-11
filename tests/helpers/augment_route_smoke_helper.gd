@@ -90,15 +90,14 @@ static func _assert_level_up_panel_displays_route(tree: SceneTree, route_augment
 		for required in [
 			str(augment.get("display_name")),
 			str(augment.get("route_id")),
-			"Tags:",
-			"Source:",
-			"Effect:",
-			"Condition:",
-			"Fit:",
-			"Risk:",
 		]:
 			if required != "" and not text.contains(required):
 				failures.append("LevelUpPanel text for %s missing cue %s: %s" % [augment_id, required, text])
+		for forbidden in ["Tags:", "Source:", "Effect:", "Condition:", "Fit:", "Risk:"]:
+			if text.contains(forbidden):
+				failures.append("LevelUpPanel text for %s contains debug cue %s: %s" % [augment_id, forbidden, text])
+		if text.split("\n", false).size() != 4:
+			failures.append("LevelUpPanel text for %s should use four player-facing lines: %s" % [augment_id, text])
 		var rarity_cue := _rarity_label(str(augment.get("rarity")))
 		if rarity_cue != "" and not text.contains(rarity_cue):
 			failures.append("LevelUpPanel text for %s missing rarity cue %s: %s" % [augment_id, rarity_cue, text])

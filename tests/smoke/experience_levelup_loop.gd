@@ -47,6 +47,15 @@ func _assert_readable_option_buttons(level_panel: Node) -> bool:
 		if lines.size() < 3:
 			push_error("LevelUpPanel option is not route-readable: %s" % button.text)
 			return false
+		if button.text.contains("类型："):
+			if lines.size() != 4 or not button.text.contains("效果：") or not button.text.contains("触发："):
+				push_error("LevelUpPanel augment option does not use the four-line player-facing contract: %s" % button.text)
+				return false
+			for forbidden in ["Tags:", "Source:", "Effect:", "Condition:", "Fit:", "Risk:"]:
+				if button.text.contains(forbidden):
+					push_error("LevelUpPanel augment option contains debug field %s: %s" % [forbidden, button.text])
+					return false
+			continue
 		if not button.text.contains("|") and not button.text.contains("条件"):
 			push_error("LevelUpPanel option is missing route/effect text: %s" % button.text)
 			return false
@@ -73,6 +82,7 @@ func _run() -> void:
 
 	var run_scene := run_scene_packed.instantiate()
 	root.add_child(run_scene)
+	run_scene.call("begin_run")
 
 	var player: Variant = run_scene.get_node("World/Player")
 	var pickups := run_scene.get_node("World/Pickups")

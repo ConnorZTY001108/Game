@@ -3,6 +3,9 @@ extends Node
 signal run_started
 signal run_paused(is_paused: bool)
 signal run_finished(result: String)
+signal restart_run_requested
+signal return_to_menu_requested
+signal quit_game_requested
 signal player_died
 signal enemy_died(enemy: Node, experience_value: int)
 signal damage_applied(target: Node, amount: float, tags: Array[String])
@@ -31,6 +34,9 @@ signal elite_killed(enemy: Node, packet: Dictionary)
 signal boss_damaged(enemy: Node, packet: Dictionary)
 signal augment_periodic_tick(elapsed_seconds: float)
 signal augment_quest_progressed(augment_id: String, amount: int, total: int)
+signal augment_acquired(augment_id: String, augment: Resource, owner: Node, snapshot: Dictionary)
+signal augment_effect_triggered(payload: Dictionary)
+signal augment_state_changed(snapshot: Dictionary)
 signal experience_collected(amount: int)
 signal level_changed(level: int)
 signal wave_phase_started(wave_phase_id: String, level: int, packet: Dictionary)

@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/DebugOverlay.tscn" id="4_gnhp1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/SettlementPanel.tscn" id="11_settlement"]
 [ext_resource type="PackedScene" path="res://scenes/map/MapDirector.tscn" id="12_map_director"]
+[ext_resource type="Script" path="res://scripts/feedback/AugmentFeedbackDirector.gd" id="13_augment_feedback"]
 
 [node name="RunScene" type="Node2D" unique_id=1644201574]
 script = ExtResource("5_run_scene")
@@ -44,6 +45,14 @@ enabled = true
 [node name="Enemies" type="Node2D" parent="World" unique_id=1100469798]
 
 [node name="Projectiles" type="Node2D" parent="World" unique_id=1239215219]
+
+[node name="VFXRoot2D" type="Node2D" parent="World"]
+z_index = 80
+
+[node name="Feedback" type="Node" parent="World"]
+
+[node name="AugmentFeedbackDirector" type="Node" parent="World/Feedback"]
+script = ExtResource("13_augment_feedback")
 
 [node name="Pickups" type="Node2D" parent="World" unique_id=1631832712]
 
